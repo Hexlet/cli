@@ -15,5 +15,8 @@ lint:
 publish:
 	npm publish
 
+pkg:
+	npx pkg package.json --out-path targets
+
 .PHONY: test
 

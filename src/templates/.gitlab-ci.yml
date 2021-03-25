@@ -1,1 +1,4 @@
-FIXME!!!
+include:
+  - project: hexlethq/hexlet-program-source-ci
+    ref: release
+    file: /gitlab-ci-check-template.yml

@@ -1,6 +1,6 @@
 // @ts-check
 
-const fs = require('fs');
+const fs = require('fs/promises');
 const fse = require('fs-extra');
 const path = require('path');
 const { Gitlab } = require('@gitbeaker/node');
@@ -14,8 +14,8 @@ const handler = async ({
 
   fse.ensureDir(path.dirname(hexletConfigPath));
   try {
-    if (fs.existsSync(hexletConfigPath)) {
-      data = fse.readJsonSync(hexletConfigPath);
+    if (await fse.pathExists(hexletConfigPath)) {
+      data = await fse.readJson(hexletConfigPath);
     }
   } catch (err) {
     // nothing
@@ -29,7 +29,7 @@ const handler = async ({
   }
   data.programs[program] = groupId;
 
-  fse.writeJsonSync(hexletConfigPath, data);
+  await fse.writeJson(hexletConfigPath, data);
   console.log(`Config created: ${hexletConfigPath}`);
 
   const api = new Gitlab({
@@ -49,36 +49,31 @@ const handler = async ({
   }
   console.log(`Repository Home: ${project.web_url}`);
 
-  const gitlabCiYamlContent = fs.readFileSync(path.join(cliSrcDir, 'templates/gitlab-ci.yml'), 'utf-8');
-  const gitlabCiFilePath = '.gitlab-ci.yml';
+  const templatePaths = await fs.readdir(path.join(cliSrcDir, 'templates'));
+  const promises = templatePaths.map(async (templatePath) => {
+    let action;
+    try {
+      await api.RepositoryFiles.show(projectId, templatePath, branch);
+      action = 'update';
+    } catch (e) {
+      action = 'create';
+    }
+    const content = await fs.readFile(path.join(cliSrcDir, 'templates', templatePath), 'utf-8');
+    const commitAction = {
+      action,
+      content,
+      filePath: templatePath,
+    };
+    return commitAction;
+  });
+  const commitActions = await Promise.all(promises);
 
-  try {
-    await api.Commits.create(
-      projectId,
-      branch,
-      'init',
-      [
-        {
-          action: 'create',
-          filePath: gitlabCiFilePath,
-          content: gitlabCiYamlContent,
-        },
-      ],
-    );
-  } catch (e) {
-    await api.Commits.create(
-      projectId,
-      branch,
-      'init (refresh)',
-      [
-        {
-          action: 'update',
-          filePath: gitlabCiFilePath,
-          content: gitlabCiYamlContent,
-        },
-      ],
-    );
-  }
+  await api.Commits.create(
+    projectId,
+    branch,
+    'configure (auto)',
+    commitActions,
+  );
 
   // console.log(namespace);
   const localPath = path.join(hexletDir, program, namespace.path);

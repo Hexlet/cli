@@ -6,9 +6,7 @@ This repository is created and maintained by the team and the community of Hexle
 
 # cli
 
-[![Node CI](https://github.com/hexlet-boilerplates/cli/workflows/Node%20CI/badge.svg)](https://github.com/hexlet-boilerplates/cli/actions)
-[![Maintainability](https://api.codeclimate.com/v1/badges/dfc50c2d88cd46d069c1/maintainability)](https://codeclimate.com/github/hexlet-boilerplates/cli/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/dfc50c2d88cd46d069c1/test_coverage)](https://codeclimate.com/github/hexlet-boilerplates/cli/test_coverage)
+[![Node CI](https://github.com/hexlet/cli/workflows/Node%20CI/badge.svg)](https://github.com/hexlet/cli/actions)
 
 ## Setup
 

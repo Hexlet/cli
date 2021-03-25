@@ -1,15 +1,19 @@
 // @ts-check
 
-const fs = require('fs/promises');
+const fsp = require('fs/promises');
 const fse = require('fs-extra');
 const path = require('path');
 const { Gitlab } = require('@gitbeaker/node');
 
-const { branch, hexletConfigPath, hexletDir, cliSrcDir } = require('../../settings.js');
+const initSettings = require('../../settings.js');
 
 const handler = async ({
   program, groupId, id, token,
-}) => {
+}, customSettings = {}) => {
+  const {
+    branch, hexletConfigPath, hexletDir, hexletTemplatesPath,
+  } = initSettings(customSettings);
+
   let data = {};
 
   fse.ensureDir(path.dirname(hexletConfigPath));
@@ -49,8 +53,9 @@ const handler = async ({
   }
   console.log(`Repository Home: ${project.web_url}`);
 
-  const templatePaths = await fs.readdir(path.join(cliSrcDir, 'templates'));
-  const promises = templatePaths.map(async (templatePath) => {
+  const programTemplateDir = path.join(hexletTemplatesPath, 'program');
+  const programTemplatePaths = await fsp.readdir(programTemplateDir);
+  const promises = programTemplatePaths.map(async (templatePath) => {
     let action;
     try {
       await api.RepositoryFiles.show(projectId, templatePath, branch);
@@ -58,7 +63,8 @@ const handler = async ({
     } catch (e) {
       action = 'create';
     }
-    const content = await fs.readFile(path.join(cliSrcDir, 'templates', templatePath), 'utf-8');
+    const fullPath = path.join(programTemplateDir, templatePath);
+    const content = await fsp.readFile(fullPath, 'utf-8');
     const commitAction = {
       action,
       content,
@@ -67,17 +73,13 @@ const handler = async ({
     return commitAction;
   });
   const commitActions = await Promise.all(promises);
-
-  await api.Commits.create(
-    projectId,
-    branch,
-    'configure (auto)',
-    commitActions,
-  );
+  await api.Commits.create(projectId, branch, 'configure (auto)', commitActions);
 
   // console.log(namespace);
   const localPath = path.join(hexletDir, program, namespace.path);
   console.log(`COMMAND: git clone ${project.ssh_url_to_repo} ${localPath}`);
+
+  return { hexletConfigPath };
 };
 
 const obj = {

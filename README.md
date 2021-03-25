@@ -13,12 +13,10 @@ This repository is created and maintained by the team and the community of Hexle
 ## Setup
 
 ```sh
-make install
+# Node.js
+curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# Hexlet Cli
+npm install -g @hexlet/cli
 ```
-
-## Run tests
-
-```sh
-make test
-```
-

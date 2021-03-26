@@ -8,13 +8,24 @@ This repository is created and maintained by the team and the community of Hexle
 
 [![Node CI](https://github.com/hexlet/cli/workflows/Node%20CI/badge.svg)](https://github.com/hexlet/cli/actions)
 
-## Setup
+Утилита для взаимодействия с Hexlet.
+
+## Установка и использование
+
+**Требования:**
+* Node.js >= 14
+* npm >= 6.5
 
 ```sh
-# Node.js
-curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
-sudo apt-get install -y nodejs
-
-# Hexlet Cli
+# установить утилиту
 npm install -g @hexlet/cli
+
+# запустить
+npx hexlet --help
+# ознакомиться со справкой
 ```
+
+## Полезные материалы
+
+* [Гайд](src/templates/README.md) по выполнению домашних заданий с использованием этой утилиты.
+* [Инструкции](https://github.com/Hexlet/instructions) по установке *Node.js* и не только.

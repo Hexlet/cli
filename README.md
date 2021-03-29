@@ -27,5 +27,5 @@ npx hexlet --help
 
 ## Полезные материалы
 
-* [Гайд](src/templates/README.md) по выполнению домашних заданий с использованием этой утилиты.
+* [Гайд](src/templates/program/README.md) по выполнению домашних заданий с использованием этой утилиты.
 * [Инструкции](https://github.com/Hexlet/instructions) по установке *Node.js* и не только.

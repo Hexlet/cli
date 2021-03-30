@@ -8,7 +8,7 @@ const { Gitlab } = require('@gitbeaker/node');
 const initSettings = require('../../settings.js');
 
 const handler = async ({
-  program, groupId, id, token,
+  program, groupId, userId, token,
 }, customSettings = {}) => {
   const {
     branch, hexletConfigPath, hexletDir, hexletTemplatesPath,
@@ -25,7 +25,7 @@ const handler = async ({
     // nothing
   }
 
-  data.id = id;
+  data.userId = userId;
   data.token = token;
   // _.set(data.programs, ['programs', program], group);
   if (!data.programs) {
@@ -41,11 +41,11 @@ const handler = async ({
   });
 
   const namespace = await api.Namespaces.show(groupId);
-  const projectId = path.join(namespace.full_path, `${id}`);
+  const projectId = path.join(namespace.full_path, `${userId}`);
   let project;
   try {
     project = await api.Projects.create({
-      name: id,
+      name: userId,
       namespace_id: groupId,
     });
   } catch (e) {
@@ -83,7 +83,7 @@ const handler = async ({
 };
 
 const obj = {
-  command: 'init <program> <groupId> <id>',
+  command: 'init <program> <groupId> <userId>',
   description: 'Init repository',
   builder: (yargs) => yargs.option('token', {
     description: 'Gitlab Token',

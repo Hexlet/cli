@@ -1,9 +1,12 @@
 {
   "dependencies": {
     "@gitbeaker/node": "^28.2.0",
+    "axios": "^0.21.1",
+    "debug": "^4.3.1",
     "fs-extra": "^9.1.0",
     "lodash": "^4.17.21",
     "pkg": "^4.5.0",
+    "tar": "^6.1.0",
     "yargs": "^16.2.0"
   },
   "devDependencies": {

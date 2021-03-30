@@ -47,6 +47,7 @@ const handler = async ({
   await tar.x({
     cwd: tmpDirPath,
     file: tmpArchiveFilePath,
+    noChmod: true,
   });
 
   const programPath = generateHexletProgramPath(program);

@@ -1,11 +1,17 @@
 // @ts-check
 
 const fsp = require('fs/promises');
+const http = require('isomorphic-git/http/node')
+const fs = require('fs');
+const debug = require('debug');
 const fse = require('fs-extra');
 const path = require('path');
+const git = require('isomorphic-git');
 const { Gitlab } = require('@gitbeaker/node');
 
 const initSettings = require('../../settings.js');
+
+const log = debug('hexlet');
 
 const handler = async ({
   program, groupId, userId, token,
@@ -27,14 +33,10 @@ const handler = async ({
 
   data.userId = userId;
   data.token = token;
-  // _.set(data.programs, ['programs', program], group);
   if (!data.programs) {
     data.programs = {};
   }
   data.programs[program] = groupId;
-
-  await fse.writeJson(hexletConfigPath, data);
-  console.log(`Config created: ${hexletConfigPath}`);
 
   const api = new Gitlab({
     token,
@@ -52,6 +54,13 @@ const handler = async ({
     project = await api.Projects.show(projectId);
   }
   console.log(`Repository Home: ${project.web_url}`);
+
+  // const sshRepoUrl = `https://oauth2:${token}@gitlab.com/${project.path_with_namespace}`;
+  // console.log(project);
+  // data.gitRepoUrl = project.ssh_url_to_repo;
+
+  await fse.writeJson(hexletConfigPath, data);
+  console.log(`Config created: ${hexletConfigPath}`);
 
   const programTemplateDir = path.join(hexletTemplatesPath, 'program');
   const programTemplatePaths = await fsp.readdir(programTemplateDir);
@@ -76,8 +85,26 @@ const handler = async ({
   await api.Commits.create(projectId, branch, 'configure (auto)', commitActions);
 
   // console.log(namespace);
-  const localPath = path.join(hexletDir, program, namespace.path);
-  console.log(`COMMAND: git clone ${project.ssh_url_to_repo} ${localPath}`);
+  const localPath = path.join(hexletDir, program);
+  log(`COMMAND: git clone ${project.ssh_url_to_repo} ${localPath}`);
+
+  try {
+    await git.clone({
+      fs,
+      http,
+      dir: localPath,
+      onAuth: () => ({ username: 'oauth2', password: token }),
+      // corsProxy: 'https://cors.isomorphic-git.org',
+      url: project.http_url_to_repo,
+      singleBranch: true,
+      ref: branch,
+    });
+  } catch (e) {
+    if (e.code !== 'AlreadyExistsError') {
+      throw e;
+    }
+    console.log('Repository already exists');
+  }
 
   return { hexletConfigPath };
 };

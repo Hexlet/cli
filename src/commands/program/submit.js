@@ -1,49 +1,72 @@
 // @ts-check
 
-// const fsp = require('fs/promises');
 const fse = require('fs-extra');
 const fs = require('fs');
-const os = require('os');
-const util = require('util');
-const path = require('path');
-const tar = require('tar');
-const axios = require('axios');
+const http = require('isomorphic-git/http/node');
+// const path = require('path');
 const debug = require('debug');
-const { Gitlab } = require('@gitbeaker/node');
+const git = require('isomorphic-git');
 
 const log = debug('hexlet');
 
 const initSettings = require('../../settings.js');
 
 const handler = async ({
-  program
+  program,
 }, customSettings = {}) => {
   const {
-    branch, hexletConfigPath, hexletDir, hexletTemplatesPath,
+    generateHexletProgramPath, hexletConfigPath, branch,
   } = initSettings(customSettings);
 
   const { token } = await fse.readJson(hexletConfigPath);
-  const api = new Gitlab({
-    token,
+  const programPath = generateHexletProgramPath(program);
+
+  // FIXME: add "git pull --rebase"
+  await git.pull({
+    fs,
+    http,
+    dir: programPath,
+    fastForwardOnly: true,
+    ref: branch,
+    singleBranch: true,
+    onAuth: () => ({ username: 'oauth2', password: token }),
+    author: {
+      name: '@hexlet/cli',
+      email: 'support@hexlet.io',
+    },
   });
 
-  const templateUrl = 'https://my-data.fra1.digitaloceanspaces.com/hexlet-programs/%s-program.tar.gz';
-  const programUrl = util.format(templateUrl, program);
-  log(programUrl);
-  const tmpFilePath = path.join(os.tmpdir(), `${program}-program.tar.gz`);
-  log(tmpFilePath);
-  // const tmpDirPath
+  const statuses = await git.statusMatrix({ fs, dir: programPath });
+  const promises = statuses.map(([filepath, , worktreeStatus]) => {
+    if (worktreeStatus) {
+      return git.add({ fs, dir: programPath, filepath });
+    }
+    return git.remove({ fs, dir: programPath, filepath });
+  });
+  Promise.all(promises);
 
-  await axios({
-    method: 'get',
-    url: programUrl,
-    responseType: 'stream',
-  }).then((response) => response.data.pipe(fs.createWriteStream(tmpFilePath)));
+  // FIXME: only when changed
+  await git.commit({
+    fs,
+    dir: programPath,
+    message: 'auto save',
+    author: {
+      name: '@hexlet/cli',
+      email: 'support@hexlet.io',
+    },
+  });
 
-  const result = await tar.x({
-    file: tmpFilePath,
-  }); // .then(_=> { .. tarball has been dumped in cwd .. })
-  // console.log(result);
+  await git.push({
+    fs,
+    http,
+    dir: programPath,
+    // url: repoUrl,
+    onAuth: () => ({ username: 'oauth2', password: token }),
+    remote: 'origin',
+    ref: branch,
+  });
+
+  console.log('Check the repository');
 };
 
 const obj = {

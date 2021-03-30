@@ -2,30 +2,23 @@
 
 const fsp = require('fs/promises');
 const fse = require('fs-extra');
-const fs = require('fs');
 const os = require('os');
 const util = require('util');
 const path = require('path');
 const tar = require('tar');
 const axios = require('axios');
 const debug = require('debug');
-const { Gitlab } = require('@gitbeaker/node');
 
 const log = debug('hexlet');
 
 const initSettings = require('../../settings.js');
 
 const handler = async ({
-  program
+  program,
 }, customSettings = {}) => {
   const {
-    generateHexletProgramPath, hexletConfigPath,
+    generateHexletProgramPath,
   } = initSettings(customSettings);
-
-  const { token } = await fse.readJson(hexletConfigPath);
-  const api = new Gitlab({
-    token,
-  });
 
   const templateUrl = 'https://my-data.fra1.digitaloceanspaces.com/hexlet-programs/%s-program.tar.gz';
   const programUrl = util.format(templateUrl, program);
@@ -58,7 +51,7 @@ const handler = async ({
 
   const exerciseNames = await fsp.readdir(tmpDirPath);
   const promises = exerciseNames.map(async (exerciseName) => {
-    const hexletExercisePath = path.join(programPath, exerciseName);
+    const hexletExercisePath = path.join(programPath, 'exercises', exerciseName);
     const exercisePath = path.join(tmpDirPath, exerciseName);
     const exists = await fse.pathExists(hexletExercisePath);
     if (!exists) {

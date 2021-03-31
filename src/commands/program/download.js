@@ -46,7 +46,7 @@ const handler = async ({
   const programPath = generateHexletProgramPath(program);
   const programPathExists = await fse.pathExists(programPath);
   if (!programPathExists) {
-    await fsp.mkdir(programPath);
+    await fse.mkdirp(programPath);
   }
 
   const exerciseNames = await fsp.readdir(tmpDirPath);

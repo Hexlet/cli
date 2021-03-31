@@ -77,7 +77,7 @@ const handler = async (params) => {
   console.log(chalk.grey(`Gitlab repository: ${project.web_url}`));
 
   prepareConfig({
-    ...params, hexletConfigPath, program, project
+    ...params, hexletConfigPath, program, project,
   });
 
   const programTemplateDir = path.join(hexletTemplatesPath, 'program');

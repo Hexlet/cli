@@ -20,8 +20,8 @@ describe('program', () => {
 
   it('init', async () => {
     nock('https://gitlab.com')
-      .get('/api/v4/namespaces/test-group')
-      .reply(200, { full_path: 'hexlet/jopa', path: 'jopa' });
+      .get('/api/v4/namespaces/jopa')
+      .reply(200, { full_path: 'hexlet/programs/jopa', path: 'jopa' });
 
     const project = {
       web_url: 'lala',
@@ -29,20 +29,19 @@ describe('program', () => {
       ssh_url_to_repo: 'git://gitlab.com/repository.git',
     };
     nock('https://gitlab.com')
-      .get('/api/v4/projects/hexlet%2Fjopa%2F1')
+      .get('/api/v4/projects/hexlet%2Fprograms%2Fjopa%2F1')
       .reply(200, project);
 
     nock('https://gitlab.com')
-      .post('/api/v4/projects/hexlet%2Fjopa%2F1/repository/commits')
+      .post('/api/v4/projects/hexlet%2Fprograms%2Fjopa%2F1/repository/commits')
       .reply(200, {});
 
     git.clone = jest.fn(() => {});
     git.pull = jest.fn(() => {});
 
     const args = {
-      program: 'ruby',
       userId: '1',
-      groupId: 'test-group',
+      groupId: 'jopa',
       token: 'some-token',
       customSettings: defaults,
     };

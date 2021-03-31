@@ -3,6 +3,7 @@
 const fse = require('fs-extra');
 const fs = require('fs');
 const http = require('isomorphic-git/http/node');
+const chalk = require('chalk');
 const path = require('path');
 const debug = require('debug');
 const git = require('isomorphic-git');
@@ -15,10 +16,10 @@ const handler = async ({
   program, exercise,
 }, customSettings = {}) => {
   const {
-    generateHexletProgramPath, hexletConfigPath, branch,
+    author, generateHexletProgramPath, hexletConfigPath, branch,
   } = initSettings(customSettings);
 
-  const { token } = await fse.readJson(hexletConfigPath);
+  const { token, programs } = await fse.readJson(hexletConfigPath);
   const programPath = generateHexletProgramPath(program);
 
   const exercisePath = path.join(programPath, 'exercises', exercise);
@@ -34,10 +35,7 @@ const handler = async ({
     ref: branch,
     singleBranch: true,
     onAuth: () => ({ username: 'oauth2', password: token }),
-    author: {
-      name: '@hexlet/cli',
-      email: 'support@hexlet.io',
-    },
+    author,
   });
 
   const current = { exercise };
@@ -63,10 +61,7 @@ const handler = async ({
       fs,
       dir: programPath,
       message: '@hexlet/cli: submit',
-      author: {
-        name: '@hexlet/cli',
-        email: 'support@hexlet.io',
-      },
+      author,
     });
 
     await git.push({
@@ -78,9 +73,9 @@ const handler = async ({
       remote: 'origin',
       ref: branch,
     });
-    console.log('Check the repository');
+    console.log(chalk.green(`Exercise has been submitted! Open ${programs[program].gitlabUrl}`));
   } else {
-    console.log('Nothing changed. Skip commiting');
+    console.log(chalk.grey('Nothing changed. Skip commiting'));
   }
 };
 

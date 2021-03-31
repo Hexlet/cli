@@ -4,6 +4,7 @@ const fsp = require('fs/promises');
 const fse = require('fs-extra');
 const os = require('os');
 const util = require('util');
+const chalk = require('chalk');
 const path = require('path');
 const tar = require('tar');
 const axios = require('axios');
@@ -70,7 +71,7 @@ const handler = async ({
     throw new Error(`Program "${program}" does not contain exercise with name "${exercise}"`);
   }
 
-  console.log(`Look at the ${programPath}`);
+  console.log(chalk.green(`Exercise path: ${hexletExercisePath}`));
 };
 
 const obj = {

@@ -4,6 +4,8 @@
 const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
 
+console.log();
+
 const obj = yargs(hideBin(process.argv));
 // eslint-disable-next-line no-unused-expressions
 obj.commandDir('../src/commands')

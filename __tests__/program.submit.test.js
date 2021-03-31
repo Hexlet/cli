@@ -7,7 +7,6 @@ const nock = require('nock');
 
 const programCmd = require('../src/commands/program/submit.js');
 const initSettings = require('../src/settings.js');
-// const programDownloadCmd = require('../src/commands/program/download.js');
 
 nock.disableNetConnect();
 
@@ -21,7 +20,10 @@ describe('program', () => {
     const { hexletConfigPath, generateHexletProgramPath } = initSettings(defaults);
     const hexletProgramPath = generateHexletProgramPath('ruby');
     await fsp.mkdir(path.join(hexletProgramPath, 'exercises', 'hello-world'), { recursive: true });
-    const configData = { token: 'token' };
+    const configData = {
+      token: 'token',
+      programs: { ruby: { gitlabUrl: 'lal' } },
+    };
     await fse.writeJson(hexletConfigPath, configData);
   });
 

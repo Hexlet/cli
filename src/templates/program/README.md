@@ -39,6 +39,7 @@ Group ID: 12345
 Теперь можно приступить к указанию аргументов:
 
 * `program` — название учебной программы. Берётся из адресной строки. `java-programmer` — в нашем примере.
+* `exercise` — название упражнения для скачивания/отправки. Для примера будет упражнение `arrays`.
 * `groupId` — идентификатор группы. Находится на странице группы, под названием. `12345` — в нашем примере.
 * `token` — *Personal access token* из Gitlab. О нём рассказывается в [статье в Notion](https://www.notion.so/hexlet/780f724542b14ecb883a6ebf8ea6e54e). 
 * `userId` — идентификатор студента на Хекслете. Они будут предоставлены преподавателем, когда понадобится выполнять 
@@ -53,6 +54,6 @@ hexlet program init java-programmer 12345 0 --token=accesstoken
 Для команд `download` и `submit` нужно указывать только название учебной программы: 
 
 ```shell
-hexlet program download java-programmer
-hexlet program submit java-programmer
+hexlet program download java-programmer arrays # скачать на компьютер упражнение Массивы из программы Java-программист
+hexlet program submit java-programmer arrays # отправить упражнение в Gitlab (git add, commit, push)
 ```

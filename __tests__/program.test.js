@@ -14,7 +14,7 @@ let defaults;
 
 describe('program', () => {
   beforeEach(async () => {
-    const tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'foo-'));
+    const tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-cli-'));
     defaults = { homedir: tmpDir };
   });
 
@@ -43,6 +43,7 @@ describe('program', () => {
       userId: '1',
       groupId: 'test-group',
       token: 'some-token',
+      customSettings: defaults,
     };
     const result = await programInitCmd.handler(args, defaults);
     const data = await fse.readJson(result.hexletConfigPath);

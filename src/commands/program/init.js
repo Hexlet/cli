@@ -13,15 +13,10 @@ const initSettings = require('../../settings.js');
 
 const log = debug('hexlet');
 
-const handler = async (params) => {
+const prepareConfig = async (params) => {
   const {
-    program, groupId, userId, token, customSettings = {},
+    hexletConfigPath, program, groupId, token, userId,
   } = params;
-  log('params', params);
-
-  const {
-    branch, hexletConfigPath, hexletDir, hexletTemplatesPath,
-  } = initSettings(customSettings);
 
   let data = {};
 
@@ -40,6 +35,22 @@ const handler = async (params) => {
     data.programs = {};
   }
   data.programs[program] = groupId;
+
+  await fse.writeJson(hexletConfigPath, data);
+  console.log(`Config created: ${hexletConfigPath}`);
+};
+
+const handler = async (params) => {
+  const {
+    program, groupId, userId, token, customSettings = {},
+  } = params;
+  log('params', params);
+
+  const {
+    branch, hexletConfigPath, hexletDir, hexletTemplatesPath,
+  } = initSettings(customSettings);
+
+  prepareConfig({ ...params, hexletConfigPath });
 
   const api = new Gitlab({
     token,
@@ -63,9 +74,6 @@ const handler = async (params) => {
   // console.log(project);
   // data.gitRepoUrl = project.ssh_url_to_repo;
 
-  await fse.writeJson(hexletConfigPath, data);
-  console.log(`Config created: ${hexletConfigPath}`);
-
   const programTemplateDir = path.join(hexletTemplatesPath, 'program');
   const programTemplatePaths = await fsp.readdir(programTemplateDir);
   const promises = programTemplatePaths.map(async (templatePath) => {
@@ -86,7 +94,7 @@ const handler = async (params) => {
     return commitAction;
   });
   const commitActions = await Promise.all(promises);
-  await api.Commits.create(projectId, branch, 'configure (auto)', commitActions);
+  await api.Commits.create(projectId, branch, '@hexlet/cli: configure', commitActions);
 
   // console.log(namespace);
   const localPath = path.join(hexletDir, program);
@@ -116,11 +124,23 @@ const handler = async (params) => {
 const obj = {
   command: 'init <program> <groupId> <userId>',
   description: 'Init repository',
-  builder: (yargs) => yargs.option('token', {
-    description: 'Gitlab Token',
-    required: true,
-    type: 'string',
-  }),
+  builder: (yargs) => {
+    yargs.option('token', {
+      description: 'Gitlab Token',
+      required: true,
+      type: 'string',
+    });
+    yargs.positional('groupId', {
+      description: 'Gitlab Group Id',
+      // required: true,
+      type: 'string',
+    });
+    yargs.positional('userId', {
+      description: 'Hexlet User Id',
+      // required: true,
+      type: 'string',
+    });
+  },
   handler,
 };
 

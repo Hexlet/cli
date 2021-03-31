@@ -26,7 +26,6 @@ const handler = async ({
     fs,
     http,
     dir: programPath,
-    fastForwardOnly: true,
     ref: branch,
     singleBranch: true,
     onAuth: () => ({ username: 'oauth2', password: token }),
@@ -37,36 +36,43 @@ const handler = async ({
   });
 
   const statuses = await git.statusMatrix({ fs, dir: programPath });
-  const promises = statuses.map(([filepath, , worktreeStatus]) => {
-    if (worktreeStatus) {
+  const statusDifferentFromHead = 2;
+  const statusIdenticalToHead = 1;
+  const changedStatuses = statuses.filter(
+    ([, , workdirStatus]) => workdirStatus !== statusIdenticalToHead,
+  );
+  const promises = changedStatuses.map(([filepath, , workdirStatus]) => {
+    if (statusDifferentFromHead === workdirStatus) {
       return git.add({ fs, dir: programPath, filepath });
     }
     return git.remove({ fs, dir: programPath, filepath });
   });
   Promise.all(promises);
 
-  // FIXME: only when changed
-  await git.commit({
-    fs,
-    dir: programPath,
-    message: 'auto save',
-    author: {
-      name: '@hexlet/cli',
-      email: 'support@hexlet.io',
-    },
-  });
+  if (promises.length > 0) {
+    await git.commit({
+      fs,
+      dir: programPath,
+      message: '@hexlet/cli: submit',
+      author: {
+        name: '@hexlet/cli',
+        email: 'support@hexlet.io',
+      },
+    });
 
-  await git.push({
-    fs,
-    http,
-    dir: programPath,
-    // url: repoUrl,
-    onAuth: () => ({ username: 'oauth2', password: token }),
-    remote: 'origin',
-    ref: branch,
-  });
-
-  console.log('Check the repository');
+    await git.push({
+      fs,
+      http,
+      dir: programPath,
+      // url: repoUrl,
+      onAuth: () => ({ username: 'oauth2', password: token }),
+      remote: 'origin',
+      ref: branch,
+    });
+    console.log('Check the repository');
+  } else {
+    console.log('Nothing changed. Skip commiting');
+  }
 };
 
 const obj = {

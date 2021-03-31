@@ -12,11 +12,11 @@ test-coverage:
 lint:
 	npx eslint .
 
-publish:
-	npm publish
-
 pkg:
 	npx pkg package.json --out-path targets
+
+publish:
+	npx release-it
 
 .PHONY: test
 

@@ -5,7 +5,7 @@ const fsp = require('fs/promises');
 const fse = require('fs-extra');
 const nock = require('nock');
 
-const programInitCmd = require('../src/commands/program/init.js');
+const programCmd = require('../src/commands/program/init.js');
 // const programDownloadCmd = require('../src/commands/program/download.js');
 
 nock.disableNetConnect();
@@ -45,7 +45,7 @@ describe('program', () => {
       token: 'some-token',
       customSettings: defaults,
     };
-    const result = await programInitCmd.handler(args, defaults);
+    const result = await programCmd.handler(args, defaults);
     const data = await fse.readJson(result.hexletConfigPath);
 
     expect(data).toMatchObject({ userId: args.userId });

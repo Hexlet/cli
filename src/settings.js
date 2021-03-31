@@ -7,7 +7,7 @@ module.exports = (options = {}) => {
   const homeDir = options.homedir || os.homedir();
   const hexletDir = path.join(homeDir, 'Hexlet');
   const cliSrcDir = path.join(__dirname, '..', 'src');
-  const hexletConfigPath = path.join(hexletDir, '.config');
+  const hexletConfigPath = path.join(hexletDir, '.config.json');
   const hexletTemplatesPath = path.join(cliSrcDir, 'templates');
   const hexletGitlabNamespace = 'hexlethq'; // https://gitlab.com/hexlethq
   const branch = 'main';

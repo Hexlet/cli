@@ -3,16 +3,16 @@
 const fse = require('fs-extra');
 const fs = require('fs');
 const http = require('isomorphic-git/http/node');
-// const path = require('path');
-// const debug = require('debug');
+const path = require('path');
+const debug = require('debug');
 const git = require('isomorphic-git');
 
-// const log = debug('hexlet');
+const log = debug('hexlet');
 
 const initSettings = require('../../settings.js');
 
 const handler = async ({
-  program,
+  program, exercise,
 }, customSettings = {}) => {
   const {
     generateHexletProgramPath, hexletConfigPath, branch,
@@ -21,7 +21,12 @@ const handler = async ({
   const { token } = await fse.readJson(hexletConfigPath);
   const programPath = generateHexletProgramPath(program);
 
-  // FIXME: add "git pull --rebase"
+  const exercisePath = path.join(programPath, 'exercises', exercise);
+  log(exercisePath);
+  if (!await fse.pathExists(exercisePath)) {
+    throw new Error(`Exercise with name "${exercise}" does not exists. Check the name and try again or try to download it`);
+  }
+
   await git.pull({
     fs,
     http,
@@ -34,6 +39,10 @@ const handler = async ({
       email: 'support@hexlet.io',
     },
   });
+
+  const current = { exercise };
+  const currentExerciseConfigPath = path.join(programPath, '.current.json');
+  await fse.writeJson(currentExerciseConfigPath, current);
 
   const statuses = await git.statusMatrix({ fs, dir: programPath });
   const statusDifferentFromHead = 2;
@@ -76,7 +85,7 @@ const handler = async ({
 };
 
 const obj = {
-  command: 'submit <program>',
+  command: 'submit <program> <exercise>',
   description: 'Submit exercises',
   builder: () => {},
   handler,

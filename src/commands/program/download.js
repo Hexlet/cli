@@ -14,7 +14,7 @@ const log = debug('hexlet');
 const initSettings = require('../../settings.js');
 
 const handler = async ({
-  program,
+  program, exercise,
 }, customSettings = {}) => {
   const {
     generateHexletProgramPath,
@@ -50,23 +50,31 @@ const handler = async ({
   }
 
   const exercisesPath = path.join(tmpDirPath, 'exercises');
-  const exerciseNames = await fsp.readdir(exercisesPath);
+  // const exerciseNames = await fsp.readdir(exercisesPath);
 
-  const promises = exerciseNames.map(async (exerciseName) => {
-    const hexletExercisePath = path.join(programPath, 'exercises', exerciseName);
-    const exercisePath = path.join(exercisesPath, exerciseName);
-    const exists = await fse.pathExists(hexletExercisePath);
-    if (!exists) {
-      await fse.copy(exercisePath, hexletExercisePath);
-    }
-  });
-  Promise.all(promises);
+  // const promises = exerciseNames.map(async (exerciseName) => {
+  //   const hexletExercisePath = path.join(programPath, 'exercises', exerciseName);
+  //   const exercisePath = path.join(exercisesPath, exerciseName);
+  //   const exists = await fse.pathExists(hexletExercisePath);
+  //   if (!exists) {
+  //     await fse.copy(exercisePath, hexletExercisePath);
+  //   }
+  // });
+  // Promise.all(promises);
+  const hexletExercisePath = path.join(programPath, 'exercises', exercise);
+  const exercisePath = path.join(exercisesPath, exercise);
+  try {
+    await fse.copy(exercisePath, hexletExercisePath);
+  } catch (e) {
+    log(e);
+    throw new Error(`Program "${program}" does not contain exercise with name "${exercise}"`);
+  }
 
   console.log(`Look at the ${programPath}`);
 };
 
 const obj = {
-  command: 'download <program>',
+  command: 'download <program> <exercise>',
   description: 'Download exercises',
   builder: () => {},
   handler,

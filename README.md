@@ -15,14 +15,19 @@ This repository is created and maintained by the team and the community of Hexle
 **Требования:**
 * Node.js >= 14
 * npm >= 6.5
+* git >= 2.26
 
 ```sh
 # установить утилиту
 npm install -g @hexlet/cli
 
 # запустить
-npx hexlet --help
+hexlet --help
 # ознакомиться со справкой
+
+# справка по подкомандам:
+hexlet program --help
+hexlet program init --help
 ```
 
 ## Полезные материалы

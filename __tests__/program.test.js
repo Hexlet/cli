@@ -1,5 +1,6 @@
 const os = require('os');
 const path = require('path');
+const git = require('isomorphic-git');
 const fsp = require('fs/promises');
 const fse = require('fs-extra');
 const nock = require('nock');
@@ -22,27 +23,30 @@ describe('program', () => {
       .get('/api/v4/namespaces/test-group')
       .reply(200, { full_path: 'hexlet/jopa', path: 'jopa' });
 
+    const project = {
+      web_url: 'lala',
+      http_url_to_repo: 'https://gitlab.com/repository.git',
+      ssh_url_to_repo: 'git://gitlab.com/repository.git',
+    };
     nock('https://gitlab.com')
-      .get('/api/v4/projects/jopa%2F1')
-      .reply(200, { web_url: 'lala' });
+      .get('/api/v4/projects/hexlet%2Fjopa%2F1')
+      .reply(200, project);
 
     nock('https://gitlab.com')
       .post('/api/v4/projects/hexlet%2Fjopa%2F1/repository/commits')
       .reply(200, {});
 
-    nock('https://gitlab.com')
-      .get('/api/v4/projects/hexlet%2Fjopa%2F1')
-      .reply(200, {});
+    git.clone = jest.fn(() => {});
 
     const args = {
       program: 'ruby',
-      id: 1,
+      userId: '1',
       groupId: 'test-group',
       token: 'some-token',
     };
     const result = await programInitCmd.handler(args, defaults);
     const data = await fse.readJson(result.hexletConfigPath);
 
-    expect(data).toMatchObject({ id: args.id });
+    expect(data).toMatchObject({ userId: args.userId });
   });
 });

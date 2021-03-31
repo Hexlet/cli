@@ -13,9 +13,12 @@ const initSettings = require('../../settings.js');
 
 const log = debug('hexlet');
 
-const handler = async ({
-  program, groupId, userId, token,
-}, customSettings = {}) => {
+const handler = async (params) => {
+  const {
+    program, groupId, userId, token, customSettings = {},
+  } = params;
+  log('params', params);
+
   const {
     branch, hexletConfigPath, hexletDir, hexletTemplatesPath,
   } = initSettings(customSettings);
@@ -43,7 +46,7 @@ const handler = async ({
   });
 
   const namespace = await api.Namespaces.show(groupId);
-  const projectId = path.join(namespace.full_path, `${userId}`);
+  const projectId = path.join(namespace.full_path, userId);
   let project;
   try {
     project = await api.Projects.create({
@@ -51,9 +54,10 @@ const handler = async ({
       namespace_id: groupId,
     });
   } catch (e) {
+    // console.log(e);
     project = await api.Projects.show(projectId);
   }
-  console.log(`Repository Home: ${project.web_url}`);
+  log('project', project);
 
   // const sshRepoUrl = `https://oauth2:${token}@gitlab.com/${project.path_with_namespace}`;
   // console.log(project);

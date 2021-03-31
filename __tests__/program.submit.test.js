@@ -52,11 +52,10 @@ describe('program', () => {
       exercise: 'hello-world',
       customSettings: defaults,
     };
-    const result = await programCmd.handler(args, defaults);
+    await programCmd.handler(args, defaults);
     // const data = await fse.readJson(result.hexletConfigPath);
 
     expect(true).toBe(true);
     // expect(data).toMatchObject({ userId: args.userId });
   });
 });
-

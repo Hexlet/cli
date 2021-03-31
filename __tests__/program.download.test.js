@@ -2,7 +2,7 @@ const os = require('os');
 const path = require('path');
 const git = require('isomorphic-git');
 const fsp = require('fs/promises');
-const fse = require('fs-extra');
+// const fse = require('fs-extra');
 const nock = require('nock');
 
 const programCmd = require('../src/commands/program/download.js');

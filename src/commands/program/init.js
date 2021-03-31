@@ -1,7 +1,7 @@
 // @ts-check
 
 const fsp = require('fs/promises');
-const http = require('isomorphic-git/http/node')
+const http = require('isomorphic-git/http/node');
 const fs = require('fs');
 const debug = require('debug');
 const fse = require('fs-extra');

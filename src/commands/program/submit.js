@@ -4,10 +4,10 @@ const fse = require('fs-extra');
 const fs = require('fs');
 const http = require('isomorphic-git/http/node');
 // const path = require('path');
-const debug = require('debug');
+// const debug = require('debug');
 const git = require('isomorphic-git');
 
-const log = debug('hexlet');
+// const log = debug('hexlet');
 
 const initSettings = require('../../settings.js');
 

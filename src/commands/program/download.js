@@ -46,13 +46,15 @@ const handler = async ({
   const programPath = generateHexletProgramPath(program);
   const programPathExists = await fse.pathExists(programPath);
   if (!programPathExists) {
-    await fsp.mkdir(programPath);
+    await fse.mkdirp(programPath);
   }
 
-  const exerciseNames = await fsp.readdir(tmpDirPath);
+  const exercisesPath = path.join(tmpDirPath, 'exercises');
+  const exerciseNames = await fsp.readdir(exercisesPath);
+
   const promises = exerciseNames.map(async (exerciseName) => {
     const hexletExercisePath = path.join(programPath, 'exercises', exerciseName);
-    const exercisePath = path.join(tmpDirPath, exerciseName);
+    const exercisePath = path.join(exercisesPath, exerciseName);
     const exists = await fse.pathExists(hexletExercisePath);
     if (!exists) {
       await fse.copy(exercisePath, hexletExercisePath);

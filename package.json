@@ -22,6 +22,10 @@
     "nock": "^13.0.11",
     "release-it": "^14.5.0"
   },
+  "files": [
+    "bin",
+    "src"
+  ],
   "bin": {
     "hexlet": "bin/hexlet.js"
   },

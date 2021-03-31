@@ -37,6 +37,7 @@ describe('program', () => {
       .reply(200, {});
 
     git.clone = jest.fn(() => {});
+    git.pull = jest.fn(() => {});
 
     const args = {
       program: 'ruby',

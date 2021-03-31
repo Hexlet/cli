@@ -97,14 +97,14 @@ const handler = async (params) => {
   await api.Commits.create(projectId, branch, '@hexlet/cli: configure', commitActions);
 
   // console.log(namespace);
-  const localPath = path.join(hexletDir, program);
-  log(`COMMAND: git clone ${project.ssh_url_to_repo} ${localPath}`);
+  const programPath = path.join(hexletDir, program);
+  log(`COMMAND: git clone ${project.ssh_url_to_repo} ${programPath}`);
 
   try {
     await git.clone({
       fs,
       http,
-      dir: localPath,
+      dir: programPath,
       onAuth: () => ({ username: 'oauth2', password: token }),
       // corsProxy: 'https://cors.isomorphic-git.org',
       url: project.http_url_to_repo,
@@ -117,6 +117,21 @@ const handler = async (params) => {
     }
     console.log('Repository already exists');
   }
+
+  await git.pull({
+    fs,
+    http,
+    dir: programPath,
+    ref: branch,
+    singleBranch: true,
+    onAuth: () => ({ username: 'oauth2', password: token }),
+    author: {
+      name: '@hexlet/cli',
+      email: 'support@hexlet.io',
+    },
+  });
+  console.log('Repository already exists');
+  console.log(`Program path: "${programPath}"`);
 
   return { hexletConfigPath };
 };

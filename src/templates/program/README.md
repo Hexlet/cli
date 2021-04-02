@@ -39,7 +39,7 @@
 На вкладке [Обучение](https://ru.hexlet.io/my/learning) личного кабинета студента идентификаторы *groupId* и *userId* уже подставлены в команду для утилиты, а снизу в `program` указано название программы:
 
 ```sh
-hexlet program init 12345 1 --token=accesstoken
+hexlet program init 12345 1 --token=ваш токен Gitlab
 
 # program: java-programmer
 ```

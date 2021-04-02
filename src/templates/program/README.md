@@ -24,41 +24,45 @@
 
 ### Аргументы
 
-Представим себе, что мы состоим в группе **Student Group**, в программе **Java-программист**. Тогда она будет иметь на Gitlab следующий адрес:
+У каждой команды есть несколько аргументов. Ниже будет показано, как они используются и где взять нужные значения.
 
-https://gitlab.com/hexlethq/programs/java-programmer/hexlet-groups/student-group
+* *program* — название учебной программы. Берётся из адресной строки в Gitlab.
+* *exercise* — название упражнения для скачивания/отправки.
+* *groupId* — идентификатор группы.
+* *userId* — идентификатор студента на Хекслете. 
+* *token* — *Personal access token* из Gitlab. О нём рассказывается в [статье в Notion](https://www.notion.so/hexlet/780f724542b14ecb883a6ebf8ea6e54e).
 
-На этой странице будет название группы, а под ней идентификатор вида
+### Использование
 
-```text
-Student Group
-Group ID: 12345
-```
+Представим себе, что мы состоим в группе **Student Group**, в программе **Java-программист**.
 
-Теперь можно приступить к указанию аргументов:
-
-* *exercise* — название упражнения для скачивания/отправки. Для примера будет упражнение *arrays*.
-* *groupId* — идентификатор группы. Находится на странице группы, под названием. *12345* — в нашем примере.
-* *token* — *Personal access token* из Gitlab. О нём рассказывается в [статье в Notion](https://www.notion.so/hexlet/780f724542b14ecb883a6ebf8ea6e54e). 
-* *userId* — идентификатор студента на Хекслете. Берётся на странице [Обучение](https://ru.hexlet.io/my/learning). Нужно состоять в группе, чтобы идентификатор отображался.
-
-Тогда команда инициализации будет выглядеть следующим образом:
+На вкладке [Обучение](https://ru.hexlet.io/my/learning) личного кабинета студента идентификаторы *groupId* и *userId* уже подставлены в команду для утилиты, а снизу в `program` указано название программы, остаётся её скопировать и указать свой токен:
 
 ```sh
-# Можно вызывать из любого места
 hexlet program init 12345 1 --token=accesstoken
 
-# Program name: java-programmer
+# program: java-programmer
+```
+
+Для инициализации проекта остаётся скопировать команду, указать свой токен и выполнить её:
+
+```sh
+# Можно вызывать из любого каталога
+hexlet program init 12345 1 --token=accesstoken
+
 # groupId: 12345
 # userId: 1
 ```
 
-Для команд *download* и *submit* нужно указывать только название учебной программы:
+Для команд *download* и *submit* аргументами нужно указывать название учебной программы (*program*) и урок (*exercise*), с которым ведётся работа:
 
 ```sh
 # скачать на компьютер упражнение Массивы из программы Java-программист
 hexlet program download java-programmer arrays
 
 # отправить упражнение в Gitlab (git add, commit, push)
-hexlet program submit java-programmer arrays 
+hexlet program submit java-programmer arrays
+
+# program: java-programmer
+# exercise: arrays
 ```

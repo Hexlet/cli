@@ -4,6 +4,8 @@
 
 ## Hexlet CLI
 
+Утилита вызывается по имени *hexlet*, и содержит одну главную главную команду *program*, за которой идёт одна из команд ниже.
+
 ### Команды
 
 * *init* — создаёт репозиторий в Gitlab и конфигурационный файл на компьютере студента.
@@ -39,7 +41,7 @@
 На вкладке [Обучение](https://ru.hexlet.io/my/learning) личного кабинета студента идентификаторы *groupId* и *userId* уже подставлены в команду для утилиты, а снизу в `program` указано название программы:
 
 ```sh
-hexlet init 12345 1 --token=ваш токен Gitlab
+hexlet program init 12345 1 --token=ваш токен Gitlab
 
 # program: java-programmer
 ```
@@ -48,7 +50,7 @@ hexlet init 12345 1 --token=ваш токен Gitlab
 
 ```sh
 # Можно вызывать из любого каталога
-hexlet init 12345 1 --token=accesstoken
+hexlet program init 12345 1 --token=accesstoken
 
 # groupId: 12345
 # userId: 1

@@ -1,4 +1,4 @@
 include:
-  - project: hexlethq/hexlet-program-source-ci
+  - project: hexlethq/hexlet-program-ci
     ref: release
-    file: /gitlab-ci-check-template.yml
+    file: /gitlab-ci-template.yml

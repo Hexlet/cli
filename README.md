@@ -12,7 +12,6 @@ This repository is created and maintained by the team and the community of Hexle
 
 ## Установка и использование
 
-**Требования:**
 * Node.js >= 14
 * npm >= 6.5
 * git >= 2.26
@@ -21,9 +20,8 @@ This repository is created and maintained by the team and the community of Hexle
 # установить утилиту
 npm install -g @hexlet/cli
 
-# запустить
+# справка
 hexlet --help
-# ознакомиться со справкой
 
 # справка по подкомандам:
 hexlet program --help

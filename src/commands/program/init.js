@@ -16,7 +16,7 @@ const log = debug('hexlet');
 
 const prepareConfig = async (params) => {
   const {
-    hexletConfigPath, groupId, token, userId, program, project,
+    hexletConfigPath, gitlabGroupId, token, hexletUserId, program, project,
   } = params;
 
   let data = {};
@@ -30,14 +30,14 @@ const prepareConfig = async (params) => {
     // nothing
   }
 
-  data.userId = userId;
+  data.hexletUserId = hexletUserId;
   data.token = token;
   if (!data.programs) {
     data.programs = { [program]: {} };
   }
   data.programs[program] = {
     gitlabUrl: project.web_url,
-    groupId,
+    gitlabGroupId,
   };
 
   await fse.writeJson(hexletConfigPath, data);
@@ -46,7 +46,7 @@ const prepareConfig = async (params) => {
 
 const handler = async (params) => {
   const {
-    groupId, userId, token, customSettings = {},
+    gitlabGroupId, hexletUserId, token, customSettings = {},
   } = params;
   log('params', params);
 
@@ -58,16 +58,16 @@ const handler = async (params) => {
     token,
   });
 
-  const namespace = await api.Namespaces.show(groupId);
+  const namespace = await api.Namespaces.show(gitlabGroupId);
   log(namespace);
   const program = namespace.full_path.split('/')[2];
 
-  const projectId = path.join(namespace.full_path, userId);
+  const projectId = path.join(namespace.full_path, hexletUserId);
   let project;
   try {
     project = await api.Projects.create({
-      name: userId,
-      namespace_id: groupId,
+      name: hexletUserId,
+      namespace_id: gitlabGroupId,
     });
   } catch (e) {
     log(e);
@@ -135,7 +135,7 @@ const handler = async (params) => {
 };
 
 const obj = {
-  command: 'init <groupId> <userId>',
+  command: 'init',
   description: 'Init repository',
   builder: (yargs) => {
     yargs.option('token', {
@@ -143,14 +143,15 @@ const obj = {
       required: true,
       type: 'string',
     });
-    yargs.positional('groupId', {
+    // TODO switch to hexlet group id after integration with hexlet
+    yargs.positional('group-id', {
       description: 'Gitlab Group Id',
-      // required: true,
+      required: true,
       type: 'string',
     });
-    yargs.positional('userId', {
+    yargs.positional('user-id', {
       description: 'Hexlet User Id',
-      // required: true,
+      required: true,
       type: 'string',
     });
   },

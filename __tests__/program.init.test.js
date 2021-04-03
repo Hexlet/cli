@@ -40,14 +40,14 @@ describe('program', () => {
     git.pull = jest.fn(() => {});
 
     const args = {
-      userId: '1',
-      groupId: 'jopa',
+      hexletUserId: '1',
+      gitlabGroupId: 'jopa',
       token: 'some-token',
       customSettings: defaults,
     };
     const result = await programCmd.handler(args, defaults);
     const data = await fse.readJson(result.hexletConfigPath);
 
-    expect(data).toMatchObject({ userId: args.userId });
+    expect(data).toMatchObject({ hexletUserId: args.hexletUserId });
   });
 });

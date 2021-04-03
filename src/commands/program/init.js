@@ -16,7 +16,7 @@ const log = debug('hexlet');
 
 const prepareConfig = async (params) => {
   const {
-    hexletConfigPath, gitlabGroupId, token, hexletUserId, program, project,
+    hexletConfigPath, gitlabGroupId, gitlabToken, hexletUserId, program, project,
   } = params;
 
   let data = {};
@@ -31,7 +31,7 @@ const prepareConfig = async (params) => {
   }
 
   data.hexletUserId = hexletUserId;
-  data.token = token;
+  data.gitlabToken = gitlabToken;
   if (!data.programs) {
     data.programs = { [program]: {} };
   }
@@ -46,7 +46,7 @@ const prepareConfig = async (params) => {
 
 const handler = async (params) => {
   const {
-    gitlabGroupId, hexletUserId, token, customSettings = {},
+    gitlabGroupId, hexletUserId, gitlabToken, customSettings = {},
   } = params;
   log('params', params);
 
@@ -55,11 +55,11 @@ const handler = async (params) => {
   } = initSettings(customSettings);
 
   const api = new Gitlab({
-    token,
+    token: gitlabToken,
   });
 
   const namespace = await api.Namespaces.show(gitlabGroupId);
-  log(namespace);
+  log('namespace', namespace);
   const program = namespace.full_path.split('/')[2];
 
   const projectId = path.join(namespace.full_path, hexletUserId);
@@ -109,7 +109,7 @@ const handler = async (params) => {
     fs,
     http,
     dir: programPath,
-    onAuth: () => ({ username: 'oauth2', password: token }),
+    onAuth: () => ({ username: 'oauth2', password: gitlabToken }),
     url: project.http_url_to_repo,
     singleBranch: true,
     ref: branch,
@@ -121,7 +121,7 @@ const handler = async (params) => {
     dir: programPath,
     ref: branch,
     singleBranch: true,
-    onAuth: () => ({ username: 'oauth2', password: token }),
+    onAuth: () => ({ username: 'oauth2', password: gitlabToken }),
     author,
   });
 
@@ -138,18 +138,18 @@ const obj = {
   command: 'init',
   description: 'Init repository',
   builder: (yargs) => {
-    yargs.option('token', {
+    yargs.option('gitlab-token', {
       description: 'Gitlab Token',
       required: true,
       type: 'string',
     });
     // TODO switch to hexlet group id after integration with hexlet
-    yargs.positional('group-id', {
+    yargs.option('gitlab-group-id', {
       description: 'Gitlab Group Id',
       required: true,
       type: 'string',
     });
-    yargs.positional('user-id', {
+    yargs.option('hexlet-user-id', {
       description: 'Hexlet User Id',
       required: true,
       type: 'string',

@@ -19,7 +19,7 @@ const handler = async ({
     author, generateHexletProgramPath, hexletConfigPath, branch,
   } = initSettings(customSettings);
 
-  const { token, programs } = await fse.readJson(hexletConfigPath);
+  const { gitlabToken, programs } = await fse.readJson(hexletConfigPath);
   const programPath = generateHexletProgramPath(program);
 
   const exercisePath = path.join(programPath, 'exercises', exercise);
@@ -34,7 +34,7 @@ const handler = async ({
     dir: programPath,
     ref: branch,
     singleBranch: true,
-    onAuth: () => ({ username: 'oauth2', password: token }),
+    onAuth: () => ({ username: 'oauth2', password: gitlabToken }),
     author,
   });
 
@@ -69,7 +69,7 @@ const handler = async ({
       http,
       dir: programPath,
       // url: repoUrl,
-      onAuth: () => ({ username: 'oauth2', password: token }),
+      onAuth: () => ({ username: 'oauth2', password: gitlabToken }),
       remote: 'origin',
       ref: branch,
     });

@@ -48,7 +48,7 @@ hexlet init 12345 1 --token=ваш токен Gitlab
 
 ```sh
 # Можно вызывать из любого каталога
-hexlet program init 12345 1 --token=accesstoken
+hexlet init 12345 1 --token=accesstoken
 
 # groupId: 12345
 # userId: 1

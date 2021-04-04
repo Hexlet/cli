@@ -30,9 +30,12 @@
 
 * *program* — название учебной программы. Берётся из адресной строки в Gitlab.
 * *exercise* — название упражнения для скачивания/отправки.
-* *groupId* — идентификатор группы.
-* *userId* — идентификатор студента на Хекслете. 
-* *token* — *Personal access token* из Gitlab. О нём рассказывается в [статье в Notion](https://www.notion.so/hexlet/780f724542b14ecb883a6ebf8ea6e54e).
+
+## Опции
+
+* *gitlab-group-id* — идентификатор группы.
+* *hexlet-user-id* — идентификатор студента на Хекслете.
+* *gitlab-token* — *Personal access token* из Gitlab. О нём рассказывается в [статье в Notion](https://www.notion.so/hexlet/780f724542b14ecb883a6ebf8ea6e54e).
 
 ### Использование
 
@@ -41,7 +44,7 @@
 На вкладке [Обучение](https://ru.hexlet.io/my/learning) личного кабинета студента идентификаторы *groupId* и *userId* уже подставлены в команду для утилиты, а снизу в `program` указано название программы:
 
 ```sh
-hexlet program init 12345 1 --token=ваш токен Gitlab
+hexlet program init --gitlab-group-id=12345 --hexlet-user-id=1 --gitlab-token=<ваш токен GitLab>
 
 # program: java-programmer
 ```
@@ -50,10 +53,12 @@ hexlet program init 12345 1 --token=ваш токен Gitlab
 
 ```sh
 # Можно вызывать из любого каталога
-hexlet program init 12345 1 --token=accesstoken
+hexlet program init --gitlab-group-id=12345 --hexlet-user-id=1 --gitlab-token=<ваш токен>
 
-# groupId: 12345
-# userId: 1
+# Gitlab repository: https://gitlab.com/hexlethq/programs/java-programmer/hexlet-groups/student-group/1
+# Config: /home/<username>/Hexlet/.config.json
+# Program name: java-programmer
+# Program path: /home/<username>/Hexlet/java-programmer
 ```
 
 Для команд *download* и *submit* аргументами нужно указывать название учебной программы (*program*) и урок (*exercise*), с которым ведётся работа:
@@ -67,4 +72,9 @@ hexlet program submit java-programmer arrays
 
 # program: java-programmer
 # exercise: arrays
+```
+
+Не забывайте выводить справочную информацию. чтобы получить список актуальных команд. Например
+```shell
+hexlet program --help
 ```

@@ -44,12 +44,15 @@ const handler = async ({
     noChmod: true,
   });
 
-  const programPath = generateHexletProgramPath(program);
-  const programPathExists = await fse.pathExists(programPath);
+  const hexletProgramPath = generateHexletProgramPath(program);
+  const programPathExists = await fse.pathExists(hexletProgramPath);
   if (!programPathExists) {
-    await fse.mkdirp(programPath);
+    await fse.mkdirp(hexletProgramPath);
   }
 
+  const tmpGitignorePath = path.join(tmpDirPath, '.gitignore');
+  const hexletGitignorePath = path.join(hexletProgramPath, '.gitignore');
+  await fse.copy(tmpGitignorePath, hexletGitignorePath);
   const exercisesPath = path.join(tmpDirPath, 'exercises');
   // const exerciseNames = await fsp.readdir(exercisesPath);
 
@@ -62,7 +65,7 @@ const handler = async ({
   //   }
   // });
   // Promise.all(promises);
-  const hexletExercisePath = path.join(programPath, 'exercises', exercise);
+  const hexletExercisePath = path.join(hexletProgramPath, 'exercises', exercise);
   const exercisePath = path.join(exercisesPath, exercise);
   try {
     await fse.copy(exercisePath, hexletExercisePath);

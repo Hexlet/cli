@@ -22,8 +22,8 @@ describe('program', () => {
 
   it('download', async () => {
     const programArchivePath = path.join(fixturesPath, 'ruby-program.tar.gz');
-    nock('https://my-data.fra1.digitaloceanspaces.com')
-      .get('/hexlet-programs/ruby-program.tar.gz')
+    nock('https://hexlet-programs.fra1.digitaloceanspaces.com')
+      .get('/ruby-program.tar.gz')
       .replyWithFile(200, programArchivePath);
 
     // const project = {

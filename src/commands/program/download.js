@@ -21,7 +21,7 @@ const handler = async ({
     generateHexletProgramPath,
   } = initSettings(customSettings);
 
-  const templateUrl = 'https://my-data.fra1.digitaloceanspaces.com/hexlet-programs/%s-program.tar.gz';
+  const templateUrl = 'https://hexlet-programs.fra1.digitaloceanspaces.com/%s-program.tar.gz';
   const programUrl = util.format(templateUrl, program);
   log(programUrl);
   const tmpDirPath = path.join(os.tmpdir(), `${program}-program`);

@@ -62,7 +62,7 @@ const handler = async (params) => {
   log('namespace', namespace);
   const program = namespace.full_path.split('/')[2];
 
-  const projectId = path.join(namespace.full_path, hexletUserId);
+  const projectId = `${namespace.full_path}/${hexletUserId}`;
   let project;
   try {
     project = await api.Projects.create({

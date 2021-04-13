@@ -10,14 +10,18 @@ jobs:
   build:
 
     # The type of machine to run the job on
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     strategy:
-      # Node versions list
       matrix:
+        # OS list
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        # Node versions list
         node-version: [14.x]
 
     steps:
+        # When using the package on windows, line breaks will not be converted
+      - run: git config --global core.autocrlf false
         # Check-out repository under GitHub workspace
         # https://github.com/actions/checkout
       - uses: actions/checkout@v2

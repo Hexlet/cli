@@ -48,7 +48,7 @@
 ```sh
 hexlet program init --gitlab-group-id=12345 --hexlet-user-id=1 --gitlab-token=<ваш токен GitLab>
 
-# program: java-programmer
+# program: java
 ```
 
 Для инициализации проекта остаётся скопировать команду, указать свой токен и выполнить её:
@@ -57,22 +57,22 @@ hexlet program init --gitlab-group-id=12345 --hexlet-user-id=1 --gitlab-token=<�
 # Можно вызывать из любого каталога
 hexlet program init --gitlab-group-id=12345 --hexlet-user-id=1 --gitlab-token=<ваш токен>
 
-# Gitlab repository: https://gitlab.com/hexlethq/programs/java-programmer/hexlet-groups/student-group/1
+# Gitlab repository: https://gitlab.com/hexlethq/programs/java/hexlet-groups/student-group/1
 # Config: /home/<username>/Hexlet/.config.json
-# Program name: java-programmer
-# Program path: /home/<username>/Hexlet/java-programmer
+# Program name: java
+# Program path: /home/<username>/Hexlet/java
 ```
 
 Для команд *download* и *submit* аргументами нужно указывать название учебной программы (*program*) и урок (*exercise*), с которым ведётся работа:
 
 ```sh
 # скачать на компьютер упражнение Массивы из программы Java-программист
-hexlet program download java-programmer arrays
+hexlet program download java arrays
 
 # отправить упражнение в Gitlab (git add, commit, push)
-hexlet program submit java-programmer arrays
+hexlet program submit java arrays
 
-# program: java-programmer
+# program: java
 # exercise: arrays
 ```
 

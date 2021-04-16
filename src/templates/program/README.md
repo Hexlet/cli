@@ -67,13 +67,13 @@ hexlet program init --gitlab-group-id=12345 --hexlet-user-id=1 --gitlab-token=<�
 
 ```sh
 # скачать на компьютер упражнение Массивы из программы Java-программист
-hexlet program download java arrays
+hexlet program download java start
 
 # отправить упражнение в Gitlab (git add, commit, push)
-hexlet program submit java arrays
+hexlet program submit java start
 
 # program: java
-# exercise: arrays
+# exercise: start
 ```
 
 Не забывайте выводить справочную информацию. чтобы получить список актуальных команд. Например

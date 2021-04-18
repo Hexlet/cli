@@ -12,3 +12,5 @@ module.exports.readHexletConfig = async (configPath) => {
   // TODO: add schema check https://github.com/ajv-validator/ajv
   return fse.readJson(configPath);
 };
+
+module.exports.isRoot = () => process.getuid && process.getuid() === 0;

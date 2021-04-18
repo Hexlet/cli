@@ -3,6 +3,13 @@
 
 const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
+const chalk = require('chalk');
+
+const { isRoot } = require('../src/utils.js');
+
+if (isRoot()) {
+  throw new Error(chalk.red('Current user is root. Dont use sudo for running hexlet/cli'));
+}
 
 console.log();
 

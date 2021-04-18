@@ -20,14 +20,15 @@ describe('program', () => {
     const { hexletConfigPath, generateHexletProgramPath } = initSettings(defaults);
     const hexletProgramPath = generateHexletProgramPath('ruby');
     await fsp.mkdir(path.join(hexletProgramPath, 'exercises', 'hello-world'), { recursive: true });
+  });
+
+  it('submit', async () => {
+    const { hexletConfigPath } = initSettings(defaults);
     const configData = {
       token: 'token',
       programs: { ruby: { gitlabUrl: 'lal' } },
     };
     await fse.writeJson(hexletConfigPath, configData);
-  });
-
-  it('submit', async () => {
     // nock('https://gitlab.com')
     //   .get('/api/v4/namespaces/test-group')
     //   .reply(200, { full_path: 'hexlet/jopa', path: 'jopa' });
@@ -59,5 +60,15 @@ describe('program', () => {
 
     expect(true).toBe(true);
     // expect(data).toMatchObject({ userId: args.userId });
+  });
+
+  it('submit (without init)', async () => {
+    const args = {
+      program: 'ruby',
+      exercise: 'hello-world',
+      customSettings: defaults,
+    };
+
+    await expect(() => programCmd.handler(args, defaults)).rejects.toThrow('no such file or directory');
   });
 });

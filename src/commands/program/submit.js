@@ -11,6 +11,7 @@ const git = require('isomorphic-git');
 const log = debug('hexlet');
 
 const initSettings = require('../../settings.js');
+const { readHexletConfig } = require('../../utils.js');
 
 const handler = async ({
   program, exercise,
@@ -19,7 +20,8 @@ const handler = async ({
     author, generateHexletProgramPath, hexletConfigPath, branch,
   } = initSettings(customSettings);
 
-  const { gitlabToken, programs } = await fse.readJson(hexletConfigPath);
+  const { gitlabToken, programs } = await readHexletConfig(hexletConfigPath);
+
   const programPath = generateHexletProgramPath(program);
 
   const exercisePath = path.join(programPath, 'exercises', exercise);

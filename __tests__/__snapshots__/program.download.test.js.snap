@@ -158,6 +158,12 @@ Array [
     "type": "file",
   },
   Object {
+    "name": "TUTORIAL.md",
+    "path": "ruby/TUTORIAL.md",
+    "size": 120,
+    "type": "file",
+  },
+  Object {
     "name": "Gemfile",
     "path": "ruby/exercises/fundamentals/Gemfile",
     "size": 70,

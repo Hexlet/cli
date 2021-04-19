@@ -55,9 +55,19 @@ const handler = async ({
     await fse.mkdirp(hexletProgramPath);
   }
 
-  const tmpGitignorePath = path.join(tmpDirPath, '.gitignore');
-  const hexletGitignorePath = path.join(hexletProgramPath, '.gitignore');
-  await fse.copy(tmpGitignorePath, hexletGitignorePath);
+  const filesToCopy = [
+    '.gitignore',
+    'TUTORIAL.md',
+  ];
+
+  const promises = filesToCopy.map((fileName) => {
+    const tmpFilePath = path.join(tmpDirPath, fileName);
+    const hexletFilePath = path.join(hexletProgramPath, fileName);
+    return fse.copy(tmpFilePath, hexletFilePath);
+  });
+
+  await Promise.all(promises);
+
   const exercisesPath = path.join(tmpDirPath, 'exercises');
   // const exerciseNames = await fsp.readdir(exercisesPath);
 
@@ -78,6 +88,9 @@ const handler = async ({
     log(e);
     throw new Error(`Program "${program}" does not contain exercise with name "${exercise}"`);
   }
+
+  // TODO: Perhaps you need to delete the archive and temporary directory after copying.
+  // So that all homework is not left locally.
 
   console.log(chalk.green(`Exercise path: ${hexletExercisePath}`));
 };

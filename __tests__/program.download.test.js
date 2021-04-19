@@ -7,9 +7,8 @@ const nock = require('nock');
 
 const programCmd = require('../src/commands/program/download.js');
 const initSettings = require('../src/settings.js');
-const { readDirP } = require('./helpers/index.js');
+const { readDirP, getFixturePath } = require('./helpers/index.js');
 
-const fixturesPath = path.join(__dirname, '../__fixtures__');
 const getTmpDirPath = (program) => path.join(os.tmpdir(), `${program}-program`);
 
 nock.disableNetConnect();
@@ -28,7 +27,7 @@ describe('program', () => {
     await fsp.mkdir(hexletDir);
     await fse.writeJson(hexletConfigPath, {});
 
-    const programArchivePath = path.join(fixturesPath, 'ruby-program.tar.gz');
+    const programArchivePath = getFixturePath('ruby-program.tar.gz');
     nock('https://hexlet-programs.fra1.digitaloceanspaces.com')
       .get('/ruby-program.tar.gz')
       .replyWithFile(200, programArchivePath);

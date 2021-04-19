@@ -16,6 +16,11 @@ const readDirP = async (dirPath) => {
   return _.sortBy(filesData, 'path');
 };
 
+const getFixturePath = (filePath) => (
+  path.join(__dirname, '..', '..', '/__fixtures__', filePath)
+);
+
 module.exports = {
   readDirP,
+  getFixturePath,
 };

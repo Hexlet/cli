@@ -18,7 +18,6 @@ let defaults;
 describe('program', () => {
   beforeEach(async () => {
     const tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-cli-'));
-    // const data = await fse.readJson(result.hexletConfigPath);
     defaults = { homedir: tmpDir };
   });
 
@@ -32,19 +31,6 @@ describe('program', () => {
       .get('/ruby-program.tar.gz')
       .replyWithFile(200, programArchivePath);
 
-    // const project = {
-    //   web_url: 'lala',
-    //   http_url_to_repo: 'https://gitlab.com/repository.git',
-    //   ssh_url_to_repo: 'git://gitlab.com/repository.git',
-    // };
-    // nock('https://gitlab.com')
-    //   .get('/api/v4/projects/hexlet%2Fjopa%2F1')
-    //   .reply(200, project);
-
-    // nock('https://gitlab.com')
-    //   .post('/api/v4/projects/hexlet%2Fjopa%2F1/repository/commits')
-    //   .reply(200, {});
-
     git.clone = jest.fn(() => {});
 
     const args = {
@@ -54,7 +40,6 @@ describe('program', () => {
       customSettings: defaults,
     };
     await programCmd.handler(args, defaults);
-    // const data = await fse.readJson(result.hexletConfigPath);
 
     const tmpDirPath = getTmpDirPath(args.program);
     expect(await readDirP(tmpDirPath)).toMatchSnapshot();

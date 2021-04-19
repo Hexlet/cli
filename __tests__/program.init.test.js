@@ -46,9 +46,9 @@ describe('program', () => {
       gitlabToken: 'some-token',
     };
     const result = await programCmd.handler(args, defaults);
+
     const actualConfig = await fse.readJson(result.hexletConfigPath);
     const expectedConfig = await fse.readJson(getFixturePath('.config.json'));
-
     expect(actualConfig).toMatchObject(expectedConfig);
   });
 });

@@ -1,1 +1,10 @@
-{"hexletUserId":"1","gitlabToken":"some-token","programs":{"jopa":{"gitlabUrl":"lala","gitlabGroupId":"jopa"}}}
+{
+  "hexletUserId": "1",
+  "gitlabToken": "some-token",
+  "programs": {
+    "jopa": {
+      "gitlabUrl": "lala",
+      "gitlabGroupId": "jopa"
+    }
+  }
+}

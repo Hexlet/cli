@@ -17,7 +17,7 @@ describe('program', () => {
     const tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-cli-'));
     defaults = { homedir: tmpDir };
     // TODO use settings.js
-    const { hexletConfigPath, generateHexletProgramPath } = initSettings(defaults);
+    const { generateHexletProgramPath } = initSettings(defaults);
     const hexletProgramPath = generateHexletProgramPath('ruby');
     await fsp.mkdir(path.join(hexletProgramPath, 'exercises', 'hello-world'), { recursive: true });
   });

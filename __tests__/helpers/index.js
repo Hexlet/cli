@@ -1,30 +1,19 @@
 const readdirp = require('readdirp');
-
-const getFileType = (fileStats) => {
-  if (fileStats.isDirectory()) {
-    return 'directory';
-  }
-  if (fileStats.isFile()) {
-    return 'file';
-  }
-  if (fileStats.isSymbolicLink()) {
-    return 'symlink';
-  }
-  return 'other';
-};
+const path = require('path');
+const _ = require('lodash');
 
 const readDirP = async (dirPath) => {
-  const filesInfo = await readdirp.promise(
-    dirPath,
-    { alwaysStat: true },
-  );
+  const filesInfo = await readdirp.promise(dirPath, {
+    alwaysStat: true,
+  });
 
-  return filesInfo.map((fileInfo) => ({
-    path: fileInfo.path,
+  const filesData = filesInfo.map((fileInfo) => ({
+    path: fileInfo.path.split(path.sep).join('/'),
     name: fileInfo.basename,
-    size: fileInfo.stats.size,
-    type: getFileType(fileInfo.stats),
+    size: BigInt(fileInfo.stats.size),
   }));
+
+  return _.sortBy(filesData, 'path');
 };
 
 module.exports = {

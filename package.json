@@ -8,6 +8,7 @@
     "isomorphic-git": "^1.8.2",
     "lodash": "^4.17.21",
     "pkg": "^4.5.1",
+    "readdirp": "^3.6.0",
     "tar": "^6.1.0",
     "yargs": "^16.2.0"
   },
@@ -36,9 +37,6 @@
   "main": "index.js",
   "scripts": {
     "test": "jest"
-  },
-  "jest": {
-    "testEnvironment": "node"
   },
   "repository": {
     "type": "git",

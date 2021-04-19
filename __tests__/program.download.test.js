@@ -7,8 +7,10 @@ const nock = require('nock');
 
 const programCmd = require('../src/commands/program/download.js');
 const initSettings = require('../src/settings.js');
-// const programDownloadCmd = require('../src/commands/program/download.js');
+const { readDirP } = require('./helpers/index.js');
+
 const fixturesPath = path.join(__dirname, '../__fixtures__');
+const getTmpDirPath = (program) => path.join(os.tmpdir(), `${program}-program`);
 
 nock.disableNetConnect();
 
@@ -48,16 +50,17 @@ describe('program', () => {
 
     const args = {
       program: 'ruby',
-      exercise: 'hello-world',
+      exercise: 'fundamentals',
       token: 'some-token',
       customSettings: defaults,
     };
     await programCmd.handler(args, defaults);
     // const data = await fse.readJson(result.hexletConfigPath);
 
-    // FIXME add expectations
-    expect(true).toBe(true);
-    // expect(data).toMatchObject({ userId: args.userId });
+    const tmpDirPath = getTmpDirPath(args.program);
+    expect(await readDirP(tmpDirPath)).toMatchSnapshot();
+
+    expect(await readDirP(hexletDir)).toMatchSnapshot();
   });
 
   it('download (without init)', async () => {

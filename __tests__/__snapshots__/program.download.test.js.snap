@@ -1,0 +1,191 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`program download 1`] = `
+Array [
+  Object {
+    "name": ".gitignore",
+    "path": ".gitignore",
+    "size": 20n,
+  },
+  Object {
+    "name": "TUTORIAL.md",
+    "path": "TUTORIAL.md",
+    "size": 120n,
+  },
+  Object {
+    "name": "Gemfile",
+    "path": "exercises/blocks/Gemfile",
+    "size": 70n,
+  },
+  Object {
+    "name": "Makefile",
+    "path": "exercises/blocks/Makefile",
+    "size": 57n,
+  },
+  Object {
+    "name": "README.md",
+    "path": "exercises/blocks/README.md",
+    "size": 92n,
+  },
+  Object {
+    "name": "Rakefile",
+    "path": "exercises/blocks/Rakefile",
+    "size": 205n,
+  },
+  Object {
+    "name": "blocks.gemspec",
+    "path": "exercises/blocks/blocks.gemspec",
+    "size": 211n,
+  },
+  Object {
+    "name": "with_numbers.rb",
+    "path": "exercises/blocks/lib/with_numbers.rb",
+    "size": 46n,
+  },
+  Object {
+    "name": "test_helper.rb",
+    "path": "exercises/blocks/test/test_helper.rb",
+    "size": 58n,
+  },
+  Object {
+    "name": "with_numbers_test.rb",
+    "path": "exercises/blocks/test/with_numbers_test.rb",
+    "size": 322n,
+  },
+  Object {
+    "name": "Gemfile",
+    "path": "exercises/fundamentals/Gemfile",
+    "size": 70n,
+  },
+  Object {
+    "name": "Makefile",
+    "path": "exercises/fundamentals/Makefile",
+    "size": 31n,
+  },
+  Object {
+    "name": "README.md",
+    "path": "exercises/fundamentals/README.md",
+    "size": 185n,
+  },
+  Object {
+    "name": "Rakefile",
+    "path": "exercises/fundamentals/Rakefile",
+    "size": 205n,
+  },
+  Object {
+    "name": "fundamentals.gemspec",
+    "path": "exercises/fundamentals/fundamentals.gemspec",
+    "size": 217n,
+  },
+  Object {
+    "name": "reverse.rb",
+    "path": "exercises/fundamentals/lib/reverse.rb",
+    "size": 92n,
+  },
+  Object {
+    "name": "sum_of_primes.rb",
+    "path": "exercises/fundamentals/lib/sum_of_primes.rb",
+    "size": 96n,
+  },
+  Object {
+    "name": "reverse_test.rb",
+    "path": "exercises/fundamentals/test/reverse_test.rb",
+    "size": 214n,
+  },
+  Object {
+    "name": "sum_of_primes_test.rb",
+    "path": "exercises/fundamentals/test/sum_of_primes_test.rb",
+    "size": 284n,
+  },
+  Object {
+    "name": "test_helper.rb",
+    "path": "exercises/fundamentals/test/test_helper.rb",
+    "size": 58n,
+  },
+  Object {
+    "name": "Makefile",
+    "path": "exercises/start/Makefile",
+    "size": 23n,
+  },
+  Object {
+    "name": "README.md",
+    "path": "exercises/start/README.md",
+    "size": 402n,
+  },
+  Object {
+    "name": "spec.yml",
+    "path": "spec.yml",
+    "size": 74n,
+  },
+]
+`;
+
+exports[`program download 2`] = `
+Array [
+  Object {
+    "name": ".config.json",
+    "path": ".config.json",
+    "size": 3n,
+  },
+  Object {
+    "name": ".gitignore",
+    "path": "ruby/.gitignore",
+    "size": 20n,
+  },
+  Object {
+    "name": "TUTORIAL.md",
+    "path": "ruby/TUTORIAL.md",
+    "size": 120n,
+  },
+  Object {
+    "name": "Gemfile",
+    "path": "ruby/exercises/fundamentals/Gemfile",
+    "size": 70n,
+  },
+  Object {
+    "name": "Makefile",
+    "path": "ruby/exercises/fundamentals/Makefile",
+    "size": 31n,
+  },
+  Object {
+    "name": "README.md",
+    "path": "ruby/exercises/fundamentals/README.md",
+    "size": 185n,
+  },
+  Object {
+    "name": "Rakefile",
+    "path": "ruby/exercises/fundamentals/Rakefile",
+    "size": 205n,
+  },
+  Object {
+    "name": "fundamentals.gemspec",
+    "path": "ruby/exercises/fundamentals/fundamentals.gemspec",
+    "size": 217n,
+  },
+  Object {
+    "name": "reverse.rb",
+    "path": "ruby/exercises/fundamentals/lib/reverse.rb",
+    "size": 92n,
+  },
+  Object {
+    "name": "sum_of_primes.rb",
+    "path": "ruby/exercises/fundamentals/lib/sum_of_primes.rb",
+    "size": 96n,
+  },
+  Object {
+    "name": "reverse_test.rb",
+    "path": "ruby/exercises/fundamentals/test/reverse_test.rb",
+    "size": 214n,
+  },
+  Object {
+    "name": "sum_of_primes_test.rb",
+    "path": "ruby/exercises/fundamentals/test/sum_of_primes_test.rb",
+    "size": 284n,
+  },
+  Object {
+    "name": "test_helper.rb",
+    "path": "ruby/exercises/fundamentals/test/test_helper.rb",
+    "size": 58n,
+  },
+]
+`;

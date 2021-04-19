@@ -40,6 +40,7 @@ const handler = async ({
   });
   await fsp.writeFile(tmpArchiveFilePath, response.data);
 
+  // TODO: use mkdtemp
   await fse.remove(tmpDirPath);
   await fsp.mkdir(tmpDirPath);
   await tar.x({

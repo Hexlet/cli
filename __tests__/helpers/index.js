@@ -17,7 +17,7 @@ const readDirP = async (dirPath) => {
 };
 
 const getFixturePath = (filePath) => (
-  path.join(__dirname, '..', '..', '/__fixtures__', filePath)
+  path.join(__dirname, '..', '..', '__fixtures__', filePath)
 );
 
 module.exports = {

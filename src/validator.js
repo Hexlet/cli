@@ -30,7 +30,7 @@ const configSchema = {
   additionalProperties: false,
 };
 
-module.exports.getValidate = () => {
+module.exports.getValidator = () => {
   const ajv = new Ajv();
   return ajv.compile(configSchema);
 };

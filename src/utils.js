@@ -2,7 +2,7 @@ const chalk = require('chalk');
 const fse = require('fs-extra');
 const fsp = require('fs/promises');
 
-const { getValidate } = require('./validator.js');
+const { getValidator } = require('./validator.js');
 
 module.exports.readHexletConfig = async (configPath) => {
   try {
@@ -13,7 +13,7 @@ module.exports.readHexletConfig = async (configPath) => {
   }
 
   const configData = await fse.readJson(configPath);
-  const validate = getValidate();
+  const validate = getValidator();
   if (!validate(configData)) {
     const errorDetail = JSON.stringify(validate.errors, null, 2);
     throw new Error(chalk.red(`Validation error "${configPath}"\n${errorDetail}`));

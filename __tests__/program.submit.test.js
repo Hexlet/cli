@@ -7,44 +7,24 @@ const nock = require('nock');
 
 const programCmd = require('../src/commands/program/submit.js');
 const initSettings = require('../src/settings.js');
+const { getFixturePath } = require('./helpers/index.js');
 
 nock.disableNetConnect();
 
-let defaults;
-
 describe('program', () => {
+  let defaults;
+
   beforeEach(async () => {
     const tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-cli-'));
     defaults = { homedir: tmpDir };
-    // TODO use settings.js
-    const { generateHexletProgramPath } = initSettings(defaults);
-    const hexletProgramPath = generateHexletProgramPath('ruby');
-    await fsp.mkdir(path.join(hexletProgramPath, 'exercises', 'hello-world'), { recursive: true });
   });
 
   it('submit', async () => {
-    const { hexletConfigPath } = initSettings(defaults);
-    const configData = {
-      token: 'token',
-      programs: { ruby: { gitlabUrl: 'lal' } },
-    };
-    await fse.writeJson(hexletConfigPath, configData);
-    // nock('https://gitlab.com')
-    //   .get('/api/v4/namespaces/test-group')
-    //   .reply(200, { full_path: 'hexlet/jopa', path: 'jopa' });
+    const { hexletConfigPath, generateHexletProgramPath } = initSettings(defaults);
+    const hexletProgramPath = generateHexletProgramPath('ruby');
 
-    // const project = {
-    //   web_url: 'lala',
-    //   http_url_to_repo: 'https://gitlab.com/repository.git',
-    //   ssh_url_to_repo: 'git://gitlab.com/repository.git',
-    // };
-    // nock('https://gitlab.com')
-    //   .get('/api/v4/projects/hexlet%2Fjopa%2F1')
-    //   .reply(200, project);
-
-    // nock('https://gitlab.com')
-    //   .post('/api/v4/projects/hexlet%2Fjopa%2F1/repository/commits')
-    //   .reply(200, {});
+    await fse.mkdirp(path.join(hexletProgramPath, 'exercises', 'fundamentals'));
+    await fse.copy(getFixturePath('.config.json'), hexletConfigPath);
 
     git.pull = jest.fn(() => {});
     git.commit = jest.fn(() => {});
@@ -52,23 +32,38 @@ describe('program', () => {
 
     const args = {
       program: 'ruby',
-      exercise: 'hello-world',
-      customSettings: defaults,
+      exercise: 'fundamentals',
     };
     await programCmd.handler(args, defaults);
-    // const data = await fse.readJson(result.hexletConfigPath);
+
+    const actualCurrent = await fse.readJson(path.join(hexletProgramPath, '.current.json'));
+    const expectedCurrent = await fse.readJson(getFixturePath('.current.json'));
+    expect(actualCurrent).toMatchObject(expectedCurrent);
 
     expect(true).toBe(true);
-    // expect(data).toMatchObject({ userId: args.userId });
+  });
+
+  it('submit with wrong exercise', async () => {
+    const { hexletConfigPath } = initSettings(defaults);
+    await fse.copy(getFixturePath('.config.json'), hexletConfigPath);
+
+    const args = {
+      program: 'ruby',
+      exercise: 'wrongExercise',
+    };
+
+    await expect(programCmd.handler(args, defaults))
+      .rejects.toThrow('Exercise with name "wrongExercise" does not exists.');
   });
 
   it('submit (without init)', async () => {
     const args = {
       program: 'ruby',
-      exercise: 'hello-world',
+      exercise: 'fundamentals',
       customSettings: defaults,
     };
 
-    await expect(() => programCmd.handler(args, defaults)).rejects.toThrow('no such file or directory');
+    await expect(programCmd.handler(args, defaults))
+      .rejects.toThrow('no such file or directory');
   });
 });

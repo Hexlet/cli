@@ -50,7 +50,7 @@ describe('program', () => {
   it('download (without init)', async () => {
     const args = {
       program: 'ruby',
-      exercise: 'hello-world',
+      exercise: 'fundamentals',
       token: 'some-token',
       customSettings: defaults,
     };

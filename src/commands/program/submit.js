@@ -56,7 +56,7 @@ const handler = async ({
     }
     return git.remove({ fs, dir: programPath, filepath });
   });
-  Promise.all(promises);
+  await Promise.all(promises);
 
   if (promises.length > 0) {
     await git.commit({

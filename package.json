@@ -1,6 +1,8 @@
 {
   "dependencies": {
     "@gitbeaker/node": "^28.3.0",
+    "ajv": "^6.12.6",
+    "ajv-formats": "^2.0.2",
     "axios": "^0.21.1",
     "chalk": "^4.1.0",
     "debug": "^4.3.1",

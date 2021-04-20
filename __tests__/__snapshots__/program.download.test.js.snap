@@ -125,7 +125,7 @@ Array [
   Object {
     "name": ".config.json",
     "path": ".config.json",
-    "size": 3n,
+    "size": 216n,
   },
   Object {
     "name": ".gitignore",

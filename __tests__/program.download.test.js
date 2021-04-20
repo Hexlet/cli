@@ -13,9 +13,14 @@ const getTmpDirPath = (program) => path.join(os.tmpdir(), `${program}-program`);
 
 nock.disableNetConnect();
 
-let defaults;
-
 describe('program', () => {
+  const args = {
+    program: 'ruby',
+    exercise: 'fundamentals',
+    token: 'some-token',
+  };
+  let defaults;
+
   beforeEach(async () => {
     const tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-cli-'));
     defaults = { homedir: tmpDir };
@@ -24,7 +29,7 @@ describe('program', () => {
   it('download', async () => {
     const { hexletDir, hexletConfigPath } = initSettings(defaults);
     await fsp.mkdir(hexletDir);
-    await fse.writeJson(hexletConfigPath, {});
+    await fse.copy(getFixturePath('.config.json'), hexletConfigPath);
 
     const programArchivePath = getFixturePath('ruby-program.tar.gz');
     nock('https://hexlet-programs.fra1.digitaloceanspaces.com')
@@ -33,12 +38,6 @@ describe('program', () => {
 
     git.clone = jest.fn(() => {});
 
-    const args = {
-      program: 'ruby',
-      exercise: 'fundamentals',
-      token: 'some-token',
-      customSettings: defaults,
-    };
     await programCmd.handler(args, defaults);
 
     const tmpDirPath = getTmpDirPath(args.program);
@@ -48,13 +47,16 @@ describe('program', () => {
   });
 
   it('download (without init)', async () => {
-    const args = {
-      program: 'ruby',
-      exercise: 'hello-world',
-      token: 'some-token',
-      customSettings: defaults,
-    };
+    await expect(programCmd.handler(args, defaults))
+      .rejects.toThrow('no such file or directory');
+  });
 
-    await expect(() => programCmd.handler(args, defaults)).rejects.toThrow('no such file or directory');
+  it('download with invalid .config.json', async () => {
+    const { hexletDir, hexletConfigPath } = initSettings(defaults);
+    await fsp.mkdir(hexletDir);
+    await fse.writeJson(hexletConfigPath, {});
+
+    await expect(programCmd.handler(args, defaults))
+      .rejects.toThrow(`Validation error "${hexletConfigPath}"`);
   });
 });

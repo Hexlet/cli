@@ -1,10 +1,10 @@
 {
-  "hexletUserId": "1",
+  "hexletUserId": "123",
   "gitlabToken": "some-token",
   "programs": {
-    "jopa": {
-      "gitlabUrl": "lala",
-      "gitlabGroupId": "jopa"
+    "ruby": {
+      "gitlabUrl": "https://gitlab.com/hexlet/programs/ruby/groups/test-group/123",
+      "gitlabGroupId": "456789"
     }
   }
 }

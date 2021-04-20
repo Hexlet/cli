@@ -19,4 +19,3 @@ publish:
 	npx release-it
 
 .PHONY: test
-

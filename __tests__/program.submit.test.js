@@ -12,6 +12,10 @@ const { getFixturePath } = require('./helpers/index.js');
 nock.disableNetConnect();
 
 describe('program', () => {
+  const args = {
+    program: 'ruby',
+    exercise: 'fundamentals',
+  };
   let defaults;
 
   beforeEach(async () => {
@@ -30,10 +34,6 @@ describe('program', () => {
     git.commit = jest.fn(() => {});
     git.push = jest.fn(() => {});
 
-    const args = {
-      program: 'ruby',
-      exercise: 'fundamentals',
-    };
     await programCmd.handler(args, defaults);
 
     const actualCurrent = await fse.readJson(path.join(hexletProgramPath, '.current.json'));
@@ -43,27 +43,28 @@ describe('program', () => {
     expect(true).toBe(true);
   });
 
+  it('submit (without init)', async () => {
+    await expect(programCmd.handler(args, defaults))
+      .rejects.toThrow('no such file or directory');
+  });
+
   it('submit with wrong exercise', async () => {
     const { hexletConfigPath } = initSettings(defaults);
     await fse.copy(getFixturePath('.config.json'), hexletConfigPath);
 
-    const args = {
+    const wrongArgs = {
       program: 'ruby',
       exercise: 'wrongExercise',
     };
-
-    await expect(programCmd.handler(args, defaults))
+    await expect(programCmd.handler(wrongArgs, defaults))
       .rejects.toThrow('Exercise with name "wrongExercise" does not exists.');
   });
 
-  it('submit (without init)', async () => {
-    const args = {
-      program: 'ruby',
-      exercise: 'fundamentals',
-      customSettings: defaults,
-    };
+  it('submit with invalid .config.json', async () => {
+    const { hexletDir, hexletConfigPath } = initSettings(defaults);
+    await fsp.mkdir(hexletDir);
+    await fse.writeJson(hexletConfigPath, {});
 
-    await expect(programCmd.handler(args, defaults))
-      .rejects.toThrow('no such file or directory');
+    await expect(programCmd.handler(args, defaults)).rejects.toThrow(`Validation error "${hexletConfigPath}"`);
   });
 });

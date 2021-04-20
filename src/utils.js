@@ -2,6 +2,8 @@ const chalk = require('chalk');
 const fse = require('fs-extra');
 const fsp = require('fs/promises');
 
+const { getValidate } = require('./validator.js');
+
 module.exports.readHexletConfig = async (configPath) => {
   try {
     await fsp.access(configPath);
@@ -9,8 +11,15 @@ module.exports.readHexletConfig = async (configPath) => {
     console.log(chalk.yellow(`Config '${configPath}' does not exists. Try to run 'init' command`));
     throw e;
   }
-  // TODO: add schema check https://github.com/ajv-validator/ajv
-  return fse.readJson(configPath);
+
+  const configData = await fse.readJson(configPath);
+  const validate = getValidate();
+  if (!validate(configData)) {
+    const errorDetail = JSON.stringify(validate.errors, null, 2);
+    throw new Error(chalk.red(`Validation error "${configPath}"\n${errorDetail}`));
+  }
+
+  return configData;
 };
 
 module.exports.isRoot = () => process.getuid && process.getuid() === 0;

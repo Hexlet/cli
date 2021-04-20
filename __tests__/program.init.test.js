@@ -6,6 +6,7 @@ const fse = require('fs-extra');
 const nock = require('nock');
 
 const programCmd = require('../src/commands/program/init.js');
+const { getValidate } = require('../src/validator.js');
 const { getFixturePath } = require('./helpers/index.js');
 
 nock.disableNetConnect();
@@ -53,5 +54,8 @@ describe('program', () => {
     const actualConfig = await fse.readJson(result.hexletConfigPath);
     const expectedConfig = await fse.readJson(getFixturePath('.config.json'));
     expect(actualConfig).toMatchObject(expectedConfig);
+
+    const validate = getValidate();
+    expect(validate(actualConfig)).toBeTruthy();
   });
 });

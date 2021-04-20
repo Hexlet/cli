@@ -44,9 +44,9 @@ const prepareConfig = async (params) => {
   console.log(chalk.grey(`Config: ${hexletConfigPath}`));
 };
 
-const handler = async (params) => {
+const handler = async (params, customSettings = {}) => {
   const {
-    gitlabGroupId, hexletUserId, gitlabToken, customSettings = {},
+    gitlabGroupId, hexletUserId, gitlabToken,
   } = params;
   log('params', params);
 
@@ -76,7 +76,7 @@ const handler = async (params) => {
   log('project', project);
   console.log(chalk.grey(`Gitlab repository: ${project.web_url}`));
 
-  prepareConfig({
+  await prepareConfig({
     ...params, hexletConfigPath, program, project,
   });
 

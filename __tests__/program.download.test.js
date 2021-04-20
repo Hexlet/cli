@@ -7,9 +7,8 @@ const nock = require('nock');
 
 const programCmd = require('../src/commands/program/download.js');
 const initSettings = require('../src/settings.js');
-const { readDirP } = require('./helpers/index.js');
+const { readDirP, getFixturePath } = require('./helpers/index.js');
 
-const fixturesPath = path.join(__dirname, '../__fixtures__');
 const getTmpDirPath = (program) => path.join(os.tmpdir(), `${program}-program`);
 
 nock.disableNetConnect();
@@ -19,7 +18,6 @@ let defaults;
 describe('program', () => {
   beforeEach(async () => {
     const tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-cli-'));
-    // const data = await fse.readJson(result.hexletConfigPath);
     defaults = { homedir: tmpDir };
   });
 
@@ -28,23 +26,10 @@ describe('program', () => {
     await fsp.mkdir(hexletDir);
     await fse.writeJson(hexletConfigPath, {});
 
-    const programArchivePath = path.join(fixturesPath, 'ruby-program.tar.gz');
+    const programArchivePath = getFixturePath('ruby-program.tar.gz');
     nock('https://hexlet-programs.fra1.digitaloceanspaces.com')
       .get('/ruby-program.tar.gz')
       .replyWithFile(200, programArchivePath);
-
-    // const project = {
-    //   web_url: 'lala',
-    //   http_url_to_repo: 'https://gitlab.com/repository.git',
-    //   ssh_url_to_repo: 'git://gitlab.com/repository.git',
-    // };
-    // nock('https://gitlab.com')
-    //   .get('/api/v4/projects/hexlet%2Fjopa%2F1')
-    //   .reply(200, project);
-
-    // nock('https://gitlab.com')
-    //   .post('/api/v4/projects/hexlet%2Fjopa%2F1/repository/commits')
-    //   .reply(200, {});
 
     git.clone = jest.fn(() => {});
 
@@ -55,7 +40,6 @@ describe('program', () => {
       customSettings: defaults,
     };
     await programCmd.handler(args, defaults);
-    // const data = await fse.readJson(result.hexletConfigPath);
 
     const tmpDirPath = getTmpDirPath(args.program);
     expect(await readDirP(tmpDirPath)).toMatchSnapshot();

@@ -13,7 +13,7 @@ const programSchema = {
 const programsSchema = {
   type: 'object',
   patternProperties: {
-    '^\\w+$': programSchema,
+    '^[\\w-]+$': programSchema,
   },
   minProperties: 1,
   additionalProperties: false,

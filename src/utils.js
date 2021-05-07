@@ -1,3 +1,5 @@
+// @ts-check
+
 const chalk = require('chalk');
 const fse = require('fs-extra');
 const fsp = require('fs/promises');

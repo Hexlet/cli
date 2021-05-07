@@ -1,3 +1,5 @@
+// @ts-check
+
 const Ajv = require('ajv');
 
 const programSchema = {

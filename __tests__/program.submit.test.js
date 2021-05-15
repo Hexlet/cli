@@ -380,16 +380,4 @@ describe('program submit', () => {
     expect(await readFile(path.join(hexletProgramPath, makefilePath)))
       .toEqual('local new content');
   });
-
-  it('submit (without init)', async () => {
-    await expect(programCmd.handler(args, customSettings))
-      .rejects.toThrow('no such file or directory');
-  });
-
-  it('submit with invalid .config.json', async () => {
-    await fse.writeJson(hexletConfigPath, {});
-
-    await expect(programCmd.handler(args, customSettings))
-      .rejects.toThrow(`Validation error "${hexletConfigPath}"`);
-  });
 });

@@ -39,7 +39,6 @@ const file5Path = path.join('exercises', 'example', 'subdir', 'file5');
 const file6Path = path.join('exercises', 'example', 'file6');
 const readmePath = path.join('exercises', 'start', 'README.md');
 const makefilePath = path.join('exercises', 'start', 'Makefile');
-const specPath = 'spec.yml';
 const tutoralPath = 'TUTORIAL.md';
 const gitignorePath = '.gitignore';
 
@@ -47,25 +46,25 @@ const makeLocalChanges = async (programPath) => {
   // modified existing files
   await fse.outputFile(path.join(programPath, file1Path), 'local content');
   await fse.outputFile(path.join(programPath, file2Path), 'local content');
-  await gitAdd(file2Path, programPath);
+  await gitAdd('exercises/example/subdir/file2', programPath);
   await fse.outputFile(path.join(programPath, readmePath), 'local content');
-  await gitAdd(readmePath, programPath);
+  await gitAdd('exercises/start/README.md', programPath);
   await fse.outputFile(path.join(programPath, readmePath), 'local changed content');
   // create new files
   await fse.outputFile(path.join(programPath, file3Path), 'local content');
   await fse.outputFile(path.join(programPath, file4Path), 'local content');
-  await gitAdd(file4Path, programPath);
+  await gitAdd('exercises/example/subdir/file4', programPath);
   await fse.outputFile(path.join(programPath, file5Path), 'local content');
-  await gitAdd(file5Path, programPath);
+  await gitAdd('exercises/example/subdir/file5', programPath);
   await fse.outputFile(path.join(programPath, file5Path), 'local changed content');
   await fse.outputFile(path.join(programPath, file6Path), 'local content');
-  await gitAdd(file6Path, programPath);
+  await gitAdd('exercises/example/file6', programPath);
   await fse.remove(path.join(programPath, file6Path));
   // remove file and remove file from index
-  await gitRemove(specPath, programPath);
+  await gitRemove('spec.yml', programPath);
   await fse.remove(path.join(programPath, tutoralPath));
   // remove file and then changed (same as change and then delete) => modified
-  await gitRemove(makefilePath, programPath);
+  await gitRemove('exercises/start/Makefile', programPath);
   await fse.outputFile(path.join(programPath, makefilePath), 'local new content');
 };
 

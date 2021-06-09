@@ -8,11 +8,6 @@ Array [
     "size": 20n,
   },
   Object {
-    "name": "TUTORIAL.md",
-    "path": "TUTORIAL.md",
-    "size": 120n,
-  },
-  Object {
     "name": "Gemfile",
     "path": "exercises/blocks/Gemfile",
     "size": 70n,
@@ -31,6 +26,11 @@ Array [
     "name": "Rakefile",
     "path": "exercises/blocks/Rakefile",
     "size": 205n,
+  },
+  Object {
+    "name": "TUTORIAL.md",
+    "path": "exercises/blocks/TUTORIAL.md",
+    "size": 120n,
   },
   Object {
     "name": "blocks.gemspec",
@@ -73,6 +73,11 @@ Array [
     "size": 205n,
   },
   Object {
+    "name": "TUTORIAL.md",
+    "path": "exercises/fundamentals/TUTORIAL.md",
+    "size": 120n,
+  },
+  Object {
     "name": "fundamentals.gemspec",
     "path": "exercises/fundamentals/fundamentals.gemspec",
     "size": 217n,
@@ -113,6 +118,11 @@ Array [
     "size": 402n,
   },
   Object {
+    "name": "TUTORIAL.md",
+    "path": "exercises/start/TUTORIAL.md",
+    "size": 120n,
+  },
+  Object {
     "name": "spec.yml",
     "path": "spec.yml",
     "size": 74n,
@@ -133,11 +143,6 @@ Array [
     "size": 20n,
   },
   Object {
-    "name": "TUTORIAL.md",
-    "path": "ruby/TUTORIAL.md",
-    "size": 120n,
-  },
-  Object {
     "name": "Gemfile",
     "path": "ruby/exercises/fundamentals/Gemfile",
     "size": 70n,
@@ -156,6 +161,11 @@ Array [
     "name": "Rakefile",
     "path": "ruby/exercises/fundamentals/Rakefile",
     "size": 205n,
+  },
+  Object {
+    "name": "TUTORIAL.md",
+    "path": "ruby/exercises/fundamentals/TUTORIAL.md",
+    "size": 120n,
   },
   Object {
     "name": "fundamentals.gemspec",

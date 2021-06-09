@@ -39,7 +39,7 @@ const file5Path = path.join('exercises', 'example', 'subdir', 'file5');
 const file6Path = path.join('exercises', 'example', 'file6');
 const readmePath = path.join('exercises', 'start', 'README.md');
 const makefilePath = path.join('exercises', 'start', 'Makefile');
-const tutoralPath = 'TUTORIAL.md';
+const tutorialPath = path.join('exercises', 'start', 'TUTORIAL.md');
 const gitignorePath = '.gitignore';
 
 const makeLocalChanges = async (programPath) => {
@@ -62,7 +62,7 @@ const makeLocalChanges = async (programPath) => {
   await fse.remove(path.join(programPath, file6Path));
   // remove file and remove file from index
   await gitRemove('spec.yml', programPath);
-  await fse.remove(path.join(programPath, tutoralPath));
+  await fse.remove(path.join(programPath, gitignorePath));
   // remove file and then changed (same as change and then delete) => modified
   await gitRemove('exercises/start/Makefile', programPath);
   await fse.outputFile(path.join(programPath, makefilePath), 'local new content');
@@ -107,7 +107,7 @@ describe('program submit', () => {
 
     const actualCommits2 = await gitLog('main', hexletProgramPath);
     const expectedCommits2 = [
-      'add exemple',
+      'add example',
       'download start',
       'init',
     ];
@@ -127,7 +127,7 @@ describe('program submit', () => {
 
     const actualCommits1 = await gitLog('main', hexletProgramPath);
     const expectedCommits1 = [
-      'add exemple',
+      'add example',
       'download start',
       'init',
     ];
@@ -142,7 +142,7 @@ describe('program submit', () => {
     const actualCommits2 = await gitLog('main', hexletProgramPath);
     const expectedCommits2 = [
       'add file2 & change file1',
-      'add exemple',
+      'add example',
       'download start',
       'init',
     ];
@@ -166,7 +166,7 @@ describe('program submit', () => {
     const actualCommits1 = await gitLog('main', hexletProgramPath);
     const expectedCommits1 = [
       'add file2 & change file1',
-      'add exemple',
+      'add example',
       'download start',
       'init',
     ];
@@ -182,7 +182,7 @@ describe('program submit', () => {
     const expectedCommits2 = [
       '@hexlet/cli: submit',
       'add file2 & change file1',
-      'add exemple',
+      'add example',
       'download start',
       'init',
     ];
@@ -218,7 +218,7 @@ describe('program submit', () => {
     const actualCommits1 = await gitLog('main', hexletProgramPath);
     const expectedCommits1 = [
       'add file2 & change file1',
-      'add exemple',
+      'add example',
       'download start',
       'init',
     ];
@@ -236,7 +236,7 @@ describe('program submit', () => {
       '@hexlet/cli: submit',
       'change file1, file2 & add file3 & remove .gitignore',
       'add file2 & change file1',
-      'add exemple',
+      'add example',
       'download start',
       'init',
     ];
@@ -272,7 +272,7 @@ describe('program submit', () => {
     const actualCommits1 = await gitLog('main', hexletProgramPath);
     const expectedCommits1 = [
       'add file2 & change file1',
-      'add exemple',
+      'add example',
       'download start',
       'init',
     ];
@@ -292,9 +292,10 @@ describe('program submit', () => {
     const expectedCommits2 = [
       "Merge branch 'main' of http://localhost:8888/50.git",
       'local commit',
-      'add anotherFile & change .gitignore',
+      'add anotherFile & change tutorial',
+      'add tutorial',
       'add file2 & change file1',
-      'add exemple',
+      'add example',
       'download start',
       'init',
     ];
@@ -316,7 +317,7 @@ describe('program submit', () => {
       .toEqual('local new content');
     expect(await readFile(path.join(hexletProgramPath, anotherFilePath)))
       .toEqual('remote content');
-    expect(await readFile(path.join(hexletProgramPath, gitignorePath)))
+    expect(await readFile(path.join(hexletProgramPath, tutorialPath)))
       .toEqual('remote content');
   });
 
@@ -337,7 +338,7 @@ describe('program submit', () => {
     const actualCommits1 = await gitLog('main', hexletProgramPath);
     const expectedCommits1 = [
       'add file2 & change file1',
-      'add exemple',
+      'add example',
       'download start',
       'init',
     ];
@@ -358,7 +359,7 @@ describe('program submit', () => {
     const expectedCommits2 = [
       'local commit',
       'add file2 & change file1',
-      'add exemple',
+      'add example',
       'download start',
       'init',
     ];

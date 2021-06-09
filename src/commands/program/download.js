@@ -57,7 +57,6 @@ const handler = async ({
 
   const filesToCopy = [
     '.gitignore',
-    'TUTORIAL.md',
   ];
 
   const promises = filesToCopy.map((fileName) => {

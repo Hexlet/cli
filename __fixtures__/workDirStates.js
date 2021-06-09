@@ -1,12 +1,10 @@
 module.exports = {
   repo10: [
     ['.gitignore', 1, 1, 1],
-    ['TUTORIAL.md', 1, 1, 1],
     ['spec.yml', 1, 1, 1],
   ],
   repo20: [
     ['.gitignore', 1, 1, 1],
-    ['TUTORIAL.md', 1, 1, 1],
     ['exercises/example/file1', 1, 1, 1],
     ['exercises/start/Makefile', 1, 1, 1],
     ['exercises/start/README.md', 1, 1, 1],
@@ -14,7 +12,6 @@ module.exports = {
   ],
   repo30: [
     ['.gitignore', 1, 1, 1],
-    ['TUTORIAL.md', 1, 1, 1],
     ['exercises/example/file1', 1, 1, 1],
     ['exercises/example/subdir/file2', 1, 1, 1],
     ['exercises/start/Makefile', 1, 1, 1],
@@ -22,8 +19,7 @@ module.exports = {
     ['spec.yml', 1, 1, 1],
   ],
   repo30changed: [
-    ['.gitignore', 1, 1, 1],
-    ['TUTORIAL.md', 1, 0, 1],
+    ['.gitignore', 1, 0, 1],
     ['exercises/example/file1', 1, 2, 1],
     ['exercises/example/file3', 0, 2, 0],
     ['exercises/example/file6', 0, 0, 3],
@@ -35,7 +31,6 @@ module.exports = {
     ['spec.yml', 1, 1, 0],
   ],
   repo30afterPull30: [
-    ['.gitignore', 1, 1, 1],
     ['exercises/example/file1', 1, 1, 1],
     ['exercises/example/file3', 1, 1, 1],
     ['exercises/example/subdir/file2', 1, 1, 1],
@@ -46,7 +41,6 @@ module.exports = {
     ['spec.yml', 1, 1, 1],
   ],
   repo30afterPull40: [
-    ['.gitignore', 1, 1, 1],
     ['exercises/example/file1', 1, 1, 1],
     ['exercises/example/file3', 1, 1, 1],
     ['exercises/example/subdir/file2', 1, 1, 1],
@@ -57,7 +51,6 @@ module.exports = {
     ['spec.yml', 1, 1, 1],
   ],
   repo30afterPull50: [
-    ['.gitignore', 1, 1, 1],
     ['exercises/example/anotherFile', 1, 1, 1],
     ['exercises/example/file1', 1, 1, 1],
     ['exercises/example/file3', 1, 1, 1],
@@ -66,6 +59,7 @@ module.exports = {
     ['exercises/example/subdir/file5', 1, 1, 1],
     ['exercises/start/Makefile', 1, 1, 1],
     ['exercises/start/README.md', 1, 1, 1],
+    ['exercises/start/TUTORIAL.md', 1, 1, 1],
     ['spec.yml', 1, 1, 1],
   ],
 };

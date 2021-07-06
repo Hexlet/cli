@@ -16,6 +16,8 @@ if (semver.lt(process.versions.node, '14.0.0')) {
   throw new Error('You need at least Node v14 to work with @hexlet/cli');
 }
 
+checkVersion();
+
 console.log();
 
 const obj = yargs(hideBin(process.argv));
@@ -24,5 +26,4 @@ obj.commandDir('../src/commands')
   .demandCommand()
   .strict()
   .help()
-  .middleware(checkVersion)
   .parse();

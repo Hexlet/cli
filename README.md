@@ -1,8 +1,9 @@
 # cli
 
 [![Node CI](https://github.com/hexlet/cli/workflows/Node%20CI/badge.svg)](https://github.com/hexlet/cli/actions)
+[![npm version](https://badge.fury.io/js/%40hexlet%2Fcli.svg)](https://badge.fury.io/js/%40hexlet%2Fcli)
 
-Утилита для взаимодействия с Hexlet.
+Утилита для взаимодействия с Hexlet
 
 ## Установка и использование
 

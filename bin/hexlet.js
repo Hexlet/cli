@@ -4,11 +4,16 @@
 const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
 const chalk = require('chalk');
+const semver = require('semver');
 
-const { isRoot } = require('../src/utils.js');
+const { isRoot, checkVersion } = require('../src/utils.js');
 
 if (isRoot()) {
-  throw new Error(chalk.red('Current user is root. Dont use sudo for running hexlet/cli'));
+  throw new Error(chalk.red("Current user is root. Don't use sudo for running hexlet/cli"));
+}
+
+if (semver.lt(process.versions.node, '14.0.0')) {
+  throw new Error('You need at least Node v14 to work with @hexlet/cli');
 }
 
 console.log();
@@ -19,4 +24,5 @@ obj.commandDir('../src/commands')
   .demandCommand()
   .strict()
   .help()
-  .argv;
+  .middleware(checkVersion)
+  .parse();

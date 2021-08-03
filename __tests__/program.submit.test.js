@@ -99,7 +99,9 @@ describe('program submit', () => {
     expect(await gitLsFiles(hexletProgramPath)).toEqual(workDirStates.repo10);
 
     const actualCommits1 = await gitLog('main', hexletProgramPath);
-    const expectedCommits1 = ['init'];
+    const expectedCommits1 = [
+      'init',
+    ];
     expect(actualCommits1).toEqual(expectedCommits1);
 
     await programCmd.handler(args, customSettings);

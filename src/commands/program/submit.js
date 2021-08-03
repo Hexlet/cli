@@ -25,9 +25,15 @@ const handler = async ({ program }, customSettings = {}) => {
   const fileStatuses = await git.statusMatrix({ fs, dir: programPath });
 
   // NOTE: решение проблемы со стиранием stagged файлов
-  const resetIndexPromises = fileStatuses.map(([filepath]) => (
-    git.resetIndex({ fs, dir: programPath, filepath })
-  ));
+  const resetIndexPromises = fileStatuses
+    .filter(([, , workTreeStatus, stagedStatus]) => {
+      const existAndStaged = stagedStatus === 2 || stagedStatus === 3;
+      const deletedAndStaged = workTreeStatus === 0 && stagedStatus === 0;
+      return existAndStaged || deletedAndStaged;
+    })
+    .map(([filepath]) => (
+      git.resetIndex({ fs, dir: programPath, filepath })
+    ));
   await Promise.all(resetIndexPromises);
 
   try {
@@ -51,6 +57,7 @@ const handler = async ({ program }, customSettings = {}) => {
     }
   }
 
+  // NOTE: git add -A
   const addToIndexPromises = fileStatuses.map(([filepath, , workTreeStatus]) => (
     workTreeStatus === 0
       ? git.remove({ fs, dir: programPath, filepath })
@@ -79,6 +86,15 @@ const handler = async ({ program }, customSettings = {}) => {
   const localHistoryAhead = !_.isEqual(localLog, remoteLog);
 
   if (localHistoryAhead) {
+    const fileStatusesWithRemoteBranch = await git.statusMatrix({ fs, dir: programPath, ref: `origin/${branch}` });
+    const exerciseRegEpx = /^exercises\/([^/.]+)\/.*$/;
+    const exerciseNames = fileStatusesWithRemoteBranch
+      .filter(([filepath, , workTreeStatus]) => (
+        workTreeStatus !== 1 && exerciseRegEpx.test(filepath)
+      ))
+      .map(([filepath]) => exerciseRegEpx.exec(filepath)[1]);
+    const uniqueExerciseNames = _.uniq(exerciseNames);
+
     await git.push({
       fs,
       http,
@@ -89,6 +105,7 @@ const handler = async ({ program }, customSettings = {}) => {
     });
 
     console.log(chalk.green(`Exercises have been submitted! Open ${programs[program].gitlabUrl}`));
+    console.log(chalk.yellow(`Changed exercises:\n${uniqueExerciseNames.join('\n')}`));
   } else {
     console.log(chalk.grey('Nothing to push. Skip pushing'));
   }

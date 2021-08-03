@@ -25,9 +25,15 @@ const handler = async ({ program }, customSettings = {}) => {
   const fileStatuses = await git.statusMatrix({ fs, dir: programPath });
 
   // NOTE: решение проблемы со стиранием stagged файлов
-  const resetIndexPromises = fileStatuses.map(([filepath]) => (
-    git.resetIndex({ fs, dir: programPath, filepath })
-  ));
+  const resetIndexPromises = fileStatuses
+    .filter(([, , workTreeStatus, stagedStatus]) => {
+      const existAndStaged = stagedStatus === 2 || stagedStatus === 3;
+      const deletedAndStaged = workTreeStatus === 0 && stagedStatus === 0;
+      return existAndStaged || deletedAndStaged;
+    })
+    .map(([filepath]) => (
+      git.resetIndex({ fs, dir: programPath, filepath })
+    ));
   await Promise.all(resetIndexPromises);
 
   try {

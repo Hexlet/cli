@@ -6,6 +6,7 @@ const chalk = require('chalk');
 const debug = require('debug');
 const git = require('isomorphic-git');
 const _ = require('lodash');
+const os = require('os');
 
 const log = debug('hexlet');
 
@@ -105,7 +106,7 @@ const handler = async ({ program }, customSettings = {}) => {
     });
 
     console.log(chalk.green(`Exercises have been submitted! Open ${programs[program].gitlabUrl}`));
-    console.log(chalk.yellow(`Changed exercises:\n${uniqueExerciseNames.join('\n')}`));
+    console.log(chalk.yellow(`Changed exercises:${os.EOL}${uniqueExerciseNames.join(os.EOL)}`));
   } else {
     console.log(chalk.grey('Nothing to push. Skip pushing'));
   }

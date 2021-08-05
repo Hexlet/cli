@@ -23,10 +23,10 @@ const handler = async ({ program }, customSettings = {}) => {
   const programPath = generateHexletProgramPath(program);
   log(programPath);
 
-  const fileStatuses = await git.statusMatrix({ fs, dir: programPath });
+  const fileStatusesBeforePull = await git.statusMatrix({ fs, dir: programPath });
 
   // NOTE: решение проблемы со стиранием stagged файлов
-  const resetIndexPromises = fileStatuses
+  const resetIndexPromises = fileStatusesBeforePull
     .filter(([, , workTreeStatus, stagedStatus]) => {
       const existAndStaged = stagedStatus === 2 || stagedStatus === 3;
       const deletedAndStaged = workTreeStatus === 0 && stagedStatus === 0;
@@ -35,6 +35,7 @@ const handler = async ({ program }, customSettings = {}) => {
     .map(([filepath]) => (
       git.resetIndex({ fs, dir: programPath, filepath })
     ));
+  log(resetIndexPromises.length);
   await Promise.all(resetIndexPromises);
 
   try {
@@ -59,15 +60,18 @@ const handler = async ({ program }, customSettings = {}) => {
   }
 
   // NOTE: git add -A
-  const addToIndexPromises = fileStatuses.map(([filepath, , workTreeStatus]) => (
-    workTreeStatus === 0
-      ? git.remove({ fs, dir: programPath, filepath })
-      : git.add({ fs, dir: programPath, filepath })
-  ));
+  const fileStatusesAfterPull = await git.statusMatrix({ fs, dir: programPath });
+
+  const addToIndexPromises = fileStatusesAfterPull
+    .map(([filepath, , workTreeStatus]) => (
+      workTreeStatus === 0
+        ? git.remove({ fs, dir: programPath, filepath })
+        : git.add({ fs, dir: programPath, filepath })
+    ));
   await Promise.all(addToIndexPromises);
 
-  const newFileStatuses = await git.statusMatrix({ fs, dir: programPath });
-  const workDirHasChanges = newFileStatuses.some(([, headStatus, workTreeStatus, stageStatus]) => (
+  const fileStatuses = await git.statusMatrix({ fs, dir: programPath });
+  const workDirHasChanges = fileStatuses.some(([, headStatus, workTreeStatus, stageStatus]) => (
     headStatus !== 1 || workTreeStatus !== 1 || stageStatus !== 1
   ));
 
@@ -105,8 +109,10 @@ const handler = async ({ program }, customSettings = {}) => {
       ref: branch,
     });
 
+    console.log(chalk.yellow('Changed exercises:'));
+    console.log(uniqueExerciseNames.join(os.EOL));
+    console.log();
     console.log(chalk.green(`Exercises have been submitted! Open ${programs[program].gitlabUrl}`));
-    console.log(chalk.yellow(`Changed exercises:${os.EOL}${uniqueExerciseNames.join(os.EOL)}`));
   } else {
     console.log(chalk.grey('Nothing to push. Skip pushing'));
   }

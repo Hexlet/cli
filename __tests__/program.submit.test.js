@@ -382,4 +382,38 @@ describe('program submit', () => {
     expect(await readFile(path.join(hexletProgramPath, makefilePath)))
       .toEqual('local new content');
   });
+
+  it('remote repository is ahead of the local one by 1 commit (deleted some files)', async () => {
+    const cloneUrl = `${baseUrl}/30.git`;
+    const remoteUrl = `${baseUrl}/60.git`;
+
+    config.programs[program].gitlabUrl = remoteUrl;
+    await fse.writeJson(hexletConfigPath, config);
+
+    await gitClone(cloneUrl, hexletProgramPath);
+    await gitRemoteSetUrl('origin', remoteUrl, hexletProgramPath);
+    expect(await gitLsFiles(hexletProgramPath)).toEqual(workDirStates.repo30);
+
+    const actualCommits1 = await gitLog('main', hexletProgramPath);
+    const expectedCommits1 = [
+      'add file2 & change file1',
+      'add example',
+      'download start',
+      'init',
+    ];
+    expect(actualCommits1).toEqual(expectedCommits1);
+
+    await programCmd.handler(args, customSettings);
+    expect(await gitLsFiles(hexletProgramPath)).toEqual(workDirStates.repo30afterPull60);
+
+    const actualCommits2 = await gitLog('main', hexletProgramPath);
+    const expectedCommits2 = [
+      'remove file1',
+      'add file2 & change file1',
+      'add example',
+      'download start',
+      'init',
+    ];
+    expect(actualCommits2).toEqual(expectedCommits2);
+  });
 });

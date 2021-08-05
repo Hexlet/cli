@@ -6,7 +6,6 @@ const chalk = require('chalk');
 const debug = require('debug');
 const git = require('isomorphic-git');
 const _ = require('lodash');
-const os = require('os');
 
 const log = debug('hexlet');
 
@@ -110,7 +109,7 @@ const handler = async ({ program }, customSettings = {}) => {
     });
 
     console.log(chalk.yellow('Changed exercises:'));
-    console.log(uniqueExerciseNames.join(os.EOL));
+    console.log(uniqueExerciseNames.join('\n'));
     console.log();
     console.log(chalk.green(`Exercises have been submitted! Open ${programs[program].gitlabUrl}`));
   } else {

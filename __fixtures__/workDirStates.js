@@ -62,4 +62,11 @@ module.exports = {
     ['exercises/start/TUTORIAL.md', 1, 1, 1],
     ['spec.yml', 1, 1, 1],
   ],
+  repo30afterPull60: [
+    ['.gitignore', 1, 1, 1],
+    ['exercises/example/subdir/file2', 1, 1, 1],
+    ['exercises/start/Makefile', 1, 1, 1],
+    ['exercises/start/README.md', 1, 1, 1],
+    ['spec.yml', 1, 1, 1],
+  ],
 };

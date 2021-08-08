@@ -20,10 +20,13 @@ describe('program submit base', () => {
     const tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-cli-'));
     customSettings = { homedir: tmpDir };
     const {
-      hexletConfigPath: configPath, hexletDir,
+      hexletConfigPath: configPath,
     } = initSettings(customSettings);
     hexletConfigPath = configPath;
+    const configDir = path.dirname(hexletConfigPath);
+    const hexletDir = path.join(tmpDir, 'learning', 'Hexlet');
     await fse.mkdirp(hexletDir);
+    await fse.mkdirp(configDir);
   });
 
   it('submit (without init)', async () => {
@@ -31,7 +34,7 @@ describe('program submit base', () => {
       .rejects.toThrow('no such file or directory');
   });
 
-  it('submit with invalid .config.json', async () => {
+  it('submit with invalid config.json', async () => {
     await fse.writeJson(hexletConfigPath, {});
 
     await expect(programCmd.handler(args, customSettings))

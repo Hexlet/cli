@@ -9,6 +9,7 @@ const path = require('path');
 const git = require('isomorphic-git');
 const chalk = require('chalk');
 const { Gitlab } = require('@gitbeaker/node');
+const os = require('os');
 
 const initSettings = require('../../settings.js');
 
@@ -16,22 +17,22 @@ const log = debug('hexlet');
 
 const prepareConfig = async (params) => {
   const {
-    hexletConfigPath, gitlabGroupId, gitlabToken, hexletUserId, program, project,
+    hexletConfigPath, gitlabGroupId, gitlabToken, hexletUserId, program, project, hexletDir,
   } = params;
 
   let data = {};
 
-  fse.ensureDir(path.dirname(hexletConfigPath));
+  await fse.ensureDir(hexletDir);
+  await fse.ensureDir(path.dirname(hexletConfigPath));
   try {
-    if (await fse.pathExists(hexletConfigPath)) {
-      data = await fse.readJson(hexletConfigPath);
-    }
+    data = await fse.readJson(hexletConfigPath);
   } catch (err) {
     // nothing
   }
 
   data.hexletUserId = hexletUserId;
   data.gitlabToken = gitlabToken;
+  data.hexletDir = hexletDir;
   if (!data.programs) {
     data.programs = { [program]: {} };
   }
@@ -46,12 +47,12 @@ const prepareConfig = async (params) => {
 
 const handler = async (params, customSettings = {}) => {
   const {
-    gitlabGroupId, hexletUserId, gitlabToken,
+    gitlabGroupId, hexletUserId, gitlabToken, hexletDir,
   } = params;
   log('params', params);
 
   const {
-    author, branch, hexletConfigPath, hexletDir, hexletTemplatesPath,
+    author, branch, hexletConfigPath, hexletTemplatesPath,
   } = initSettings(customSettings);
 
   const api = new Gitlab({
@@ -134,6 +135,14 @@ const handler = async (params, customSettings = {}) => {
   return { hexletConfigPath };
 };
 
+const checkInitArgs = ({ hexletDir }) => {
+  if (!path.isAbsolute(hexletDir)) {
+    throw new Error('Path to Hexlet directory must be absolute');
+  }
+
+  return true;
+};
+
 const obj = {
   command: 'init',
   description: 'Init repository',
@@ -154,6 +163,13 @@ const obj = {
       required: true,
       type: 'string',
     });
+    yargs.option('hexlet-dir', {
+      description: 'Absolute path to Hexlet directory',
+      required: false,
+      type: 'string',
+      default: path.join(os.homedir(), 'Hexlet'),
+    });
+    yargs.check(checkInitArgs);
   },
   handler,
 };

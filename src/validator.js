@@ -26,9 +26,10 @@ const configSchema = {
   properties: {
     hexletUserId: { type: 'string', minLength: 1 },
     gitlabToken: { type: 'string', minLength: 1 },
+    hexletDir: { type: 'string', minLength: 1 },
     programs: programsSchema,
   },
-  required: ['hexletUserId', 'gitlabToken'],
+  required: ['hexletUserId', 'gitlabToken', 'hexletDir'],
   additionalProperties: false,
 };
 

@@ -48,7 +48,9 @@ describe('program', () => {
     git.clone = jest.fn(() => {});
     git.pull = jest.fn(() => {});
 
-    const args = { hexletUserId, gitlabGroupId, gitlabToken };
+    const args = {
+      hexletUserId, gitlabGroupId, gitlabToken, hexletDir: defaults.homedir,
+    };
     const result = await programCmd.handler(args, defaults);
 
     const actualConfig = await fse.readJson(result.hexletConfigPath);

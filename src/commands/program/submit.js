@@ -17,9 +17,9 @@ const handler = async ({ program }, customSettings = {}) => {
     author, generateHexletProgramPath, hexletConfigPath, branch,
   } = initSettings(customSettings);
 
-  const { gitlabToken, programs } = await readHexletConfig(hexletConfigPath);
+  const { gitlabToken, programs, hexletDir } = await readHexletConfig(hexletConfigPath);
 
-  const programPath = generateHexletProgramPath(program);
+  const programPath = generateHexletProgramPath(hexletDir, program);
   log(programPath);
 
   const fileStatusesBeforePull = await git.statusMatrix({ fs, dir: programPath });

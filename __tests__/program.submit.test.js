@@ -22,6 +22,7 @@ const args = { program };
 const config = {
   hexletUserId: '123',
   gitlabToken: 'some-token',
+  hexletDir: null,
   programs: {
     [program]: {
       gitlabUrl: null,
@@ -75,16 +76,20 @@ describe('program submit', () => {
   let hexletProgramPath;
   let hexletConfigPath;
   let customSettings;
+  let hexletDir;
 
   beforeEach(async () => {
     const tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-cli-'));
     customSettings = { homedir: tmpDir };
     const {
-      hexletConfigPath: configPath, generateHexletProgramPath, hexletDir,
+      hexletConfigPath: configPath, generateHexletProgramPath,
     } = initSettings(customSettings);
     hexletConfigPath = configPath;
-    hexletProgramPath = generateHexletProgramPath(program);
+    const configDir = path.dirname(hexletConfigPath);
+    await fse.mkdirp(configDir);
+    hexletDir = path.join(tmpDir, 'learning', 'Hexlet');
     await fse.mkdirp(hexletDir);
+    hexletProgramPath = generateHexletProgramPath(hexletDir, program);
   });
 
   it('no local changes, remote repo has new exercises', async () => {
@@ -92,6 +97,7 @@ describe('program submit', () => {
     const remoteUrl = `${baseUrl}/20.git`;
 
     config.programs[program].gitlabUrl = remoteUrl;
+    config.hexletDir = hexletDir;
     await fse.writeJson(hexletConfigPath, config);
 
     await gitClone(cloneUrl, hexletProgramPath);
@@ -121,6 +127,7 @@ describe('program submit', () => {
     const remoteUrl = `${baseUrl}/30.git`;
 
     config.programs[program].gitlabUrl = remoteUrl;
+    config.hexletDir = hexletDir;
     await fse.writeJson(hexletConfigPath, config);
 
     await gitClone(cloneUrl, hexletProgramPath);
@@ -160,6 +167,7 @@ describe('program submit', () => {
     const cloneUrl = `${baseUrl}/30.git`;
 
     config.programs[program].gitlabUrl = cloneUrl;
+    config.hexletDir = hexletDir;
     await fse.writeJson(hexletConfigPath, config);
 
     await gitClone(cloneUrl, hexletProgramPath);
@@ -211,6 +219,7 @@ describe('program submit', () => {
     const remoteUrl = `${baseUrl}/40.git`;
 
     config.programs[program].gitlabUrl = remoteUrl;
+    config.hexletDir = hexletDir;
     await fse.writeJson(hexletConfigPath, config);
 
     await gitClone(cloneUrl, hexletProgramPath);
@@ -265,6 +274,7 @@ describe('program submit', () => {
     const remoteUrl = `${baseUrl}/50.git`;
 
     config.programs[program].gitlabUrl = remoteUrl;
+    config.hexletDir = hexletDir;
     await fse.writeJson(hexletConfigPath, config);
 
     await gitClone(cloneUrl, hexletProgramPath);
@@ -331,6 +341,7 @@ describe('program submit', () => {
     const remoteUrl = `${baseUrl}/40.git`;
 
     config.programs[program].gitlabUrl = remoteUrl;
+    config.hexletDir = hexletDir;
     await fse.writeJson(hexletConfigPath, config);
 
     await gitClone(cloneUrl, hexletProgramPath);
@@ -388,6 +399,7 @@ describe('program submit', () => {
     const remoteUrl = `${baseUrl}/60.git`;
 
     config.programs[program].gitlabUrl = remoteUrl;
+    config.hexletDir = hexletDir;
     await fse.writeJson(hexletConfigPath, config);
 
     await gitClone(cloneUrl, hexletProgramPath);

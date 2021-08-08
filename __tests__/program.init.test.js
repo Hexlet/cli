@@ -13,19 +13,19 @@ nock.disableNetConnect();
 
 describe('program', () => {
   const scope = nock('https://gitlab.com/api/v4').persist();
-  let defaults;
-  let tmpDir;
+  let customSettings;
+  let hexletDir;
 
   beforeEach(async () => {
-    tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-cli-'));
-    defaults = { homedir: tmpDir };
+    const tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-cli-'));
+    customSettings = { homedir: tmpDir };
+    hexletDir = path.join(tmpDir, 'learning', 'Hexlet');
   });
 
   it('init', async () => {
     const hexletUserId = '123';
     const gitlabGroupId = '456789';
     const gitlabToken = 'some-token';
-    const hexletDir = path.join(tmpDir, 'learning', 'Hexlet');
 
     scope.get(`/namespaces/${gitlabGroupId}`)
       .reply(200, {
@@ -53,7 +53,7 @@ describe('program', () => {
     const args = {
       hexletUserId, gitlabGroupId, gitlabToken, hexletDir,
     };
-    const result = await programCmd.handler(args, defaults);
+    const result = await programCmd.handler(args, customSettings);
 
     const actualConfig = await fse.readJson(result.hexletConfigPath);
     const expectedConfig = await fse.readJson(getFixturePath('config.json'));

@@ -172,6 +172,7 @@ const obj = {
     yargs.check(checkInitArgs);
   },
   handler,
+  checkInitArgs,
 };
 
 module.exports = obj;

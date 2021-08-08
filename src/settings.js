@@ -11,6 +11,7 @@ module.exports = (options = {}) => {
   const hexletTemplatesPath = path.join(cliSrcDir, 'templates');
   const hexletGitlabNamespace = 'hexlethq'; // https://gitlab.com/hexlethq
   const branch = 'main';
+  const generateHexletProgramPath = (hexletDir, programSlug) => path.join(hexletDir, programSlug);
   const author = {
     name: '@hexlet/cli',
     email: 'support@hexlet.io',
@@ -23,5 +24,6 @@ module.exports = (options = {}) => {
     hexletGitlabNamespace,
     branch,
     hexletTemplatesPath,
+    generateHexletProgramPath,
   };
 };

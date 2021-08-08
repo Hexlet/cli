@@ -19,17 +19,23 @@ describe('program', () => {
     exercise: 'fundamentals',
     token: 'some-token',
   };
+  let tmpDir;
   let defaults;
 
   beforeEach(async () => {
-    const tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-cli-'));
+    tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-cli-'));
     defaults = { homedir: tmpDir };
   });
 
   it('download', async () => {
-    const { hexletDir, hexletConfigPath } = initSettings(defaults);
-    await fsp.mkdir(hexletDir);
-    await fse.copy(getFixturePath('.config.json'), hexletConfigPath);
+    const { hexletConfigPath } = initSettings(defaults);
+    const hexletDir = path.join(tmpDir, 'learning', 'Hexlet');
+    const configDir = path.dirname(hexletConfigPath);
+    await fse.mkdirp(hexletDir);
+    await fse.mkdirp(configDir);
+    const configData = await fse.readJson(getFixturePath('config.json'));
+    configData.hexletDir = hexletDir;
+    await fse.writeJson(hexletConfigPath, configData);
 
     const programArchivePath = getFixturePath('ruby-program.tar.gz');
     nock('https://hexlet-programs.fra1.digitaloceanspaces.com')
@@ -51,9 +57,12 @@ describe('program', () => {
       .rejects.toThrow('no such file or directory');
   });
 
-  it('download with invalid .config.json', async () => {
-    const { hexletDir, hexletConfigPath } = initSettings(defaults);
-    await fsp.mkdir(hexletDir);
+  it('download with invalid config.json', async () => {
+    const { hexletConfigPath } = initSettings(defaults);
+    const hexletDir = path.join(tmpDir, 'learning', 'Hexlet');
+    const configDir = path.dirname(hexletConfigPath);
+    await fse.mkdirp(hexletDir);
+    await fse.mkdirp(configDir);
     await fse.writeJson(hexletConfigPath, {});
 
     await expect(programCmd.handler(args, defaults))

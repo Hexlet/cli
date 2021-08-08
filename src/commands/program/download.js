@@ -23,7 +23,7 @@ const handler = async ({
   } = initSettings(customSettings);
 
   // TODO: check that program initialized
-  await readHexletConfig(hexletConfigPath);
+  const { hexletDir } = await readHexletConfig(hexletConfigPath);
 
   const templateUrl = 'https://hexlet-programs.fra1.digitaloceanspaces.com/%s-program.tar.gz';
   const programUrl = util.format(templateUrl, program);
@@ -49,7 +49,7 @@ const handler = async ({
     noChmod: true,
   });
 
-  const hexletProgramPath = generateHexletProgramPath(program);
+  const hexletProgramPath = generateHexletProgramPath(hexletDir, program);
   const programPathExists = await fse.pathExists(hexletProgramPath);
   if (!programPathExists) {
     await fse.mkdirp(hexletProgramPath);

@@ -52,7 +52,7 @@ const handler = async (params, customSettings = {}) => {
   log('params', params);
 
   const {
-    author, branch, hexletConfigPath, hexletTemplatesPath,
+    author, branch, hexletConfigPath, hexletTemplatesPath, generateHexletProgramPath,
   } = initSettings(customSettings);
 
   const api = new Gitlab({
@@ -103,7 +103,7 @@ const handler = async (params, customSettings = {}) => {
   const commitActions = await Promise.all(promises);
   await api.Commits.create(projectId, branch, '@hexlet/cli: configure', commitActions);
 
-  const programPath = path.join(hexletDir, program);
+  const programPath = generateHexletProgramPath(hexletDir, program);
   log(`git clone ${project.ssh_url_to_repo} ${programPath}`);
 
   await git.clone({

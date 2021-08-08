@@ -1,6 +1,5 @@
 const os = require('os');
 const path = require('path');
-const git = require('isomorphic-git');
 const fsp = require('fs/promises');
 const fse = require('fs-extra');
 const nock = require('nock');
@@ -11,61 +10,47 @@ const { readDirP, getFixturePath } = require('./helpers/index.js');
 
 const getTmpDirPath = (program) => path.join(os.tmpdir(), `${program}-program`);
 
+const program = 'ruby';
+const args = {
+  program,
+  exercise: 'fundamentals',
+};
+
 nock.disableNetConnect();
 
 describe('program', () => {
-  const args = {
-    program: 'ruby',
-    exercise: 'fundamentals',
-    token: 'some-token',
-  };
-  let tmpDir;
-  let defaults;
+  let hexletConfigPath;
+  let customSettings;
+  let hexletDir;
 
   beforeEach(async () => {
-    tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-cli-'));
-    defaults = { homedir: tmpDir };
+    const tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-cli-'));
+    customSettings = { homedir: tmpDir };
+    const {
+      hexletConfigPath: configPath,
+    } = initSettings(customSettings);
+    hexletConfigPath = configPath;
+    const configDir = path.dirname(hexletConfigPath);
+    await fse.mkdirp(configDir);
+    hexletDir = path.join(tmpDir, 'learning', 'Hexlet');
+    await fse.mkdirp(hexletDir);
   });
 
   it('download', async () => {
-    const { hexletConfigPath } = initSettings(defaults);
-    const hexletDir = path.join(tmpDir, 'learning', 'Hexlet');
-    const configDir = path.dirname(hexletConfigPath);
-    await fse.mkdirp(hexletDir);
-    await fse.mkdirp(configDir);
-    const configData = await fse.readJson(getFixturePath('config.json'));
-    configData.hexletDir = hexletDir;
-    await fse.writeJson(hexletConfigPath, configData);
+    const config = await fse.readJson(getFixturePath('config.json'));
+    config.hexletDir = hexletDir;
+    await fse.writeJson(hexletConfigPath, config);
 
     const programArchivePath = getFixturePath('ruby-program.tar.gz');
     nock('https://hexlet-programs.fra1.digitaloceanspaces.com')
       .get('/ruby-program.tar.gz')
       .replyWithFile(200, programArchivePath);
 
-    git.clone = jest.fn(() => {});
+    await programCmd.handler(args, customSettings);
 
-    await programCmd.handler(args, defaults);
-
-    const tmpDirPath = getTmpDirPath(args.program);
+    const tmpDirPath = getTmpDirPath(program);
     expect(await readDirP(tmpDirPath)).toMatchSnapshot();
 
     expect(await readDirP(hexletDir)).toMatchSnapshot();
-  });
-
-  it('download (without init)', async () => {
-    await expect(programCmd.handler(args, defaults))
-      .rejects.toThrow('no such file or directory');
-  });
-
-  it('download with invalid config.json', async () => {
-    const { hexletConfigPath } = initSettings(defaults);
-    const hexletDir = path.join(tmpDir, 'learning', 'Hexlet');
-    const configDir = path.dirname(hexletConfigPath);
-    await fse.mkdirp(hexletDir);
-    await fse.mkdirp(configDir);
-    await fse.writeJson(hexletConfigPath, {});
-
-    await expect(programCmd.handler(args, defaults))
-      .rejects.toThrow(`Validation error "${hexletConfigPath}"`);
   });
 });

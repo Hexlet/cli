@@ -20,6 +20,7 @@ module.exports = (options = {}) => {
   return {
     author,
     cliSrcDir,
+    hexletConfigDir,
     hexletConfigPath,
     hexletGitlabNamespace,
     branch,

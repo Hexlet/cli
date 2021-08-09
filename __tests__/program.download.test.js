@@ -11,9 +11,23 @@ const { readDirP, getFixturePath } = require('./helpers/index.js');
 const getTmpDirPath = (program) => path.join(os.tmpdir(), `${program}-program`);
 
 const program = 'ruby';
+
 const args = {
   program,
   exercise: 'fundamentals',
+  token: 'some-token',
+};
+
+const config = {
+  hexletUserId: '123',
+  gitlabToken: 'some-token',
+  hexletDir: null,
+  programs: {
+    [program]: {
+      gitlabUrl: 'https://remote-repo-url',
+      gitlabGroupId: '456789',
+    },
+  },
 };
 
 nock.disableNetConnect();
@@ -26,18 +40,14 @@ describe('program', () => {
   beforeEach(async () => {
     const tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-cli-'));
     customSettings = { homedir: tmpDir };
-    const {
-      hexletConfigPath: configPath,
-    } = initSettings(customSettings);
-    hexletConfigPath = configPath;
-    const configDir = path.dirname(hexletConfigPath);
-    await fse.mkdirp(configDir);
+    const settings = initSettings(customSettings);
+    hexletConfigPath = settings.hexletConfigPath;
+    await fse.mkdirp(settings.hexletConfigDir);
     hexletDir = path.join(tmpDir, 'learning', 'Hexlet');
     await fse.mkdirp(hexletDir);
   });
 
   it('download', async () => {
-    const config = await fse.readJson(getFixturePath('config.json'));
     config.hexletDir = hexletDir;
     await fse.writeJson(hexletConfigPath, config);
 
@@ -52,5 +62,17 @@ describe('program', () => {
     expect(await readDirP(tmpDirPath)).toMatchSnapshot();
 
     expect(await readDirP(hexletDir)).toMatchSnapshot();
+  });
+
+  it('download (without init)', async () => {
+    await expect(programCmd.handler(args, customSettings))
+      .rejects.toThrow('no such file or directory');
+  });
+
+  it('download with invalid config.json', async () => {
+    await fse.writeJson(hexletConfigPath, {});
+
+    await expect(programCmd.handler(args, customSettings))
+      .rejects.toThrow(`Validation error "${hexletConfigPath}"`);
   });
 });

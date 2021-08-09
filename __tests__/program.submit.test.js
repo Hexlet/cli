@@ -81,15 +81,12 @@ describe('program submit', () => {
   beforeEach(async () => {
     const tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-cli-'));
     customSettings = { homedir: tmpDir };
-    const {
-      hexletConfigPath: configPath, generateHexletProgramPath,
-    } = initSettings(customSettings);
-    hexletConfigPath = configPath;
-    const configDir = path.dirname(hexletConfigPath);
-    await fse.mkdirp(configDir);
+    const settings = initSettings(customSettings);
+    hexletConfigPath = settings.hexletConfigPath;
+    await fse.mkdirp(settings.hexletConfigDir);
     hexletDir = path.join(tmpDir, 'learning', 'Hexlet');
     await fse.mkdirp(hexletDir);
-    hexletProgramPath = generateHexletProgramPath(hexletDir, program);
+    hexletProgramPath = settings.generateHexletProgramPath(hexletDir, program);
   });
 
   it('no local changes, remote repo has new exercises', async () => {

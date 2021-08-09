@@ -17,13 +17,15 @@ const log = debug('hexlet');
 
 const prepareConfig = async (params) => {
   const {
-    hexletConfigPath, gitlabGroupId, gitlabToken, hexletUserId, program, project, hexletDir,
+    hexletConfigDir, hexletConfigPath, hexletDir,
+    gitlabGroupId, gitlabToken, hexletUserId,
+    program, project,
   } = params;
 
   let data = {};
 
   await fse.ensureDir(hexletDir);
-  await fse.ensureDir(path.dirname(hexletConfigPath));
+  await fse.ensureDir(hexletConfigDir);
   try {
     data = await fse.readJson(hexletConfigPath);
   } catch (err) {
@@ -54,7 +56,9 @@ const handler = async (params, customSettings = {}) => {
   log('params', params);
 
   const {
-    author, branch, hexletConfigPath, hexletTemplatesPath, generateHexletProgramPath,
+    author, branch, hexletConfigDir,
+    hexletConfigPath, hexletTemplatesPath,
+    generateHexletProgramPath,
   } = initSettings(customSettings);
 
   const api = new Gitlab({
@@ -80,7 +84,7 @@ const handler = async (params, customSettings = {}) => {
   console.log(chalk.grey(`Gitlab repository: ${project.web_url}`));
 
   const { hexletDir } = await prepareConfig({
-    ...params, hexletConfigPath, program, project,
+    ...params, hexletConfigDir, hexletConfigPath, program, project,
   });
 
   const programTemplateDir = path.join(hexletTemplatesPath, 'program');

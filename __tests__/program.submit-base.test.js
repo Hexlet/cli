@@ -19,14 +19,11 @@ describe('program submit base', () => {
   beforeEach(async () => {
     const tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-cli-'));
     customSettings = { homedir: tmpDir };
-    const {
-      hexletConfigPath: configPath,
-    } = initSettings(customSettings);
-    hexletConfigPath = configPath;
-    const configDir = path.dirname(hexletConfigPath);
+    const settings = initSettings(customSettings);
+    hexletConfigPath = settings.hexletConfigPath;
     const hexletDir = path.join(tmpDir, 'learning', 'Hexlet');
     await fse.mkdirp(hexletDir);
-    await fse.mkdirp(configDir);
+    await fse.mkdirp(settings.hexletConfigDir);
   });
 
   it('submit (without init)', async () => {

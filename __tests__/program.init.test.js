@@ -14,18 +14,18 @@ nock.disableNetConnect();
 describe('program', () => {
   const scope = nock('https://gitlab.com/api/v4').persist();
   let customSettings;
-  let hexletDir;
+  let tmpDir;
 
   beforeEach(async () => {
-    const tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-cli-'));
+    tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-cli-'));
     customSettings = { homedir: tmpDir };
-    hexletDir = path.join(tmpDir, 'learning', 'Hexlet');
   });
 
   it('init', async () => {
     const hexletUserId = '123';
     const gitlabGroupId = '456789';
     const gitlabToken = 'some-token';
+    const hexletDir = path.join(tmpDir, 'learning', 'Hexlet');
 
     scope.get(`/namespaces/${gitlabGroupId}`)
       .reply(200, {

@@ -63,17 +63,4 @@ describe('program', () => {
     const validate = getValidator();
     expect(validate(actualConfig)).toBeTruthy();
   });
-
-  it('check init arguments', () => {
-    const args1 = {
-      hexletDir: path.join('/', 'home', 'learning', 'Hexlet'),
-    };
-    expect(programCmd.checkInitArgs(args1)).toBeTruthy();
-
-    const args2 = {
-      hexletDir: path.join('learning', 'Hexlet'),
-    };
-    expect(() => programCmd.checkInitArgs(args2))
-      .toThrow('Path to Hexlet directory must be absolute');
-  });
 });

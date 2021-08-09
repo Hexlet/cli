@@ -43,11 +43,13 @@ const prepareConfig = async (params) => {
 
   await fse.writeJson(hexletConfigPath, data);
   console.log(chalk.grey(`Config: ${hexletConfigPath}`));
+
+  return data;
 };
 
 const handler = async (params, customSettings = {}) => {
   const {
-    gitlabGroupId, hexletUserId, gitlabToken, hexletDir,
+    gitlabGroupId, hexletUserId, gitlabToken,
   } = params;
   log('params', params);
 
@@ -77,7 +79,7 @@ const handler = async (params, customSettings = {}) => {
   log('project', project);
   console.log(chalk.grey(`Gitlab repository: ${project.web_url}`));
 
-  await prepareConfig({
+  const { hexletDir } = await prepareConfig({
     ...params, hexletConfigPath, program, project,
   });
 
@@ -135,14 +137,6 @@ const handler = async (params, customSettings = {}) => {
   return { hexletConfigPath };
 };
 
-const checkInitArgs = ({ hexletDir }) => {
-  if (!path.isAbsolute(hexletDir)) {
-    throw new Error('Path to Hexlet directory must be absolute');
-  }
-
-  return true;
-};
-
 const obj = {
   command: 'init',
   description: 'Init repository',
@@ -164,15 +158,14 @@ const obj = {
       type: 'string',
     });
     yargs.option('hexlet-dir', {
-      description: 'Absolute path to Hexlet directory',
+      description: 'Path to Hexlet directory',
       required: false,
       type: 'string',
       default: path.join(os.homedir(), 'Hexlet'),
     });
-    yargs.check(checkInitArgs);
+    yargs.coerce('hexlet-dir', (opt) => path.resolve(process.cwd(), opt));
   },
   handler,
-  checkInitArgs,
 };
 
 module.exports = obj;

@@ -45,10 +45,10 @@ describe('program', () => {
     await fse.mkdirp(settings.hexletConfigDir);
     hexletDir = path.join(tmpDir, 'learning', 'Hexlet');
     await fse.mkdirp(hexletDir);
+    config.hexletDir = hexletDir;
   });
 
   it('download', async () => {
-    config.hexletDir = hexletDir;
     await fse.writeJson(hexletConfigPath, config);
 
     const programArchivePath = getFixturePath('ruby-program.tar.gz');

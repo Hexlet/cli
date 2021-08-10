@@ -58,7 +58,7 @@ describe('program', () => {
       .rejects.toThrow('no such file or directory');
   });
 
-  it('download with invalid config.json', async () => {
+  it('download with invalid .config.json', async () => {
     await fse.writeJson(hexletConfigPath, {});
 
     await expect(programCmd.handler(args, customSettings))

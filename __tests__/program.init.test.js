@@ -56,7 +56,7 @@ describe('program', () => {
     const result = await programCmd.handler(args, customSettings);
 
     const actualConfig = await fse.readJson(result.hexletConfigPath);
-    const expectedConfig = await fse.readJson(getFixturePath('config.json'));
+    const expectedConfig = await fse.readJson(getFixturePath('.config.json'));
     expectedConfig.hexletDir = hexletDir;
     expect(actualConfig).toEqual(expectedConfig);
 

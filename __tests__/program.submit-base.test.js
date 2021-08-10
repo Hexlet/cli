@@ -31,7 +31,7 @@ describe('program submit base', () => {
       .rejects.toThrow('no such file or directory');
   });
 
-  it('submit with invalid config.json', async () => {
+  it('submit with invalid .config.json', async () => {
     await fse.writeJson(hexletConfigPath, {});
 
     await expect(programCmd.handler(args, customSettings))

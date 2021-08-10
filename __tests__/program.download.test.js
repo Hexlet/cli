@@ -6,7 +6,7 @@ const nock = require('nock');
 
 const programCmd = require('../src/commands/program/download.js');
 const initSettings = require('../src/settings.js');
-const { readDirP, getFixturePath } = require('./helpers/index.js');
+const { readDirP, getFixturePath, getConfig } = require('./helpers/index.js');
 
 const getTmpDirPath = (program) => path.join(os.tmpdir(), `${program}-program`);
 
@@ -18,24 +18,13 @@ const args = {
   token: 'some-token',
 };
 
-const config = {
-  hexletUserId: '123',
-  gitlabToken: 'some-token',
-  hexletDir: null,
-  programs: {
-    [program]: {
-      gitlabUrl: 'https://remote-repo-url',
-      gitlabGroupId: '456789',
-    },
-  },
-};
-
 nock.disableNetConnect();
 
 describe('program', () => {
   let hexletConfigPath;
   let customSettings;
   let hexletDir;
+  let config;
 
   beforeEach(async () => {
     const tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-cli-'));
@@ -45,7 +34,7 @@ describe('program', () => {
     await fse.mkdirp(settings.hexletConfigDir);
     hexletDir = path.join(tmpDir, 'learning', 'Hexlet');
     await fse.mkdirp(hexletDir);
-    config.hexletDir = hexletDir;
+    config = getConfig({ hexletDir, program });
   });
 
   it('download', async () => {

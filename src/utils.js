@@ -4,6 +4,8 @@ const fse = require('fs-extra');
 const fsp = require('fs/promises');
 const chalk = require('chalk');
 const updateNotifier = require('update-notifier');
+const path = require('path');
+const os = require('os');
 const pkg = require('../package.json');
 
 const { getValidator } = require('./validator.js');
@@ -17,6 +19,11 @@ module.exports.readHexletConfig = async (configPath) => {
   }
 
   const configData = await fse.readJson(configPath);
+  // NOTE: решение проблемы с обратной совместимостью
+  if (!configData.hexletDir) {
+    configData.hexletDir = path.join(os.homedir(), 'Hexlet');
+  }
+
   const validate = getValidator();
   if (!validate(configData)) {
     const errorDetail = JSON.stringify(validate.errors, null, 2);

@@ -5,13 +5,13 @@ const path = require('path');
 
 module.exports = (options = {}) => {
   const homeDir = options.homedir || os.homedir();
-  const hexletDir = path.join(homeDir, 'Hexlet');
+  const hexletConfigDir = path.join(homeDir, '.config', 'Hexlet');
   const cliSrcDir = path.join(__dirname, '..', 'src');
-  const hexletConfigPath = path.join(hexletDir, '.config.json');
+  const hexletConfigPath = path.join(hexletConfigDir, 'config.json');
   const hexletTemplatesPath = path.join(cliSrcDir, 'templates');
   const hexletGitlabNamespace = 'hexlethq'; // https://gitlab.com/hexlethq
   const branch = 'main';
-  const generateHexletProgramPath = (programSlug) => path.join(hexletDir, programSlug);
+  const generateHexletProgramPath = (hexletDir, programSlug) => path.join(hexletDir, programSlug);
   const author = {
     name: '@hexlet/cli',
     email: 'support@hexlet.io',
@@ -20,8 +20,8 @@ module.exports = (options = {}) => {
   return {
     author,
     cliSrcDir,
+    hexletConfigDir,
     hexletConfigPath,
-    hexletDir,
     hexletGitlabNamespace,
     branch,
     hexletTemplatesPath,

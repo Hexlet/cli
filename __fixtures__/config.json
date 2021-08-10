@@ -1,6 +1,7 @@
 {
   "hexletUserId": "123",
   "gitlabToken": "some-token",
+  "hexletDir": null,
   "programs": {
     "ruby": {
       "gitlabUrl": "https://gitlab.com/hexlet/programs/ruby/groups/test-group/123",

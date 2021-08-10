@@ -9,6 +9,7 @@ const path = require('path');
 const git = require('isomorphic-git');
 const chalk = require('chalk');
 const { Gitlab } = require('@gitbeaker/node');
+const os = require('os');
 
 const initSettings = require('../../settings.js');
 
@@ -16,22 +17,24 @@ const log = debug('hexlet');
 
 const prepareConfig = async (params) => {
   const {
-    hexletConfigPath, gitlabGroupId, gitlabToken, hexletUserId, program, project,
+    hexletConfigDir, hexletConfigPath, hexletDir,
+    gitlabGroupId, gitlabToken, hexletUserId,
+    program, project,
   } = params;
 
   let data = {};
 
-  fse.ensureDir(path.dirname(hexletConfigPath));
+  await fse.ensureDir(hexletDir);
+  await fse.ensureDir(hexletConfigDir);
   try {
-    if (await fse.pathExists(hexletConfigPath)) {
-      data = await fse.readJson(hexletConfigPath);
-    }
+    data = await fse.readJson(hexletConfigPath);
   } catch (err) {
     // nothing
   }
 
   data.hexletUserId = hexletUserId;
   data.gitlabToken = gitlabToken;
+  data.hexletDir = hexletDir;
   if (!data.programs) {
     data.programs = { [program]: {} };
   }
@@ -42,6 +45,8 @@ const prepareConfig = async (params) => {
 
   await fse.writeJson(hexletConfigPath, data);
   console.log(chalk.grey(`Config: ${hexletConfigPath}`));
+
+  return data;
 };
 
 const handler = async (params, customSettings = {}) => {
@@ -51,7 +56,9 @@ const handler = async (params, customSettings = {}) => {
   log('params', params);
 
   const {
-    author, branch, hexletConfigPath, hexletDir, hexletTemplatesPath,
+    author, branch, hexletConfigDir,
+    hexletConfigPath, hexletTemplatesPath,
+    generateHexletProgramPath,
   } = initSettings(customSettings);
 
   const api = new Gitlab({
@@ -76,8 +83,8 @@ const handler = async (params, customSettings = {}) => {
   log('project', project);
   console.log(chalk.grey(`Gitlab repository: ${project.web_url}`));
 
-  await prepareConfig({
-    ...params, hexletConfigPath, program, project,
+  const { hexletDir } = await prepareConfig({
+    ...params, hexletConfigDir, hexletConfigPath, program, project,
   });
 
   const programTemplateDir = path.join(hexletTemplatesPath, 'program');
@@ -102,7 +109,7 @@ const handler = async (params, customSettings = {}) => {
   const commitActions = await Promise.all(promises);
   await api.Commits.create(projectId, branch, '@hexlet/cli: configure', commitActions);
 
-  const programPath = path.join(hexletDir, program);
+  const programPath = generateHexletProgramPath(hexletDir, program);
   log(`git clone ${project.ssh_url_to_repo} ${programPath}`);
 
   await git.clone({
@@ -154,6 +161,13 @@ const obj = {
       required: true,
       type: 'string',
     });
+    yargs.option('hexlet-dir', {
+      description: 'Path to Hexlet directory',
+      required: false,
+      type: 'string',
+      default: path.join(os.homedir(), 'Hexlet'),
+    });
+    yargs.coerce('hexlet-dir', (opt) => path.resolve(process.cwd(), opt));
   },
   handler,
 };

@@ -13,17 +13,19 @@ nock.disableNetConnect();
 
 describe('program', () => {
   const scope = nock('https://gitlab.com/api/v4').persist();
-  let defaults;
+  let customSettings;
+  let tmpDir;
 
   beforeEach(async () => {
-    const tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-cli-'));
-    defaults = { homedir: tmpDir };
+    tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-cli-'));
+    customSettings = { homedir: tmpDir };
   });
 
   it('init', async () => {
     const hexletUserId = '123';
     const gitlabGroupId = '456789';
     const gitlabToken = 'some-token';
+    const hexletDir = path.join(tmpDir, 'learning', 'Hexlet');
 
     scope.get(`/namespaces/${gitlabGroupId}`)
       .reply(200, {
@@ -48,12 +50,15 @@ describe('program', () => {
     git.clone = jest.fn(() => {});
     git.pull = jest.fn(() => {});
 
-    const args = { hexletUserId, gitlabGroupId, gitlabToken };
-    const result = await programCmd.handler(args, defaults);
+    const args = {
+      hexletUserId, gitlabGroupId, gitlabToken, hexletDir,
+    };
+    const result = await programCmd.handler(args, customSettings);
 
     const actualConfig = await fse.readJson(result.hexletConfigPath);
-    const expectedConfig = await fse.readJson(getFixturePath('.config.json'));
-    expect(actualConfig).toMatchObject(expectedConfig);
+    const expectedConfig = await fse.readJson(getFixturePath('config.json'));
+    expectedConfig.hexletDir = hexletDir;
+    expect(actualConfig).toEqual(expectedConfig);
 
     const validate = getValidator();
     expect(validate(actualConfig)).toBeTruthy();

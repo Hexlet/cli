@@ -7,7 +7,7 @@ const git = require('isomorphic-git');
 
 const programCmd = require('../src/commands/program/submit.js');
 const initSettings = require('../src/settings.js');
-const { readFile } = require('./helpers/index.js');
+const { readFile, getConfig } = require('./helpers/index.js');
 const {
   gitClone, gitRemoteSetUrl, gitLog, gitLsFiles, gitAdd, gitAddAll, gitRemove, gitCommit,
 } = require('./helpers/gitCommands.js');
@@ -18,17 +18,6 @@ const baseUrl = `http://${mockServerHost}`;
 
 const program = 'ruby';
 const args = { program };
-
-const config = {
-  hexletUserId: '123',
-  gitlabToken: 'some-token',
-  programs: {
-    [program]: {
-      gitlabUrl: null,
-      gitlabGroupId: '456789',
-    },
-  },
-};
 
 const anotherFilePath = path.join('exercises', 'example', 'anotherFile');
 const file1Path = path.join('exercises', 'example', 'file1');
@@ -75,23 +64,24 @@ describe('program submit', () => {
   let hexletProgramPath;
   let hexletConfigPath;
   let customSettings;
+  let hexletDir;
 
   beforeEach(async () => {
     const tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-cli-'));
     customSettings = { homedir: tmpDir };
-    const {
-      hexletConfigPath: configPath, generateHexletProgramPath, hexletDir,
-    } = initSettings(customSettings);
-    hexletConfigPath = configPath;
-    hexletProgramPath = generateHexletProgramPath(program);
+    const settings = initSettings(customSettings);
+    hexletConfigPath = settings.hexletConfigPath;
+    await fse.mkdirp(settings.hexletConfigDir);
+    hexletDir = path.join(tmpDir, 'learning', 'Hexlet');
     await fse.mkdirp(hexletDir);
+    hexletProgramPath = settings.generateHexletProgramPath(hexletDir, program);
   });
 
   it('no local changes, remote repo has new exercises', async () => {
     const cloneUrl = `${baseUrl}/10.git`;
     const remoteUrl = `${baseUrl}/20.git`;
 
-    config.programs[program].gitlabUrl = remoteUrl;
+    const config = getConfig({ hexletDir, program, remoteUrl });
     await fse.writeJson(hexletConfigPath, config);
 
     await gitClone(cloneUrl, hexletProgramPath);
@@ -120,7 +110,7 @@ describe('program submit', () => {
     const cloneUrl = `${baseUrl}/20.git`;
     const remoteUrl = `${baseUrl}/30.git`;
 
-    config.programs[program].gitlabUrl = remoteUrl;
+    const config = getConfig({ hexletDir, program, remoteUrl });
     await fse.writeJson(hexletConfigPath, config);
 
     await gitClone(cloneUrl, hexletProgramPath);
@@ -159,7 +149,7 @@ describe('program submit', () => {
   it('local repo has changes, remote repo has no changes', async () => {
     const cloneUrl = `${baseUrl}/30.git`;
 
-    config.programs[program].gitlabUrl = cloneUrl;
+    const config = getConfig({ hexletDir, program, remoteUrl: cloneUrl });
     await fse.writeJson(hexletConfigPath, config);
 
     await gitClone(cloneUrl, hexletProgramPath);
@@ -210,7 +200,7 @@ describe('program submit', () => {
     const cloneUrl = `${baseUrl}/30.git`;
     const remoteUrl = `${baseUrl}/40.git`;
 
-    config.programs[program].gitlabUrl = remoteUrl;
+    const config = getConfig({ hexletDir, program, remoteUrl });
     await fse.writeJson(hexletConfigPath, config);
 
     await gitClone(cloneUrl, hexletProgramPath);
@@ -264,7 +254,7 @@ describe('program submit', () => {
     const cloneUrl = `${baseUrl}/30.git`;
     const remoteUrl = `${baseUrl}/50.git`;
 
-    config.programs[program].gitlabUrl = remoteUrl;
+    const config = getConfig({ hexletDir, program, remoteUrl });
     await fse.writeJson(hexletConfigPath, config);
 
     await gitClone(cloneUrl, hexletProgramPath);
@@ -330,7 +320,7 @@ describe('program submit', () => {
     const cloneUrl = `${baseUrl}/30.git`;
     const remoteUrl = `${baseUrl}/40.git`;
 
-    config.programs[program].gitlabUrl = remoteUrl;
+    const config = getConfig({ hexletDir, program, remoteUrl });
     await fse.writeJson(hexletConfigPath, config);
 
     await gitClone(cloneUrl, hexletProgramPath);
@@ -387,7 +377,7 @@ describe('program submit', () => {
     const cloneUrl = `${baseUrl}/30.git`;
     const remoteUrl = `${baseUrl}/60.git`;
 
-    config.programs[program].gitlabUrl = remoteUrl;
+    const config = getConfig({ hexletDir, program, remoteUrl });
     await fse.writeJson(hexletConfigPath, config);
 
     await gitClone(cloneUrl, hexletProgramPath);

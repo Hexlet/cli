@@ -133,11 +133,6 @@ Array [
 exports[`program download 2`] = `
 Array [
   Object {
-    "name": ".config.json",
-    "path": ".config.json",
-    "size": 216n,
-  },
-  Object {
     "name": ".gitignore",
     "path": "ruby/.gitignore",
     "size": 20n,

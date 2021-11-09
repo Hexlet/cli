@@ -120,17 +120,24 @@ const handler = async (params, customSettings = {}) => {
     url: project.http_url_to_repo,
     singleBranch: true,
     ref: branch,
+    noCheckout: true,
   });
 
-  await git.pull({
-    fs,
-    http,
-    dir: programPath,
-    ref: branch,
-    singleBranch: true,
-    onAuth: () => ({ username: 'oauth2', password: gitlabToken }),
-    author,
-  });
+  try {
+    await git.pull({
+      fs,
+      http,
+      dir: programPath,
+      ref: branch,
+      singleBranch: true,
+      onAuth: () => ({ username: 'oauth2', password: gitlabToken }),
+      author,
+    });
+  } catch (e) {
+    if (!(e instanceof git.Errors.CheckoutConflictError)) {
+      throw e;
+    }
+  }
 
   console.log(chalk.grey(`Program name: ${program}`));
   console.log(chalk.grey(`Program path: ${programPath}`));

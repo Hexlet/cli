@@ -112,6 +112,17 @@ const handler = async (params, customSettings = {}) => {
   const programPath = generateHexletProgramPath(hexletDir, program);
   log(`git clone ${project.ssh_url_to_repo} ${programPath}`);
 
+  // NOTE: решение с повторным init, включает решение конфликтов
+  try {
+    await git.deleteRemote({
+      fs,
+      dir: programPath,
+      remote: 'origin',
+    });
+  } catch (e) {
+    // локально репозиторий отсутствует
+  }
+
   await git.clone({
     fs,
     http,
@@ -120,24 +131,17 @@ const handler = async (params, customSettings = {}) => {
     url: project.http_url_to_repo,
     singleBranch: true,
     ref: branch,
-    noCheckout: true,
   });
 
-  try {
-    await git.pull({
-      fs,
-      http,
-      dir: programPath,
-      ref: branch,
-      singleBranch: true,
-      onAuth: () => ({ username: 'oauth2', password: gitlabToken }),
-      author,
-    });
-  } catch (e) {
-    if (!(e instanceof git.Errors.CheckoutConflictError)) {
-      throw e;
-    }
-  }
+  await git.pull({
+    fs,
+    http,
+    dir: programPath,
+    ref: branch,
+    singleBranch: true,
+    onAuth: () => ({ username: 'oauth2', password: gitlabToken }),
+    author,
+  });
 
   console.log(chalk.grey(`Program name: ${program}`));
   console.log(chalk.grey(`Program path: ${programPath}`));

@@ -4,7 +4,7 @@
     "ajv": "^8.11.0",
     "ajv-formats": "^2.1.1",
     "axios": "^0.27.2",
-    "chalk": "^5.0.1",
+    "chalk": "4.1.2",
     "debug": "^4.3.4",
     "fs-extra": "^10.1.0",
     "isomorphic-git": "^1.18.3",
@@ -13,7 +13,7 @@
     "readdirp": "^3.6.0",
     "semver": "^7.3.7",
     "tar": "^6.1.11",
-    "update-notifier": "^6.0.2",
+    "update-notifier": "5.1.0",
     "yargs": "^17.5.1"
   },
   "devDependencies": {

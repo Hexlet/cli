@@ -5,7 +5,7 @@ const fse = require('fs-extra');
 const nock = require('nock');
 
 const programCmd = require('../src/commands/program/download.js');
-const initSettings = require('../src/settings.js');
+const { initSettings } = require('../src/config.js');
 const { readDirP, getFixturePath, getConfig } = require('./helpers/index.js');
 
 const getTmpDirPath = (program) => path.join(os.tmpdir(), `${program}-program`);

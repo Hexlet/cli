@@ -6,7 +6,7 @@ const nock = require('nock');
 const git = require('isomorphic-git');
 
 const programCmd = require('../src/commands/program/submit.js');
-const initSettings = require('../src/settings.js');
+const { initSettings } = require('../src/config.js');
 const { readFile, getConfig } = require('./helpers/index.js');
 const {
   gitClone, gitRemoteSetUrl, gitLog, gitLsFiles, gitAdd, gitAddAll, gitRemove, gitCommit,

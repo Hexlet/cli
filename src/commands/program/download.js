@@ -12,8 +12,7 @@ const debug = require('debug');
 
 const log = debug('hexlet');
 
-const initSettings = require('../../settings.js');
-const { readHexletConfig } = require('../../utils.js');
+const { initSettings, readHexletConfig } = require('../../config.js');
 
 const handler = async ({
   program, exercise,

@@ -5,7 +5,7 @@ const fse = require('fs-extra');
 const nock = require('nock');
 
 const programCmd = require('../src/commands/program/submit.js');
-const initSettings = require('../src/settings.js');
+const { initSettings } = require('../src/config.js');
 
 const program = 'ruby';
 const args = { program };

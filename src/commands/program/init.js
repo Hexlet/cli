@@ -1,17 +1,15 @@
 // @ts-check
 
 const fsp = require('fs/promises');
-const http = require('isomorphic-git/http/node');
-const fs = require('fs');
 const debug = require('debug');
 const fse = require('fs-extra');
 const path = require('path');
-const git = require('isomorphic-git');
 const chalk = require('chalk');
 const { Gitlab } = require('@gitbeaker/node');
 const os = require('os');
 
-const initSettings = require('../../settings.js');
+const { initSettings } = require('../../config.js');
+const git = require('../../utils/git.js');
 
 const log = debug('hexlet');
 
@@ -110,37 +108,28 @@ const handler = async (params, customSettings = {}) => {
   await api.Commits.create(projectId, branch, '@hexlet/cli: configure', commitActions);
 
   const programPath = generateHexletProgramPath(hexletDir, program);
-  log(`git clone ${project.ssh_url_to_repo} ${programPath}`);
+  log(`git clone ${project.http_url_to_repo} ${programPath}`);
 
   // NOTE: решение с повторным init, включает решение конфликтов
   try {
-    await git.deleteRemote({
-      fs,
-      dir: programPath,
-      remote: 'origin',
-    });
+    await git.deleteRemote({ dir: programPath });
   } catch (e) {
     // локально репозиторий отсутствует
   }
 
   await git.clone({
-    fs,
-    http,
     dir: programPath,
-    onAuth: () => ({ username: 'oauth2', password: gitlabToken }),
-    url: project.http_url_to_repo,
-    singleBranch: true,
     ref: branch,
+    token: gitlabToken,
+    url: project.http_url_to_repo,
+    noCheckout: true,
   });
 
   try {
     await git.pull({
-      fs,
-      http,
       dir: programPath,
       ref: branch,
-      singleBranch: true,
-      onAuth: () => ({ username: 'oauth2', password: gitlabToken }),
+      token: gitlabToken,
       author,
     });
   } catch (e) {

@@ -11,7 +11,7 @@ if (semver.lt(process.versions.node, '14.0.0')) {
 const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
 
-const { isRoot, checkVersion } = require('../src/utils.js');
+const { isRoot, checkVersion } = require('../src/utils/cli.js');
 
 if (isRoot()) {
   throw new Error(chalk.red("Current user is root. Don't use sudo for running hexlet/cli"));

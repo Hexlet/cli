@@ -1,16 +1,14 @@
 // @ts-check
 
-const fs = require('fs');
-const http = require('isomorphic-git/http/node');
 const chalk = require('chalk');
 const debug = require('debug');
-const git = require('isomorphic-git');
 const _ = require('lodash');
 
 const log = debug('hexlet');
 
-const initSettings = require('../../settings.js');
-const { readHexletConfig } = require('../../utils.js');
+const { initSettings, readHexletConfig } = require('../../config.js');
+const { getChangedExercises } = require('../../utils/program.js');
+const git = require('../../utils/git.js');
 
 const handler = async ({ program }, customSettings = {}) => {
   const {
@@ -22,61 +20,19 @@ const handler = async ({ program }, customSettings = {}) => {
   const programPath = generateHexletProgramPath(hexletDir, program);
   log(programPath);
 
-  const fileStatusesBeforePull = await git.statusMatrix({ fs, dir: programPath });
+  await git.pullMerge({
+    dir: programPath,
+    ref: branch,
+    token: gitlabToken,
+    author,
+  });
 
-  // NOTE: решение проблемы со стиранием stagged файлов
-  const resetIndexPromises = fileStatusesBeforePull
-    .filter(([, , workTreeStatus, stagedStatus]) => {
-      const existAndStaged = stagedStatus === 2 || stagedStatus === 3;
-      const deletedAndStaged = workTreeStatus === 0 && stagedStatus === 0;
-      return existAndStaged || deletedAndStaged;
-    })
-    .map(([filepath]) => (
-      git.resetIndex({ fs, dir: programPath, filepath })
-    ));
-  log(resetIndexPromises.length);
-  await Promise.all(resetIndexPromises);
+  await git.addAll({ dir: programPath });
 
-  try {
-    // NOTE: pull стирает stagged файлы
-    await git.pull({
-      fs,
-      http,
-      dir: programPath,
-      ref: branch,
-      singleBranch: true,
-      onAuth: () => ({ username: 'oauth2', password: gitlabToken }),
-      author,
-    });
-  } catch (e) {
-    // NOTE: внутри git.pull вызывается git.checkout без установленной опции force (это хорошо)
-    // потому коммит из удалённого репозитория пулится, но в рабочей директории
-    // остаются файлы с локальными изменениями (состояние рабочей директории приоритетно).
-    // Решение конфиликтов (см. тесты)
-    if (!(e instanceof git.Errors.CheckoutConflictError)) {
-      throw e;
-    }
-  }
+  const workDirChanged = await git.isWorkDirChanged({ dir: programPath });
 
-  // NOTE: git add -A
-  const fileStatusesAfterPull = await git.statusMatrix({ fs, dir: programPath });
-
-  const addToIndexPromises = fileStatusesAfterPull
-    .map(([filepath, , workTreeStatus]) => (
-      workTreeStatus === 0
-        ? git.remove({ fs, dir: programPath, filepath })
-        : git.add({ fs, dir: programPath, filepath })
-    ));
-  await Promise.all(addToIndexPromises);
-
-  const fileStatuses = await git.statusMatrix({ fs, dir: programPath });
-  const workDirHasChanges = fileStatuses.some(([, headStatus, workTreeStatus, stageStatus]) => (
-    headStatus !== 1 || workTreeStatus !== 1 || stageStatus !== 1
-  ));
-
-  if (workDirHasChanges) {
+  if (workDirChanged) {
     await git.commit({
-      fs,
       dir: programPath,
       message: '@hexlet/cli: submit',
       author,
@@ -85,27 +41,20 @@ const handler = async ({ program }, customSettings = {}) => {
     console.log(chalk.grey('Nothing changed. Skip commiting'));
   }
 
-  const localLog = await git.log({ fs, dir: programPath, ref: branch });
-  const remoteLog = await git.log({ fs, dir: programPath, ref: `origin/${branch}` });
+  const localLog = await git.log({ dir: programPath, ref: branch });
+  const remoteLog = await git.log({ dir: programPath, ref: `origin/${branch}` });
   const localHistoryAhead = !_.isEqual(localLog, remoteLog);
 
   if (localHistoryAhead) {
-    const fileStatusesWithRemoteBranch = await git.statusMatrix({ fs, dir: programPath, ref: `origin/${branch}` });
-    const exerciseRegEpx = /^exercises\/([^/.]+)\/.*$/;
-    const exerciseNames = fileStatusesWithRemoteBranch
-      .filter(([filepath, , workTreeStatus]) => (
-        workTreeStatus !== 1 && exerciseRegEpx.test(filepath)
-      ))
-      .map(([filepath]) => exerciseRegEpx.exec(filepath)[1]);
-    const uniqueExerciseNames = _.uniq(exerciseNames);
+    const uniqueExerciseNames = await getChangedExercises({
+      dir: programPath,
+      ref: `origin/${branch}`,
+    });
 
     await git.push({
-      fs,
-      http,
       dir: programPath,
-      onAuth: () => ({ username: 'oauth2', password: gitlabToken }),
-      remote: 'origin',
       ref: branch,
+      token: gitlabToken,
     });
 
     console.log(chalk.yellow('Changed exercises:'));

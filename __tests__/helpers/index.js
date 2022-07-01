@@ -1,3 +1,5 @@
+// @ts-check
+
 const readdirp = require('readdirp');
 const path = require('path');
 const _ = require('lodash');

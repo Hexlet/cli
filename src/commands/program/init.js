@@ -117,11 +117,12 @@ const handler = async (params, customSettings = {}) => {
     // локально репозиторий отсутствует
   }
 
-  await git.clone({
+  await git.cloneAuth({
     dir: programPath,
     ref: branch,
     token: gitlabToken,
     url: project.http_url_to_repo,
+    singleBranch: true,
     noCheckout: true,
   });
 

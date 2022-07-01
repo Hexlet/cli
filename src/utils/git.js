@@ -9,7 +9,7 @@ const log = debug('hexlet');
 
 const gitPull = async (options) => {
   const {
-    dir, ref, token, author,
+    dir, ref = 'main', token, author,
   } = options;
 
   await git.pull({
@@ -84,7 +84,7 @@ const gitCommit = ({ dir, author, message }) => (
   })
 );
 
-const gitPush = ({ dir, ref, token }) => (
+const gitPush = ({ dir, ref = 'main', token }) => (
   git.push({
     fs,
     http,
@@ -95,7 +95,7 @@ const gitPush = ({ dir, ref, token }) => (
   })
 );
 
-const gitLog = ({ dir, ref }) => (
+const gitLog = ({ dir, ref = 'main' }) => (
   git.log({
     fs,
     dir,
@@ -103,28 +103,76 @@ const gitLog = ({ dir, ref }) => (
   })
 );
 
-const gitClone = async (options) => {
+const gitLogMessages = async (options) => {
+  const commitData = await gitLog(options);
+
+  return commitData
+    .map((data) => data.commit.message.trim());
+};
+
+const gitClone = async (options, customCloneOptions) => {
   const {
-    dir, ref, token, url, noCheckout = false,
+    dir, url, ref = 'main', noCheckout = false, singleBranch = false,
   } = options;
 
   await git.clone({
     fs,
     http,
     dir,
-    onAuth: () => ({ username: 'oauth2', password: token }),
     url,
-    singleBranch: true,
+    singleBranch,
     ref,
     noCheckout,
+    ...customCloneOptions,
   });
 };
 
-const gitDeleteRemote = ({ dir }) => (
+const gitCloneAuth = async (options) => {
+  const { token } = options;
+
+  await gitClone(options, {
+    onAuth: () => ({ username: 'oauth2', password: token }),
+  });
+};
+
+const gitDeleteRemote = ({ dir, remote = 'origin' }) => (
   git.deleteRemote({
     fs,
     dir,
-    remote: 'origin',
+    remote,
+  })
+);
+
+const gitRemoteSetUrl = ({ dir, url, remote = 'origin' }) => (
+  git.addRemote({
+    fs,
+    dir,
+    remote,
+    url,
+    force: true,
+  })
+);
+
+const gitLsFiles = ({ dir }) => (
+  git.statusMatrix({
+    fs,
+    dir,
+  })
+);
+
+const gitAdd = ({ dir, filepath }) => (
+  git.add({
+    fs,
+    dir,
+    filepath,
+  })
+);
+
+const gitRemove = ({ dir, filepath }) => (
+  git.remove({
+    fs,
+    dir,
+    filepath,
   })
 );
 
@@ -138,5 +186,11 @@ module.exports = {
   push: gitPush,
   log: gitLog,
   clone: gitClone,
+  cloneAuth: gitCloneAuth,
   deleteRemote: gitDeleteRemote,
+  remoteSetUrl: gitRemoteSetUrl,
+  logMessages: gitLogMessages,
+  lsFiles: gitLsFiles,
+  add: gitAdd,
+  remove: gitRemove,
 };

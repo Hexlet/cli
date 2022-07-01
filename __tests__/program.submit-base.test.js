@@ -1,3 +1,5 @@
+// @ts-check
+
 const os = require('os');
 const path = require('path');
 const fsp = require('fs/promises');

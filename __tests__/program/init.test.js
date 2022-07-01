@@ -7,9 +7,9 @@ const fsp = require('fs/promises');
 const fse = require('fs-extra');
 const nock = require('nock');
 
-const programCmd = require('../src/commands/program/init.js');
-const { getValidator } = require('../src/validator/index.js');
-const { getFixturePath } = require('./helpers/index.js');
+const programCmd = require('../../src/commands/program/init.js');
+const { getValidator } = require('../../src/validator/index.js');
+const { getFixturePath } = require('../helpers/index.js');
 
 nock.disableNetConnect();
 

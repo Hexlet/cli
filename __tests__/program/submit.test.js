@@ -6,11 +6,11 @@ const fsp = require('fs/promises');
 const fse = require('fs-extra');
 const nock = require('nock');
 
-const programCmd = require('../src/commands/program/submit.js');
-const { initSettings } = require('../src/config.js');
-const { readFile, getConfig } = require('./helpers/index.js');
-const git = require('../src/utils/git.js');
-const workDirStates = require('../__fixtures__/workDirStates.js');
+const programCmd = require('../../src/commands/program/submit.js');
+const { initSettings } = require('../../src/config.js');
+const { readFile, getConfig } = require('../helpers/index.js');
+const git = require('../../src/utils/git.js');
+const workDirStates = require('../../__fixtures__/programWorkDirStates.js');
 
 const mockServerHost = 'localhost:8888';
 const baseUrl = `http://${mockServerHost}`;
@@ -81,8 +81,8 @@ describe('program submit', () => {
   });
 
   it('no local changes, remote repo has new exercises', async () => {
-    const cloneUrl = `${baseUrl}/10.git`;
-    const remoteUrl = `${baseUrl}/20.git`;
+    const cloneUrl = `${baseUrl}/program-10.git`;
+    const remoteUrl = `${baseUrl}/program-20.git`;
 
     const config = getConfig({ hexletDir, program, remoteUrl });
     await fse.writeJson(hexletConfigPath, config);
@@ -111,8 +111,8 @@ describe('program submit', () => {
   });
 
   it('no local changes, remote repo has new file & changed file', async () => {
-    const cloneUrl = `${baseUrl}/20.git`;
-    const remoteUrl = `${baseUrl}/30.git`;
+    const cloneUrl = `${baseUrl}/program-20.git`;
+    const remoteUrl = `${baseUrl}/program-30.git`;
 
     const config = getConfig({ hexletDir, program, remoteUrl });
     await fse.writeJson(hexletConfigPath, config);
@@ -151,7 +151,7 @@ describe('program submit', () => {
   });
 
   it('local repo has changes, remote repo has no changes', async () => {
-    const cloneUrl = `${baseUrl}/30.git`;
+    const cloneUrl = `${baseUrl}/program-30.git`;
 
     const config = getConfig({ hexletDir, program, remoteUrl: cloneUrl });
     await fse.writeJson(hexletConfigPath, config);
@@ -201,8 +201,8 @@ describe('program submit', () => {
   });
 
   it('local repo has changes, remote repo has commit with conflicts', async () => {
-    const cloneUrl = `${baseUrl}/30.git`;
-    const remoteUrl = `${baseUrl}/40.git`;
+    const cloneUrl = `${baseUrl}/program-30.git`;
+    const remoteUrl = `${baseUrl}/program-40.git`;
 
     const config = getConfig({ hexletDir, program, remoteUrl });
     await fse.writeJson(hexletConfigPath, config);
@@ -255,8 +255,8 @@ describe('program submit', () => {
   });
 
   it('local repo has changes with commit, remote repo has commit without conflicts', async () => {
-    const cloneUrl = `${baseUrl}/30.git`;
-    const remoteUrl = `${baseUrl}/50.git`;
+    const cloneUrl = `${baseUrl}/program-30.git`;
+    const remoteUrl = `${baseUrl}/program-50.git`;
 
     const config = getConfig({ hexletDir, program, remoteUrl });
     await fse.writeJson(hexletConfigPath, config);
@@ -286,7 +286,7 @@ describe('program submit', () => {
     const actualCommits2 = await git.logMessages({ dir: hexletProgramPath });
     // NOTE: выполнен мердж, конфликтов нет.
     const expectedCommits2 = [
-      "Merge branch 'main' of http://localhost:8888/50.git",
+      "Merge branch 'main' of http://localhost:8888/program-50.git",
       'local commit',
       'add anotherFile & change tutorial',
       'add tutorial',
@@ -321,8 +321,8 @@ describe('program submit', () => {
   // Удалённый репозиторий содержит коммит с конфликтами (он локально отсутствует),
   // Submit провален, нужно делать pull и исправлять конфликты вручную!
   it('local repo has changes with commit, remote repo has commit with conflicts', async () => {
-    const cloneUrl = `${baseUrl}/30.git`;
-    const remoteUrl = `${baseUrl}/40.git`;
+    const cloneUrl = `${baseUrl}/program-30.git`;
+    const remoteUrl = `${baseUrl}/program-40.git`;
 
     const config = getConfig({ hexletDir, program, remoteUrl });
     await fse.writeJson(hexletConfigPath, config);
@@ -378,8 +378,8 @@ describe('program submit', () => {
   });
 
   it('remote repository is ahead of the local one by 1 commit (deleted some files)', async () => {
-    const cloneUrl = `${baseUrl}/30.git`;
-    const remoteUrl = `${baseUrl}/60.git`;
+    const cloneUrl = `${baseUrl}/program-30.git`;
+    const remoteUrl = `${baseUrl}/program-60.git`;
 
     const config = getConfig({ hexletDir, program, remoteUrl });
     await fse.writeJson(hexletConfigPath, config);

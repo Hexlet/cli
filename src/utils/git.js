@@ -110,7 +110,7 @@ const gitLogMessages = async (options) => {
     .map((data) => data.commit.message.trim());
 };
 
-const gitClone = async (options, customCloneOptions) => {
+const gitClone = async (options, customCloneOptions = {}) => {
   const {
     dir, url, ref = 'main', noCheckout = false, singleBranch = false,
   } = options;

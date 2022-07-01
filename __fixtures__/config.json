@@ -1,0 +1,16 @@
+{
+  "hexletUserId": "123",
+  "gitlabToken": "some-token",
+  "hexletDir": null,
+  "programs": {
+    "ruby": {
+      "gitlabUrl": "https://gitlab.com/hexlet/programs/ruby/groups/test-group/123",
+      "gitlabGroupId": "456789"
+    }
+  },
+  "hexletToken": "some-hexlet-token",
+  "githubToken": "some-github-token",
+  "assignments": {
+    "githubUrl": "https://github.com/exampleuser/hexlet-assignments"
+  }
+}

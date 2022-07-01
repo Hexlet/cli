@@ -1,0 +1,8 @@
+{
+  "hexletDir": null,
+  "githubToken": "some-github-token",
+  "hexletToken": "some-hexlet-token",
+  "assignments": {
+    "githubUrl": "https://github.com/exampleuser/hexlet-assignments"
+  }
+}

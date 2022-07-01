@@ -7,15 +7,19 @@ const _ = require('lodash');
 const log = debug('hexlet');
 
 const { initSettings, readHexletConfig } = require('../../config.js');
+const { getEntityName } = require('../../utils/index.js');
 const { getChangedExercises } = require('../../utils/program.js');
 const git = require('../../utils/git.js');
 
-const handler = async ({ program }, customSettings = {}) => {
+const handler = async (params, customSettings = {}) => {
+  const { program } = params;
+  const entityName = getEntityName(params);
+
   const {
     author, generateHexletProgramPath, hexletConfigPath, branch,
   } = initSettings(customSettings);
 
-  const { gitlabToken, programs, hexletDir } = await readHexletConfig(hexletConfigPath);
+  const { gitlabToken, programs, hexletDir } = await readHexletConfig(hexletConfigPath, entityName);
 
   const programPath = generateHexletProgramPath(hexletDir, program);
   log(programPath);

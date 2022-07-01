@@ -18,6 +18,7 @@ const args = {
   program,
   exercise: 'fundamentals',
   token: 'some-token',
+  _: ['program', 'download'],
 };
 
 nock.disableNetConnect();

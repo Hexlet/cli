@@ -16,7 +16,10 @@ const mockServerHost = 'localhost:8888';
 const baseUrl = `http://${mockServerHost}`;
 
 const program = 'ruby';
-const args = { program };
+const args = {
+  program,
+  _: ['program', 'submit'],
+};
 const author = { name: 'user', email: 'user@example.com' };
 
 const anotherFilePath = path.join('exercises', 'example', 'anotherFile');

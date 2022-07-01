@@ -13,16 +13,18 @@ const debug = require('debug');
 const log = debug('hexlet');
 
 const { initSettings, readHexletConfig } = require('../../config.js');
+const { getEntityName } = require('../../utils/index.js');
 
-const handler = async ({
-  program, exercise,
-}, customSettings = {}) => {
+const handler = async (params, customSettings = {}) => {
+  const { program, exercise } = params;
+  const entityName = getEntityName(params);
+
   const {
     generateHexletProgramPath, hexletConfigPath,
   } = initSettings(customSettings);
 
   // TODO: check that program initialized
-  const { hexletDir } = await readHexletConfig(hexletConfigPath);
+  const { hexletDir } = await readHexletConfig(hexletConfigPath, entityName);
 
   const templateUrl = 'https://hexlet-programs.fra1.digitaloceanspaces.com/%s-program.tar.gz';
   const programUrl = util.format(templateUrl, program);

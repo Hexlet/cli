@@ -6,9 +6,9 @@ const chalk = require('chalk');
 const path = require('path');
 const os = require('os');
 
-const { getValidator } = require('./validator.js');
+const { getValidator } = require('./validator/index.js');
 
-const readHexletConfig = async (configPath) => {
+const readHexletConfig = async (configPath, entityName) => {
   try {
     await fsp.access(configPath);
   } catch (e) {
@@ -22,7 +22,7 @@ const readHexletConfig = async (configPath) => {
     configData.hexletDir = path.join(os.homedir(), 'Hexlet');
   }
 
-  const validate = getValidator();
+  const validate = getValidator(entityName);
   if (!validate(configData)) {
     const errorDetail = JSON.stringify(validate.errors, null, 2);
     throw new Error(chalk.red(`Validation error "${configPath}"\n${errorDetail}`));

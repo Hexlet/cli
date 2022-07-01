@@ -10,6 +10,7 @@ const os = require('os');
 
 const { initSettings } = require('../../config.js');
 const git = require('../../utils/git.js');
+const { getEntityName } = require('../../utils/index.js');
 
 const log = debug('hexlet');
 
@@ -51,7 +52,9 @@ const handler = async (params, customSettings = {}) => {
   const {
     gitlabGroupId, hexletUserId, gitlabToken,
   } = params;
+
   log('params', params);
+  const entityName = getEntityName(params);
 
   const {
     author, branch, hexletConfigDir,
@@ -82,7 +85,7 @@ const handler = async (params, customSettings = {}) => {
   console.log(chalk.grey(`Gitlab repository: ${project.web_url}`));
 
   const { hexletDir } = await prepareConfig({
-    ...params, hexletConfigDir, hexletConfigPath, program, project,
+    ...params, hexletConfigDir, hexletConfigPath, program, project, entityName,
   });
 
   const programTemplateDir = path.join(hexletTemplatesPath, 'program');

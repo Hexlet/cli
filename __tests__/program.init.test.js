@@ -8,7 +8,7 @@ const fse = require('fs-extra');
 const nock = require('nock');
 
 const programCmd = require('../src/commands/program/init.js');
-const { getValidator } = require('../src/validator.js');
+const { getValidator } = require('../src/validator/index.js');
 const { getFixturePath } = require('./helpers/index.js');
 
 nock.disableNetConnect();
@@ -27,6 +27,7 @@ describe('program', () => {
     const hexletUserId = '123';
     const gitlabGroupId = '456789';
     const gitlabToken = 'some-token';
+    const commandParts = ['program', 'init'];
     const hexletDir = path.join(tmpDir, 'learning', 'Hexlet');
 
     scope.get(`/namespaces/${gitlabGroupId}`)
@@ -53,7 +54,7 @@ describe('program', () => {
     git.pull = jest.fn(() => {});
 
     const args = {
-      hexletUserId, gitlabGroupId, gitlabToken, hexletDir,
+      hexletUserId, gitlabGroupId, gitlabToken, hexletDir, _: commandParts,
     };
     const result = await programCmd.handler(args, customSettings);
 
@@ -62,7 +63,7 @@ describe('program', () => {
     expectedConfig.hexletDir = hexletDir;
     expect(actualConfig).toEqual(expectedConfig);
 
-    const validate = getValidator();
+    const validate = getValidator('program');
     expect(validate(actualConfig)).toBeTruthy();
   });
 });

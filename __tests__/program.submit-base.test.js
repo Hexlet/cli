@@ -10,7 +10,10 @@ const programCmd = require('../src/commands/program/submit.js');
 const { initSettings } = require('../src/config.js');
 
 const program = 'ruby';
-const args = { program };
+const args = {
+  program,
+  _: ['program', 'submit'],
+};
 
 nock.disableNetConnect();
 

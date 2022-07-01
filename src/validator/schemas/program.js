@@ -1,7 +1,5 @@
 // @ts-check
 
-const Ajv = require('ajv');
-
 const programSchema = {
   type: 'object',
   properties: {
@@ -21,7 +19,7 @@ const programsSchema = {
   additionalProperties: false,
 };
 
-const configSchema = {
+module.exports = {
   type: 'object',
   properties: {
     hexletUserId: { type: 'string', minLength: 1 },
@@ -30,10 +28,5 @@ const configSchema = {
     programs: programsSchema,
   },
   required: ['hexletUserId', 'gitlabToken', 'hexletDir'],
-  additionalProperties: false,
-};
-
-module.exports.getValidator = () => {
-  const ajv = new Ajv();
-  return ajv.compile(configSchema);
+  additionalProperties: true,
 };

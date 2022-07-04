@@ -4,22 +4,29 @@ const fs = require('fs');
 const http = require('isomorphic-git/http/node');
 const git = require('isomorphic-git');
 const debug = require('debug');
+const _ = require('lodash');
 
 const log = debug('hexlet');
 
 const gitPull = async (options) => {
   const {
-    dir, ref = 'main', token, author,
+    dir, ref = 'main', token, author, singleBranch = true,
   } = options;
+
+  const customOptions = {};
+
+  if (!_.isNil(token)) {
+    customOptions.onAuth = () => ({ username: 'oauth2', password: token });
+  }
 
   await git.pull({
     fs,
     http,
     dir,
     ref,
-    singleBranch: true,
-    onAuth: () => ({ username: 'oauth2', password: token }),
+    singleBranch,
     author,
+    ...customOptions,
   });
 };
 
@@ -84,16 +91,22 @@ const gitCommit = ({ dir, author, message }) => (
   })
 );
 
-const gitPush = ({ dir, ref = 'main', token }) => (
-  git.push({
+const gitPush = async ({ dir, ref = 'main', token }) => {
+  const customOptions = {};
+
+  if (!_.isNil(token)) {
+    customOptions.onAuth = () => ({ username: 'oauth2', password: token });
+  }
+
+  await git.push({
     fs,
     http,
     dir,
-    onAuth: () => ({ username: 'oauth2', password: token }),
     remote: 'origin',
     ref,
-  })
-);
+    ...customOptions,
+  });
+};
 
 const gitLog = ({ dir, ref = 'main' }) => (
   git.log({
@@ -110,10 +123,17 @@ const gitLogMessages = async (options) => {
     .map((data) => data.commit.message.trim());
 };
 
-const gitClone = async (options, customCloneOptions = {}) => {
+const gitClone = async (options) => {
   const {
-    dir, url, ref = 'main', noCheckout = false, singleBranch = false,
+    dir, url, ref = 'main', token,
+    noCheckout = false, singleBranch = false, force = false,
   } = options;
+
+  const customOptions = {};
+
+  if (!_.isNil(token)) {
+    customOptions.onAuth = () => ({ username: 'oauth2', password: token });
+  }
 
   await git.clone({
     fs,
@@ -123,15 +143,8 @@ const gitClone = async (options, customCloneOptions = {}) => {
     singleBranch,
     ref,
     noCheckout,
-    ...customCloneOptions,
-  });
-};
-
-const gitCloneAuth = async (options) => {
-  const { token } = options;
-
-  await gitClone(options, {
-    onAuth: () => ({ username: 'oauth2', password: token }),
+    force,
+    ...customOptions,
   });
 };
 
@@ -186,7 +199,6 @@ module.exports = {
   push: gitPush,
   log: gitLog,
   clone: gitClone,
-  cloneAuth: gitCloneAuth,
   deleteRemote: gitDeleteRemote,
   remoteSetUrl: gitRemoteSetUrl,
   logMessages: gitLogMessages,

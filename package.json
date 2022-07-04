@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@gitbeaker/node": "^35.6.0",
+    "@octokit/rest": "^18.12.0",
     "ajv": "^8.11.0",
     "ajv-formats": "^2.1.1",
     "axios": "^0.27.2",
@@ -8,6 +9,7 @@
     "debug": "^4.3.4",
     "fs-extra": "^10.1.0",
     "isomorphic-git": "^1.18.3",
+    "libsodium-wrappers": "^0.7.10",
     "lodash": "^4.17.21",
     "pkg": "^5.7.0",
     "readdirp": "^3.6.0",

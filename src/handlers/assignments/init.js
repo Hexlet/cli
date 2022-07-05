@@ -2,7 +2,6 @@
 
 const debug = require('debug');
 const fse = require('fs-extra');
-const path = require('path');
 const chalk = require('chalk');
 const _ = require('lodash');
 

@@ -11,6 +11,7 @@
     "isomorphic-git": "^1.18.3",
     "libsodium-wrappers": "^0.7.10",
     "lodash": "^4.17.21",
+    "moment": "^2.29.3",
     "pkg": "^5.7.0",
     "readdirp": "^3.6.0",
     "semver": "^7.3.7",

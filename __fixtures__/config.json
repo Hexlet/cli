@@ -11,6 +11,6 @@
   "hexletToken": "some-hexlet-token",
   "githubToken": "some-github-token",
   "assignments": {
-    "githubUrl": "https://github.com/exampleuser/hexlet-assignments"
+    "githubUrl": "http://localhost:8888/assignments-empty"
   }
 }

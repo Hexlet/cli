@@ -8,6 +8,7 @@ const fsp = require('fs/promises');
 const readDirP = async (dirPath) => {
   const filesInfo = await readdirp.promise(dirPath, {
     alwaysStat: true,
+    directoryFilter: ['!.git'],
   });
 
   const filesData = filesInfo.map((fileInfo) => ({

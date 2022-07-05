@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`program init with program config 1`] = `
+Array [
+  Object {
+    "name": "hexlet-check.yml",
+    "path": "hexlet-assignments/.github/workflows/hexlet-check.yml",
+    "size": 903n,
+  },
+  Object {
+    "name": "README.md",
+    "path": "hexlet-assignments/README.md",
+    "size": 14n,
+  },
+]
+`;
+
+exports[`program init without local config 1`] = `
+Array [
+  Object {
+    "name": "hexlet-check.yml",
+    "path": "hexlet-assignments/.github/workflows/hexlet-check.yml",
+    "size": 903n,
+  },
+  Object {
+    "name": "README.md",
+    "path": "hexlet-assignments/README.md",
+    "size": 14n,
+  },
+]
+`;

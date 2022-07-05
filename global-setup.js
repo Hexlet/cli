@@ -14,5 +14,8 @@ module.exports = async () => {
     command,
     launchTimeout: 20000,
     port: 8888,
+    waitOnScheme: {
+      delay: 3000,
+    },
   });
 };

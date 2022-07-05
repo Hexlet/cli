@@ -5,7 +5,6 @@ const fse = require('fs-extra');
 const path = require('path');
 const chalk = require('chalk');
 const os = require('os');
-const { Octokit } = require('@octokit/rest');
 const _ = require('lodash');
 
 const github = require('../utils/github.js');
@@ -66,20 +65,10 @@ const handler = async (params, customSettings = {}) => {
     hexletConfigDir, hexletConfigPath, hexletTemplatesPath,
   } = initSettings(customSettings);
 
-  const octokit = new Octokit({ auth: githubToken });
-
   log('create repository');
-  let response;
-  try {
-    response = await octokit.rest.repos.createForAuthenticatedUser(repo);
-  } catch (e) {
-    if (e.status !== 422) {
-      throw e;
-    }
-    response = await octokit.rest.repos.get({ owner, repo: repo.name });
-  }
-  const { data: projectData } = response;
-  console.log(chalk.grey(`Github repository url: ${projectData.html_url}`));
+  const repoData = await github.getRepository({ repo: repo.name, owner })
+    ?? await github.createRepository({ token: githubToken, repo });
+  console.log(chalk.grey(`Github repository url: ${repoData.html_url}`));
 
   log('set secret to repository');
   await github.setRepoSecret({
@@ -92,17 +81,17 @@ const handler = async (params, customSettings = {}) => {
 
   log('prepare and write config');
   const { hexletDir } = await prepareConfig({
-    ...params, hexletConfigDir, hexletConfigPath, projectUrl: projectData.html_url, entityName,
+    ...params, hexletConfigDir, hexletConfigPath, projectUrl: repoData.html_url, entityName,
   });
 
   const repoPath = path.join(hexletDir, repo.name);
   const remoteBranchExists = await github.branchExists({ owner, repo: repo.name, branch });
 
-  log(`git clone ${projectData.clone_url} to ${repoPath}`);
+  log(`git clone ${repoData.clone_url} to ${repoPath}`);
   await git.clone({
     dir: repoPath,
     ref: branch,
-    url: projectData.clone_url,
+    url: repoData.clone_url,
     singleBranch: true,
     noCheckout: true,
     force: true, // NOTE: обновляем remote url

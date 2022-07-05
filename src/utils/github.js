@@ -72,9 +72,32 @@ const branchExists = async (options) => {
   }
 };
 
+const getRepository = async ({ token, repo, owner }) => {
+  const octokit = new Octokit({ auth: token });
+
+  try {
+    const response = await octokit.rest.repos.get({ owner, repo });
+    return response.data;
+  } catch (e) {
+    if (e.status === 404) {
+      return null;
+    }
+    throw e;
+  }
+};
+
+const createRepository = async ({ token, repo }) => {
+  const octokit = new Octokit({ auth: token });
+
+  const response = await octokit.rest.repos.createForAuthenticatedUser(repo);
+  return response.data;
+};
+
 module.exports = {
   checkToken,
   getOwner,
   setRepoSecret,
   branchExists,
+  getRepository,
+  createRepository,
 };

@@ -62,6 +62,7 @@ module.exports = async (params, customSettings = {}) => {
   const {
     repo, author, branch,
     hexletConfigDir, hexletConfigPath, hexletTemplatesPath,
+    generateRepoPath,
   } = initSettings(customSettings);
 
   log('create repository');
@@ -83,7 +84,7 @@ module.exports = async (params, customSettings = {}) => {
     ...params, hexletConfigDir, hexletConfigPath, projectUrl: repoData.html_url, entityName,
   });
 
-  const repoPath = path.join(hexletDir, repo.name);
+  const repoPath = generateRepoPath(hexletDir);
   const remoteBranchExists = await github.branchExists({ owner, repo: repo.name, branch });
 
   log(`git clone ${repoData.clone_url} to ${repoPath}`);

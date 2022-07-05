@@ -46,6 +46,7 @@ const initSettings = (options = {}) => {
     name: 'hexlet-assignments',
     description: 'Hexlet assignments',
   };
+  const generateRepoPath = (hexletDir) => path.join(hexletDir, repo.name);
   // NOTE: данные ниже, нужны только для программ
   const generateHexletProgramPath = (hexletDir, programSlug) => path.join(hexletDir, programSlug);
 
@@ -57,6 +58,7 @@ const initSettings = (options = {}) => {
     hexletTemplatesPath,
     repo,
     generateHexletProgramPath,
+    generateRepoPath,
   };
 };
 

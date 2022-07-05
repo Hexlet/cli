@@ -103,7 +103,7 @@ const gitPush = async ({ dir, ref = 'main', token }) => {
     http,
     dir,
     remote: 'origin',
-    ref,
+    ref: `refs/heads/${ref}`,
     ...customOptions,
   });
 };
@@ -189,6 +189,29 @@ const gitRemove = ({ dir, filepath }) => (
   })
 );
 
+const gitCurrentBranch = ({ dir }) => (
+  git.currentBranch({
+    fs,
+    dir,
+    test: true,
+  })
+);
+
+const gitRenameBranch = async (options) => {
+  const {
+    dir, ref, oldref, checkout = true,
+  } = options;
+
+  await git.renameBranch({
+    fs,
+    dir,
+    ref,
+    remoteRef: ref,
+    oldref,
+    checkout,
+  });
+};
+
 module.exports = {
   Errors: git.Errors,
   pull: gitPull,
@@ -205,4 +228,6 @@ module.exports = {
   lsFiles: gitLsFiles,
   add: gitAdd,
   remove: gitRemove,
+  currentBranch: gitCurrentBranch,
+  renameBranch: gitRenameBranch,
 };

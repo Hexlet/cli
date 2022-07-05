@@ -5,6 +5,7 @@ const path = require('path');
 const fsp = require('fs/promises');
 const fse = require('fs-extra');
 const nock = require('nock');
+const git = require('isomorphic-git');
 
 const assignmentsInitCmd = require('../../src/commands/assignments-init.js');
 const { getValidator } = require('../../src/validator/index.js');
@@ -63,6 +64,8 @@ describe('program', () => {
     scope
       .get(`/repos/${githubUser}/${repoName}/branches/${branch}`)
       .reply(404);
+
+    git.push = jest.fn(() => {});
   });
 
   beforeEach(async () => {

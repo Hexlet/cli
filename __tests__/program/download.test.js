@@ -8,7 +8,7 @@ const nock = require('nock');
 
 const programCmd = require('../../src/commands/program/download.js');
 const { initSettings } = require('../../src/config.js');
-const { readDirP, getFixturePath, getConfig } = require('../helpers/index.js');
+const { readDirP, getFixturePath, getProgramConfig } = require('../helpers/index.js');
 
 const getTmpDirPath = (program) => path.join(os.tmpdir(), `${program}-program`);
 
@@ -17,7 +17,7 @@ const program = 'ruby';
 const args = {
   program,
   exercise: 'fundamentals',
-  token: 'some-token',
+  token: 'some-gitlab-token',
   _: ['program', 'download'],
 };
 
@@ -34,10 +34,10 @@ describe('program', () => {
     customSettings = { homedir: tmpDir };
     const settings = initSettings(customSettings);
     hexletConfigPath = settings.hexletConfigPath;
-    await fse.mkdirp(settings.hexletConfigDir);
+    await fse.ensureDir(settings.hexletConfigDir);
     hexletDir = path.join(tmpDir, 'learning', 'Hexlet');
-    await fse.mkdirp(hexletDir);
-    config = getConfig({ hexletDir, program });
+    await fse.ensureDir(hexletDir);
+    config = getProgramConfig({ hexletDir, program });
   });
 
   it('download', async () => {

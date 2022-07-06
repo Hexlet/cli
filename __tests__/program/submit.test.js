@@ -8,7 +8,7 @@ const nock = require('nock');
 
 const programCmd = require('../../src/commands/program/submit.js');
 const { initSettings } = require('../../src/config.js');
-const { readFile, getConfig } = require('../helpers/index.js');
+const { readFile, getProgramConfig } = require('../helpers/index.js');
 const git = require('../../src/utils/git.js');
 const workDirStates = require('../../__fixtures__/programWorkDirStates.js');
 
@@ -84,7 +84,7 @@ describe('program submit', () => {
     const cloneUrl = `${baseUrl}/program-10.git`;
     const remoteUrl = `${baseUrl}/program-20.git`;
 
-    const config = getConfig({ hexletDir, program, remoteUrl });
+    const config = getProgramConfig({ hexletDir, program, remoteUrl });
     await fse.writeJson(hexletConfigPath, config);
 
     await git.clone({ dir: hexletProgramPath, url: cloneUrl });
@@ -114,7 +114,7 @@ describe('program submit', () => {
     const cloneUrl = `${baseUrl}/program-20.git`;
     const remoteUrl = `${baseUrl}/program-30.git`;
 
-    const config = getConfig({ hexletDir, program, remoteUrl });
+    const config = getProgramConfig({ hexletDir, program, remoteUrl });
     await fse.writeJson(hexletConfigPath, config);
 
     await git.clone({ dir: hexletProgramPath, url: cloneUrl });
@@ -153,7 +153,7 @@ describe('program submit', () => {
   it('local repo has changes, remote repo has no changes', async () => {
     const cloneUrl = `${baseUrl}/program-30.git`;
 
-    const config = getConfig({ hexletDir, program, remoteUrl: cloneUrl });
+    const config = getProgramConfig({ hexletDir, program, remoteUrl: cloneUrl });
     await fse.writeJson(hexletConfigPath, config);
 
     await git.clone({ dir: hexletProgramPath, url: cloneUrl });
@@ -204,7 +204,7 @@ describe('program submit', () => {
     const cloneUrl = `${baseUrl}/program-30.git`;
     const remoteUrl = `${baseUrl}/program-40.git`;
 
-    const config = getConfig({ hexletDir, program, remoteUrl });
+    const config = getProgramConfig({ hexletDir, program, remoteUrl });
     await fse.writeJson(hexletConfigPath, config);
 
     await git.clone({ dir: hexletProgramPath, url: cloneUrl });
@@ -258,7 +258,7 @@ describe('program submit', () => {
     const cloneUrl = `${baseUrl}/program-30.git`;
     const remoteUrl = `${baseUrl}/program-50.git`;
 
-    const config = getConfig({ hexletDir, program, remoteUrl });
+    const config = getProgramConfig({ hexletDir, program, remoteUrl });
     await fse.writeJson(hexletConfigPath, config);
 
     await git.clone({ dir: hexletProgramPath, url: cloneUrl });
@@ -324,7 +324,7 @@ describe('program submit', () => {
     const cloneUrl = `${baseUrl}/program-30.git`;
     const remoteUrl = `${baseUrl}/program-40.git`;
 
-    const config = getConfig({ hexletDir, program, remoteUrl });
+    const config = getProgramConfig({ hexletDir, program, remoteUrl });
     await fse.writeJson(hexletConfigPath, config);
 
     await git.clone({ dir: hexletProgramPath, url: cloneUrl });
@@ -381,7 +381,7 @@ describe('program submit', () => {
     const cloneUrl = `${baseUrl}/program-30.git`;
     const remoteUrl = `${baseUrl}/program-60.git`;
 
-    const config = getConfig({ hexletDir, program, remoteUrl });
+    const config = getProgramConfig({ hexletDir, program, remoteUrl });
     await fse.writeJson(hexletConfigPath, config);
 
     await git.clone({ dir: hexletProgramPath, url: cloneUrl });

@@ -26,9 +26,9 @@ const getFixturePath = (filePath) => (
 
 const readFile = (filePath) => fsp.readFile(filePath, 'utf-8');
 
-const getConfig = ({ hexletDir, program, remoteUrl }) => ({
+const getProgramConfig = ({ hexletDir, program, remoteUrl }) => ({
   hexletUserId: '123',
-  gitlabToken: 'some-token',
+  gitlabToken: 'some-gitlab-token',
   hexletDir,
   programs: {
     [program]: {
@@ -38,9 +38,19 @@ const getConfig = ({ hexletDir, program, remoteUrl }) => ({
   },
 });
 
+const getAssignmentConfig = ({ hexletDir, remoteUrl }) => ({
+  hexletDir,
+  hexletToken: 'some-hexlet-token',
+  githubToken: 'some-github-token',
+  assignments: {
+    githubUrl: remoteUrl ?? 'https://remote-repo-url',
+  },
+});
+
 module.exports = {
   readDirP,
   getFixturePath,
   readFile,
-  getConfig,
+  getProgramConfig,
+  getAssignmentConfig,
 };

@@ -5,6 +5,17 @@ const _ = require('lodash');
 const moment = require('moment');
 const fse = require('fs-extra');
 
+const isValidLessonUrl = (lessonUrl) => {
+  const urlRegExp = /^https:\/\/.{0,2}\.*hexlet.io\/courses\/.+\/lessons\/[^/.]+/;
+  return urlRegExp.test(lessonUrl);
+};
+
+const checkLessonUrl = (lessonUrl) => {
+  if (!isValidLessonUrl(lessonUrl)) {
+    throw new Error('Incorrect lessonUrl');
+  }
+};
+
 const getLessonData = (lessonUrl) => {
   const url = new URL(lessonUrl);
   const lessonPath = url.pathname.replace('/', '');
@@ -18,7 +29,7 @@ const getLessonData = (lessonUrl) => {
   };
 };
 
-const backupAssignment = async (assignmentPath) => {
+const makeAssignmentBackup = async (assignmentPath) => {
   const dateTime = moment().format('DD.MM.YY_HH.mm.ss');
   const assignmentBackupPath = `${assignmentPath}_${dateTime}`;
   await fse.move(assignmentPath, assignmentBackupPath);
@@ -27,5 +38,7 @@ const backupAssignment = async (assignmentPath) => {
 
 module.exports = {
   getLessonData,
-  backupAssignment,
+  makeAssignmentBackup,
+  isValidLessonUrl,
+  checkLessonUrl,
 };

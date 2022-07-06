@@ -45,10 +45,24 @@ const makeAssignmentBackup = async (assignmentPath) => {
   return assignmentBackupPath;
 };
 
+const getAssignmentData = (cwdPath, repoPath) => {
+  const { sep } = path;
+  const regexp = new RegExp(`${repoPath}${sep}(?<courseSlugWithLocale>[^/]+)${sep}(?<lessonSlug>[^/]+).*$`);
+  const validAssignmentPath = regexp.test(cwdPath);
+
+  if (!validAssignmentPath) {
+    throw new Error('Submit command must be executed from assignment directory.');
+  }
+
+  const matches = cwdPath.match(regexp);
+  return matches.groups;
+};
+
 module.exports = {
   getLessonData,
   makeAssignmentBackup,
   isValidLessonUrl,
   checkLessonUrl,
+  getAssignmentData,
   generateAssignmentPath,
 };

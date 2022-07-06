@@ -24,11 +24,26 @@ const updateTemplates = async (hexletTemplatesPath, repoPath) => {
       path.join(repoPath, destPath),
     );
     await git.add({ dir: repoPath, filepath: destPath });
+    return destPath;
   });
-  await Promise.all(promises);
+  const templatePaths = await Promise.all(promises);
+
+  return templatePaths;
+};
+
+const updateCurrent = async (repoPath, assignmentRelativePath) => {
+  const currentName = '.current.json';
+  const currentPath = path.join(repoPath, currentName);
+
+  const data = { assignment: assignmentRelativePath };
+  await fse.writeJSON(currentPath, data);
+  await git.add({ dir: repoPath, filepath: currentName });
+
+  return currentName;
 };
 
 module.exports = {
   getEntityName,
   updateTemplates,
+  updateCurrent,
 };

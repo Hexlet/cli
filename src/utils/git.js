@@ -5,6 +5,8 @@ const http = require('isomorphic-git/http/node');
 const git = require('isomorphic-git');
 const debug = require('debug');
 const _ = require('lodash');
+const path = require('path');
+const fsp = require('fs/promises');
 
 const log = debug('hexlet');
 
@@ -74,8 +76,21 @@ const gitAddAll = async ({ dir }) => {
   await Promise.all(addToIndexPromises);
 };
 
-const gitIsWorkDirChanged = async ({ dir }) => {
-  const fileStatuses = await git.statusMatrix({ fs, dir });
+const gitIsWorkDirChanged = async ({ dir, checkedPath = null }) => {
+  let filter = null;
+
+  if (!_.isNull(checkedPath)) {
+    const checkedFullPath = path.join(dir, checkedPath);
+    const stats = await fsp.stat(checkedFullPath);
+    const formattedCheckedPath = stats.isDirectory() ? `${checkedPath}/` : checkedPath;
+    filter = (filePath) => filePath.startsWith(formattedCheckedPath);
+  }
+
+  const fileStatuses = await git.statusMatrix({
+    fs,
+    dir,
+    filter,
+  });
 
   return fileStatuses.some(([, headStatus, workTreeStatus, stageStatus]) => (
     headStatus !== 1 || workTreeStatus !== 1 || stageStatus !== 1

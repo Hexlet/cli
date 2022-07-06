@@ -28,10 +28,6 @@ const args = {
 };
 const lessonArchivePath = getFixturePath(`${lessonSlug}.tar.gz`);
 
-beforeAll(() => {
-  nock.disableNetConnect();
-});
-
 describe.each([
   { method: 'POST', successCode: 201, command: assignmentDownloadCmd },
   { method: 'PUT', successCode: 200, command: assignmentRefreshCmd },
@@ -43,11 +39,18 @@ describe.each([
   let repoName;
 
   beforeAll(() => {
+    nock.disableNetConnect();
+
     const scope = nock(buildApiUrl(courseSlug, lessonSlug)).persist();
     scope
       .matchHeader('X-Auth-Key', hexletToken)
       .intercept('', method)
       .replyWithFile(successCode, lessonArchivePath);
+  });
+
+  afterAll(() => {
+    nock.cleanAll();
+    nock.enableNetConnect();
   });
 
   beforeEach(async () => {

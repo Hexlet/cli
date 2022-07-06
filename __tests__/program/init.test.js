@@ -49,6 +49,11 @@ describe('program', () => {
     git.pull = jest.fn(() => {});
   });
 
+  afterAll(() => {
+    nock.cleanAll();
+    nock.enableNetConnect();
+  });
+
   beforeEach(async () => {
     const tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-cli-'));
     customSettings = { homedir: tmpDir };

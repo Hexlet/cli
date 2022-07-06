@@ -60,14 +60,21 @@ const makeLocalChanges = async (programPath) => {
   await fse.outputFile(path.join(programPath, makefilePath), 'local new content');
 };
 
-nock.disableNetConnect();
-nock.enableNetConnect(new RegExp(mockServerHost));
-
 describe('program submit', () => {
   let hexletProgramPath;
   let hexletConfigPath;
   let customSettings;
   let hexletDir;
+
+  beforeAll(() => {
+    nock.disableNetConnect();
+    nock.enableNetConnect(new RegExp(mockServerHost));
+  });
+
+  afterAll(() => {
+    nock.cleanAll();
+    nock.enableNetConnect();
+  });
 
   beforeEach(async () => {
     const tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-cli-'));

@@ -15,11 +15,18 @@ const args = {
   _: ['program', 'submit'],
 };
 
-nock.disableNetConnect();
-
 describe('program submit base', () => {
   let hexletConfigPath;
   let customSettings;
+
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
+
+  afterAll(() => {
+    nock.cleanAll();
+    nock.enableNetConnect();
+  });
 
   beforeEach(async () => {
     const tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-cli-'));

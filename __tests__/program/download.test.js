@@ -21,13 +21,20 @@ const args = {
   _: ['program', 'download'],
 };
 
-nock.disableNetConnect();
-
 describe('program', () => {
   let hexletConfigPath;
   let customSettings;
   let hexletDir;
   let config;
+
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
+
+  afterAll(() => {
+    nock.cleanAll();
+    nock.enableNetConnect();
+  });
 
   beforeEach(async () => {
     const tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-cli-'));

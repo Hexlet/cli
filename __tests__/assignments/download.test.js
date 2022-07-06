@@ -7,6 +7,7 @@ const fse = require('fs-extra');
 const nock = require('nock');
 
 const assignmentDownloadCmd = require('../../src/commands/assignment/download.js');
+const assignmentRefreshCmd = require('../../src/commands/assignment/refresh.js');
 const { initSettings } = require('../../src/config.js');
 const { readDirP, getFixturePath, getAssignmentConfig } = require('../helpers/index.js');
 
@@ -17,6 +18,7 @@ const buildApiUrl = (courseSlug, lessonSlug) => (
   `https://ru.hexlet.io/api/course/${courseSlug}/lesson/${lessonSlug}/assignment/download`
 );
 
+const hexletToken = 'some-hexlet-token';
 const courseSlug = 'java-advanced';
 const lessonSlug = 'multithreading-java';
 const commandParts = ['assignment', 'download'];
@@ -26,7 +28,14 @@ const args = {
 };
 const lessonArchivePath = getFixturePath(`${lessonSlug}.tar.gz`);
 
-describe('program', () => {
+beforeAll(() => {
+  nock.disableNetConnect();
+});
+
+describe.each([
+  { method: 'POST', successCode: 201, command: assignmentDownloadCmd },
+  { method: 'PUT', successCode: 200, command: assignmentRefreshCmd },
+])('$command.description', ({ method, successCode, command }) => {
   let hexletConfigPath;
   let customSettings;
   let hexletDir;
@@ -34,12 +43,11 @@ describe('program', () => {
   let repoName;
 
   beforeAll(() => {
-    nock.disableNetConnect();
-
     const scope = nock(buildApiUrl(courseSlug, lessonSlug)).persist();
     scope
-      .post('')
-      .replyWithFile(200, lessonArchivePath);
+      .matchHeader('X-Auth-Key', hexletToken)
+      .intercept('', method)
+      .replyWithFile(successCode, lessonArchivePath);
   });
 
   beforeEach(async () => {
@@ -56,7 +64,7 @@ describe('program', () => {
   it('download', async () => {
     await fse.writeJson(hexletConfigPath, config);
 
-    await assignmentDownloadCmd.handler(args, customSettings);
+    await command.handler(args, customSettings);
     expect(await readDirP(hexletDir)).toMatchSnapshot();
   });
 
@@ -68,7 +76,7 @@ describe('program', () => {
     await fse.outputFile(someFilePath, 'content');
 
     expect(await readDirP(assignmentPath)).toMatchSnapshot();
-    await assignmentDownloadCmd.handler(args, customSettings);
+    await command.handler(args, customSettings);
     expect(await readDirP(assignmentPath)).toMatchSnapshot();
 
     const assignments = await fsp.readdir(coursePath);
@@ -82,14 +90,14 @@ describe('program', () => {
   });
 
   it('download (without init)', async () => {
-    await expect(assignmentDownloadCmd.handler(args, customSettings))
+    await expect(command.handler(args, customSettings))
       .rejects.toThrow('no such file or directory');
   });
 
   it('download with invalid .config.json', async () => {
     await fse.writeJson(hexletConfigPath, {});
 
-    await expect(assignmentDownloadCmd.handler(args, customSettings))
+    await expect(command.handler(args, customSettings))
       .rejects.toThrow(`Validation error "${hexletConfigPath}"`);
   });
 
@@ -100,7 +108,7 @@ describe('program', () => {
       lessonUrl: 'https://domain.com',
     };
 
-    await expect(assignmentDownloadCmd.handler(params, customSettings))
+    await expect(command.handler(params, customSettings))
       .rejects.toThrow('Incorrect lessonUrl');
   });
 
@@ -114,30 +122,30 @@ describe('program', () => {
     };
 
     nock(buildApiUrl(wrongCourseSlug, wrongLessonSlug))
-      .post('')
+      .intercept('', method)
       .reply(404);
-    await expect(assignmentDownloadCmd.handler(params, customSettings))
+    await expect(command.handler(params, customSettings))
       .rejects.toThrow(`Assignment ${wrongCourseSlug}/${wrongLessonSlug} not found. Check the lessonUrl.`);
 
     let message = 'Invalid token passed.';
     nock(buildApiUrl(wrongCourseSlug, wrongLessonSlug))
-      .post('')
+      .intercept('', method)
       .reply(401, { message });
-    await expect(assignmentDownloadCmd.handler(params, customSettings))
+    await expect(command.handler(params, customSettings))
       .rejects.toThrow(message);
 
     message = 'You do not have permission to download assignment.';
     nock(buildApiUrl(wrongCourseSlug, wrongLessonSlug))
-      .post('')
+      .intercept('', method)
       .reply(422, { message });
-    await expect(assignmentDownloadCmd.handler(params, customSettings))
+    await expect(command.handler(params, customSettings))
       .rejects.toThrow(message);
 
     // Unhandled errors
     nock(buildApiUrl(wrongCourseSlug, wrongLessonSlug))
-      .post('')
+      .intercept('', method)
       .reply(500);
-    await expect(assignmentDownloadCmd.handler(params, customSettings))
+    await expect(command.handler(params, customSettings))
       .rejects.toThrow('Request failed with status code 500');
   });
 });

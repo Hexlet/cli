@@ -13,6 +13,9 @@ const { readDirP, getFixturePath, getAssignmentConfig } = require('../helpers/in
 const buildLessonUrl = (courseSlug, lessonSlug) => (
   `https://ru.hexlet.io/courses/${courseSlug}/lessons/${lessonSlug}/theory_unit`
 );
+const buildApiUrl = (courseSlug, lessonSlug) => (
+  `https://ru.hexlet.io/api/course/${courseSlug}/lesson/${lessonSlug}/assignment/download`
+);
 
 const courseSlug = 'java-advanced';
 const lessonSlug = 'multithreading-java';
@@ -29,12 +32,11 @@ describe('program', () => {
   let hexletDir;
   let config;
   let repoName;
-  let scope;
 
   beforeAll(() => {
     nock.disableNetConnect();
 
-    scope = nock(`https://ru.hexlet.io/api/course/${courseSlug}/lesson/${lessonSlug}/assignment/download`).persist();
+    const scope = nock(buildApiUrl(courseSlug, lessonSlug)).persist();
     scope
       .post('')
       .replyWithFile(200, lessonArchivePath);
@@ -100,5 +102,42 @@ describe('program', () => {
 
     await expect(assignmentDownloadCmd.handler(params, customSettings))
       .rejects.toThrow('Incorrect lessonUrl');
+  });
+
+  it('download with negative api responses', async () => {
+    await fse.writeJson(hexletConfigPath, config);
+    const wrongCourseSlug = 'wrong-course';
+    const wrongLessonSlug = 'wrong-lesson';
+    const params = {
+      ...args,
+      lessonUrl: buildLessonUrl(wrongCourseSlug, wrongLessonSlug),
+    };
+
+    nock(buildApiUrl(wrongCourseSlug, wrongLessonSlug))
+      .post('')
+      .reply(404);
+    await expect(assignmentDownloadCmd.handler(params, customSettings))
+      .rejects.toThrow(`Assignment ${wrongCourseSlug}/${wrongLessonSlug} not found. Check the lessonUrl.`);
+
+    let message = 'Invalid token passed.';
+    nock(buildApiUrl(wrongCourseSlug, wrongLessonSlug))
+      .post('')
+      .reply(401, { message });
+    await expect(assignmentDownloadCmd.handler(params, customSettings))
+      .rejects.toThrow(message);
+
+    message = 'You do not have permission to download assignment.';
+    nock(buildApiUrl(wrongCourseSlug, wrongLessonSlug))
+      .post('')
+      .reply(422, { message });
+    await expect(assignmentDownloadCmd.handler(params, customSettings))
+      .rejects.toThrow(message);
+
+    // Unhandled errors
+    nock(buildApiUrl(wrongCourseSlug, wrongLessonSlug))
+      .post('')
+      .reply(500);
+    await expect(assignmentDownloadCmd.handler(params, customSettings))
+      .rejects.toThrow('Request failed with status code 500');
   });
 });

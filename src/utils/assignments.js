@@ -12,7 +12,7 @@ const isValidLessonUrl = (lessonUrl) => {
 
 const checkLessonUrl = (lessonUrl) => {
   if (!isValidLessonUrl(lessonUrl)) {
-    throw new Error('Incorrect lessonUrl');
+    throw new Error('Incorrect lessonUrl.');
   }
 };
 

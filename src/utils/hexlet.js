@@ -26,12 +26,18 @@ const downloadAssignment = async (options) => {
 
   const { status } = response;
 
-  if (status === 403) {
+  if (status === 404) {
     throw new Error(`Assignment ${courseSlug}/${lessonSlug} not found. Check the lessonUrl.`);
   }
-  if (status === 404 || status === 422) {
+  if (status === 401 || status === 422) {
     const dataJson = response.data.toString();
-    const { message } = JSON.parse(dataJson);
+    let data;
+    try {
+      data = JSON.parse(dataJson);
+    } catch (e) {
+      data = { message: 'Unknown' };
+    }
+    const { message } = data;
     throw new Error(message);
   }
 

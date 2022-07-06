@@ -13,7 +13,7 @@ const log = debug('hexlet');
 const { initSettings, readHexletConfig } = require('../../config.js');
 const { getEntityName, updateTemplates } = require('../../utils/index.js');
 const {
-  getLessonData, makeAssignmentBackup, checkLessonUrl,
+  getLessonData, makeAssignmentBackup, checkLessonUrl, generateAssignmentPath,
 } = require('../../utils/assignments.js');
 const { downloadAssignment } = require('../../utils/hexlet.js');
 
@@ -27,11 +27,12 @@ module.exports = async (params, customSettings = {}) => {
 
   const { hexletDir, hexletToken } = await readHexletConfig(hexletConfigPath, entityName);
 
-  const { apiHost, courseSlug, lessonSlug } = getLessonData(lessonUrl);
-
   const repoPath = generateRepoPath(hexletDir);
   checkLessonUrl(lessonUrl);
-  const assignmentPath = path.join(repoPath, courseSlug, lessonSlug);
+  const {
+    apiHost, courseSlug, lessonSlug, locale,
+  } = getLessonData(lessonUrl);
+  const assignmentPath = generateAssignmentPath(repoPath, courseSlug, lessonSlug, locale);
 
   const tmpDirPath = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-assignments-'));
   const tmpArchiveName = `${lessonSlug}.tar.gz`;

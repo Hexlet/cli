@@ -20,6 +20,7 @@ const buildApiUrl = (courseSlug, lessonSlug) => (
 
 const hexletToken = 'some-hexlet-token';
 const courseSlug = 'java-advanced';
+const courseSlugWithLocale = 'java-advanced-ru';
 const lessonSlug = 'multithreading-java';
 const commandParts = ['assignment', 'download'];
 const lessonUrl = buildLessonUrl(courseSlug, lessonSlug);
@@ -73,7 +74,7 @@ describe.each([
 
   it('download the same assignment again (with backup)', async () => {
     await fse.writeJson(hexletConfigPath, config);
-    const coursePath = path.join(hexletDir, repoName, courseSlug);
+    const coursePath = path.join(hexletDir, repoName, courseSlugWithLocale);
     const assignmentPath = path.join(coursePath, lessonSlug);
     const someFilePath = path.join(assignmentPath, 'SomeFile.java');
     await fse.outputFile(someFilePath, 'content');

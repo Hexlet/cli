@@ -4,9 +4,10 @@ const { URL } = require('url');
 const _ = require('lodash');
 const moment = require('moment');
 const fse = require('fs-extra');
+const path = require('path');
 
 const isValidLessonUrl = (lessonUrl) => {
-  const urlRegExp = /^https:\/\/.{0,2}\.*hexlet.io\/courses\/.+\/lessons\/[^/.]+/;
+  const urlRegExp = /^https:\/\/\w{0,2}\.*hexlet.io\/courses\/.+\/lessons\/[^/]+/;
   return urlRegExp.test(lessonUrl);
 };
 
@@ -18,6 +19,8 @@ const checkLessonUrl = (lessonUrl) => {
 
 const getLessonData = (lessonUrl) => {
   const url = new URL(lessonUrl);
+  const hostParts = !url.host.startsWith('hexlet') ? url.host.split('.') : ['en'];
+  const [locale] = hostParts;
   const lessonPath = url.pathname.replace('/', '');
   const pathParts = lessonPath.split('/');
   const [courseSlug, lessonSlug] = _.without(pathParts, 'courses', 'lessons');
@@ -26,7 +29,13 @@ const getLessonData = (lessonUrl) => {
     apiHost: url.origin,
     courseSlug,
     lessonSlug,
+    locale,
   };
+};
+
+const generateAssignmentPath = (repoPath, courseSlug, lessonSlug, locale) => {
+  const courseSlugWithLocale = locale === 'en' ? courseSlug : `${courseSlug}-${locale}`;
+  return path.join(repoPath, courseSlugWithLocale, lessonSlug);
 };
 
 const makeAssignmentBackup = async (assignmentPath) => {
@@ -41,4 +50,5 @@ module.exports = {
   makeAssignmentBackup,
   isValidLessonUrl,
   checkLessonUrl,
+  generateAssignmentPath,
 };

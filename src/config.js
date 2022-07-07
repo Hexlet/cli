@@ -31,6 +31,40 @@ const readHexletConfig = async (configPath, entityName) => {
   return configData;
 };
 
+const prepareConfig = async (options) => {
+  const {
+    hexletConfigDir, hexletConfigPath, hexletDir, entityName,
+    githubToken, hexletToken, projectUrl,
+  } = options;
+
+  let previousData = {};
+
+  await fse.ensureDir(hexletDir);
+  await fse.ensureDir(hexletConfigDir);
+  try {
+    previousData = await fse.readJson(hexletConfigPath);
+  } catch (err) {
+    // NOTE: предыдущей конфигурации локально нет
+  }
+
+  const data = {
+    ...previousData,
+    githubToken,
+    hexletToken,
+    hexletDir,
+    assignments: {
+      githubUrl: projectUrl,
+    },
+  };
+
+  await fse.writeJson(hexletConfigPath, data);
+  console.log(chalk.grey(`Config wrote to: ${hexletConfigPath}`));
+
+  await readHexletConfig(hexletConfigPath, entityName);
+
+  return data;
+};
+
 const initSettings = (options = {}) => {
   const homeDir = options.homedir || os.homedir();
   const hexletConfigDir = path.join(homeDir, 'Hexlet');
@@ -65,4 +99,5 @@ const initSettings = (options = {}) => {
 module.exports = {
   readHexletConfig,
   initSettings,
+  prepareConfig,
 };

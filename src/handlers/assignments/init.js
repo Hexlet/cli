@@ -6,45 +6,11 @@ const chalk = require('chalk');
 const _ = require('lodash');
 
 const github = require('../../utils/github.js');
-const { initSettings, readHexletConfig } = require('../../config.js');
+const { initSettings, prepareConfig } = require('../../config.js');
 const { getEntityName, updateTemplates } = require('../../utils/index.js');
 const git = require('../../utils/git.js');
 
 const log = debug('hexlet');
-
-const prepareConfig = async (options) => {
-  const {
-    hexletConfigDir, hexletConfigPath, hexletDir, entityName,
-    githubToken, hexletToken, projectUrl,
-  } = options;
-
-  let previousData = {};
-
-  await fse.ensureDir(hexletDir);
-  await fse.ensureDir(hexletConfigDir);
-  try {
-    previousData = await fse.readJson(hexletConfigPath);
-  } catch (err) {
-    // NOTE: предыдущей конфигурации локально нет
-  }
-
-  const data = {
-    ...previousData,
-    githubToken,
-    hexletToken,
-    hexletDir,
-    assignments: {
-      githubUrl: projectUrl,
-    },
-  };
-
-  await fse.writeJson(hexletConfigPath, data);
-  console.log(chalk.grey(`Config wrote to: ${hexletConfigPath}`));
-
-  await readHexletConfig(hexletConfigPath, entityName);
-
-  return data;
-};
 
 module.exports = async (params, customSettings = {}) => {
   const {
@@ -145,7 +111,7 @@ module.exports = async (params, customSettings = {}) => {
     ? await git.isLocalHistoryAhead({ dir: repoPath, ref: branch })
     : true;
 
-  if (localHistoryAhead) {
+  if (changesToCommit && localHistoryAhead) {
     await git.push({
       dir: repoPath,
       ref: branch,

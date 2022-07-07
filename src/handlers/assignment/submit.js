@@ -2,7 +2,6 @@
 
 const chalk = require('chalk');
 const debug = require('debug');
-const _ = require('lodash');
 const path = require('path');
 
 const log = debug('hexlet');
@@ -44,18 +43,12 @@ module.exports = async (params, customSettings = {}) => {
 
   const templatePaths = await updateTemplates(hexletTemplatesPath, repoPath);
   const currentPath = await updateCurrent(repoPath, assignmentRelativePath);
+  const changesToCommit = await git.hasChangesToCommit({
+    dir: repoPath,
+    checkedPaths: [...templatePaths, currentPath, assignmentRelativePath],
+  });
 
-  const checkedPaths = [...templatePaths, currentPath, assignmentRelativePath];
-  const promises = checkedPaths.map((checkedPath) => (
-    git.isWorkDirChanged({
-      dir: repoPath,
-      checkedPath,
-    })
-  ));
-  const changeStatuses = await Promise.all(promises);
-  const hasChangesToCommit = changeStatuses.some(_.identity);
-
-  if (hasChangesToCommit) {
+  if (changesToCommit) {
     await git.commit({
       dir: repoPath,
       message: `submit ${assignmentRelativePath}`,
@@ -65,9 +58,7 @@ module.exports = async (params, customSettings = {}) => {
     console.log(chalk.grey('Nothing changed. Skip committing.'));
   }
 
-  const localLog = await git.log({ dir: repoPath, ref: branch });
-  const remoteLog = await git.log({ dir: repoPath, ref: `origin/${branch}` });
-  const localHistoryAhead = !_.isEqual(localLog, remoteLog);
+  const localHistoryAhead = await git.isLocalHistoryAhead({ dir: repoPath, ref: branch });
 
   if (localHistoryAhead) {
     await git.push({

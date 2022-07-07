@@ -85,6 +85,7 @@ module.exports = async (params, customSettings = {}) => {
 
   const repoPath = generateRepoPath(hexletDir);
   const remoteBranchExists = await github.branchExists({ owner, repo: repo.name, branch });
+  const localRepoExists = await fse.pathExists(repoPath);
 
   log(`git clone ${repoData.clone_url} to ${repoPath}`);
   await git.clone({
@@ -92,7 +93,7 @@ module.exports = async (params, customSettings = {}) => {
     ref: branch,
     url: repoData.clone_url,
     singleBranch: true,
-    noCheckout: true,
+    noCheckout: localRepoExists,
     force: true, // NOTE: обновляем remote url
   });
 
@@ -110,13 +111,21 @@ module.exports = async (params, customSettings = {}) => {
     });
   }
 
-  await updateTemplates(hexletTemplatesPath, repoPath);
-
-  await git.commit({
+  const templatePaths = await updateTemplates(hexletTemplatesPath, repoPath);
+  const changesToCommit = await git.hasChangesToCommit({
     dir: repoPath,
-    message: 'configure',
-    author,
+    checkedPaths: templatePaths,
   });
+
+  if (changesToCommit) {
+    await git.commit({
+      dir: repoPath,
+      message: 'configure',
+      author,
+    });
+  } else {
+    console.log(chalk.grey('Nothing changed. Skip committing.'));
+  }
 
   try {
     await git.renameBranch({ dir: repoPath, ref: branch, oldref: 'master' });
@@ -126,16 +135,35 @@ module.exports = async (params, customSettings = {}) => {
     }
   }
 
-  await git.push({
-    dir: repoPath,
-    ref: branch,
-    token: githubToken,
+  const locallyRemoteBranchExists = await git.branchExists({
+    dir: hexletDir,
+    ref: 'main',
+    remote: 'origin',
   });
+
+  const localHistoryAhead = locallyRemoteBranchExists
+    ? await git.isLocalHistoryAhead({ dir: repoPath, ref: branch })
+    : true;
+
+  if (localHistoryAhead) {
+    await git.push({
+      dir: repoPath,
+      ref: branch,
+      token: githubToken,
+    });
+
+    await git.setUpstream({
+      dir: repoPath,
+      ref: branch,
+    });
+  } else {
+    console.log(chalk.grey('Nothing to push. Skip pushing.'));
+  }
 
   console.log(chalk.grey(`Path to assignments: ${repoPath}`));
   console.log();
-
-  console.log(chalk.green(`File structure has been prepared! Follow instructions located at ${repoPath}/README.md`));
+  console.log(chalk.green('File structure has been prepared!'));
+  console.log(chalk.cyan(`Follow instructions located at ${repoPath}/README.md`));
 
   return { hexletConfigPath };
 };

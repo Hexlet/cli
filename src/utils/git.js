@@ -106,10 +106,10 @@ const gitCommit = ({ dir, author, message }) => (
   })
 );
 
-const gitPush = async ({ dir, ref = 'main', token }) => {
+const gitPush = async ({ dir, ref = 'main', token = null }) => {
   const customOptions = {};
 
-  if (!_.isNil(token)) {
+  if (!_.isNull(token)) {
     customOptions.onAuth = () => ({ username: 'oauth2', password: token });
   }
 
@@ -227,6 +227,48 @@ const gitRenameBranch = async (options) => {
   });
 };
 
+const gitSetUpstream = async ({ dir, remote = 'origin', ref }) => {
+  await git.setConfig({
+    fs,
+    dir,
+    path: `branch.${ref}.remote`,
+    value: remote,
+  });
+  await git.setConfig({
+    fs,
+    dir,
+    path: `branch.${ref}.merge`,
+    value: `refs/heads/${ref}`,
+  });
+};
+
+const gitBranchExists = async ({ dir, ref, remote = null }) => {
+  const branches = await git.listBranches({
+    fs,
+    dir,
+    remote,
+  });
+
+  return branches.includes(ref);
+};
+
+const gitIsLocalHistoryAhead = async ({ dir, ref, remote = 'origin' }) => {
+  const localLog = await gitLog({ dir, ref });
+  const remoteLog = await gitLog({ dir, ref: `${remote}/${ref}` });
+  return !_.isEqual(localLog, remoteLog);
+};
+
+const gitHasChangesToCommit = async ({ dir, checkedPaths }) => {
+  const promises = checkedPaths.map((checkedPath) => (
+    gitIsWorkDirChanged({
+      dir,
+      checkedPath,
+    })
+  ));
+  const changeStatuses = await Promise.all(promises);
+  return changeStatuses.some(_.identity);
+};
+
 module.exports = {
   Errors: git.Errors,
   pull: gitPull,
@@ -245,4 +287,8 @@ module.exports = {
   remove: gitRemove,
   currentBranch: gitCurrentBranch,
   renameBranch: gitRenameBranch,
+  setUpstream: gitSetUpstream,
+  branchExists: gitBranchExists,
+  isLocalHistoryAhead: gitIsLocalHistoryAhead,
+  hasChangesToCommit: gitHasChangesToCommit,
 };

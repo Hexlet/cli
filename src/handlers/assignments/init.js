@@ -9,6 +9,7 @@ const github = require('../../utils/github.js');
 const { initSettings, prepareConfig } = require('../../config.js');
 const { getEntityName, updateTemplates } = require('../../utils/index.js');
 const git = require('../../utils/git.js');
+const hexlet = require('../../utils/hexlet.js');
 
 const log = debug('hexlet');
 
@@ -22,7 +23,7 @@ module.exports = async (params, customSettings = {}) => {
 
   await github.checkToken({ token: githubToken });
   const owner = await github.getOwner({ token: githubToken });
-  // TODO: добавить чек токена Хекслета (нужна логика в API хекслета)
+  await hexlet.checkToken({ token: hexletToken });
 
   const {
     repo, author, branch,

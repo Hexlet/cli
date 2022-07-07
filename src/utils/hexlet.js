@@ -2,9 +2,6 @@
 
 const fsp = require('fs/promises');
 const axios = require('axios');
-const debug = require('debug');
-
-const log = debug('hexlet');
 
 const downloadAssignment = async (options) => {
   const {
@@ -15,7 +12,6 @@ const downloadAssignment = async (options) => {
   const url = `${apiHost}/api/course/${courseSlug}/lesson/${lessonSlug}/assignment/download`;
   const handledStatuses = [200, 201, 404, 401, 422];
 
-  log('download', filePath);
   const response = await axios({
     method,
     url,
@@ -44,6 +40,22 @@ const downloadAssignment = async (options) => {
   await fsp.writeFile(filePath, response.data);
 };
 
+const checkToken = async ({ token }) => {
+  const handledStatuses = [200, 404];
+
+  const response = await axios({
+    method: 'post',
+    url: 'https://hexlet.io/api/user/assignment_token/check',
+    data: { token },
+    validateStatus: (status) => handledStatuses.includes(status),
+  });
+
+  if (response.status === 404) {
+    throw new Error('Invalid Hexlet token passed.');
+  }
+};
+
 module.exports = {
   downloadAssignment,
+  checkToken,
 };

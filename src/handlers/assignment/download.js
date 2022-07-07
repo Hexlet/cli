@@ -15,7 +15,7 @@ const { getEntityName, updateTemplates } = require('../../utils/index.js');
 const {
   getLessonData, makeAssignmentBackup, checkLessonUrl, generateAssignmentPath,
 } = require('../../utils/assignments.js');
-const { downloadAssignment } = require('../../utils/hexlet.js');
+const hexlet = require('../../utils/hexlet.js');
 
 module.exports = async (params, customSettings = {}) => {
   const { lessonUrl, refresh } = params;
@@ -38,7 +38,8 @@ module.exports = async (params, customSettings = {}) => {
   const tmpArchiveName = `${lessonSlug}.tar.gz`;
   const tmpArchivePath = path.join(tmpDirPath, tmpArchiveName);
 
-  await downloadAssignment({
+  log('download', tmpArchivePath);
+  await hexlet.downloadAssignment({
     apiHost,
     courseSlug,
     lessonSlug,

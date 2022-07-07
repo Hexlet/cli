@@ -65,6 +65,10 @@ describe('program', () => {
       .get(`/repos/${githubUser}/${repoName}/branches/${branch}`)
       .reply(404);
 
+    nock('https://hexlet.io/api').persist()
+      .post('/user/assignment_token/check', { token: /.+/ })
+      .reply(200);
+
     git.push = jest.fn(() => {});
   });
 

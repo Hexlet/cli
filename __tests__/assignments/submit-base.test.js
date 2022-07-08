@@ -6,7 +6,7 @@ const fsp = require('fs/promises');
 const fse = require('fs-extra');
 const nock = require('nock');
 
-const assignmentsSubmitCmd = require('../../src/commands/assignment/submit.js');
+const command = require('../../src/commands/assignment/submit.js');
 const { initSettings } = require('../../src/config.js');
 
 const args = {
@@ -35,14 +35,14 @@ describe('assignment submit base', () => {
   });
 
   it('submit (without init)', async () => {
-    await expect(assignmentsSubmitCmd.handler(args, customSettings))
+    await expect(command.handler(args, customSettings))
       .rejects.toThrow('no such file or directory');
   });
 
   it('submit with invalid .config.json', async () => {
     await fse.writeJson(hexletConfigPath, {});
 
-    await expect(assignmentsSubmitCmd.handler(args, customSettings))
+    await expect(command.handler(args, customSettings))
       .rejects.toThrow(`Validation error "${hexletConfigPath}"`);
   });
 });

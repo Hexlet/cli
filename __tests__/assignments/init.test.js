@@ -7,7 +7,7 @@ const fse = require('fs-extra');
 const nock = require('nock');
 const git = require('isomorphic-git');
 
-const assignmentsInitCmd = require('../../src/commands/assignments-init.js');
+const command = require('../../src/commands/assignments-init.js');
 const { getValidator } = require('../../src/validator/index.js');
 const { getFixturePath, readDirP } = require('../helpers/index.js');
 
@@ -84,7 +84,7 @@ describe('program', () => {
   });
 
   it('init without local config', async () => {
-    const result = await assignmentsInitCmd.handler({ ...args, hexletDir }, customSettings);
+    const result = await command.handler({ ...args, hexletDir }, customSettings);
 
     const actualConfig = await fse.readJson(result.hexletConfigPath);
     const expectedConfig = await fse.readJson(getFixturePath('assignmentsConfig.json'));
@@ -102,7 +102,7 @@ describe('program', () => {
       getFixturePath('programConfig.json'),
       path.join(customSettings.homedir, 'Hexlet', '.config.json'),
     );
-    const result = await assignmentsInitCmd.handler({ ...args, hexletDir }, customSettings);
+    const result = await command.handler({ ...args, hexletDir }, customSettings);
 
     const actualConfig = await fse.readJson(result.hexletConfigPath);
     const expectedConfig = await fse.readJson(getFixturePath('config.json'));

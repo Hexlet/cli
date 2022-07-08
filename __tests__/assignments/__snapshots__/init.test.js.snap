@@ -5,12 +5,12 @@ Array [
   Object {
     "name": "hexlet-check.yml",
     "path": "hexlet-assignments/.github/workflows/hexlet-check.yml",
-    "size": 903n,
+    "size": 600n,
   },
   Object {
     "name": "README.md",
     "path": "hexlet-assignments/README.md",
-    "size": 14n,
+    "size": 21n,
   },
 ]
 `;
@@ -20,12 +20,12 @@ Array [
   Object {
     "name": "hexlet-check.yml",
     "path": "hexlet-assignments/.github/workflows/hexlet-check.yml",
-    "size": 903n,
+    "size": 600n,
   },
   Object {
     "name": "README.md",
     "path": "hexlet-assignments/README.md",
-    "size": 14n,
+    "size": 21n,
   },
 ]
 `;

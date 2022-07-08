@@ -35,34 +35,35 @@ const makefilePath = path.join('basics-course', 'example', 'Makefile');
 const readmeStartPath = path.join('basics-course', 'start', 'README.md');
 const makefileStartPath = path.join('basics-course', 'start', 'Makefile');
 const currentPath = '.current.json';
+const workflowPath = path.join('.github', 'workflows', 'hexlet-check.yml');
 
 const makeLocalChanges = async (assignmentsPath) => {
   // modified existing files
   await fse.outputFile(path.join(assignmentsPath, file1Path), 'local content');
   await fse.outputFile(path.join(assignmentsPath, file2Path), 'local content');
-  await git.add({ filepath: 'basics-course/example/subdir/file2', dir: assignmentsPath });
+  await git.add({ filepath: file2Path, dir: assignmentsPath });
   await fse.outputFile(path.join(assignmentsPath, readmeStartPath), 'local content');
-  await git.add({ filepath: 'basics-course/start/README.md', dir: assignmentsPath });
+  await git.add({ filepath: readmeStartPath, dir: assignmentsPath });
   await fse.outputFile(path.join(assignmentsPath, readmeStartPath), 'local changed content');
   // create new files
   await fse.outputFile(path.join(assignmentsPath, file3Path), 'local content');
   await fse.outputFile(path.join(assignmentsPath, file4Path), 'local content');
-  await git.add({ filepath: 'basics-course/example/subdir/file4', dir: assignmentsPath });
+  await git.add({ filepath: file4Path, dir: assignmentsPath });
   await fse.outputFile(path.join(assignmentsPath, file5Path), 'local content');
-  await git.add({ filepath: 'basics-course/example/subdir/file5', dir: assignmentsPath });
+  await git.add({ filepath: file5Path, dir: assignmentsPath });
   await fse.outputFile(path.join(assignmentsPath, file5Path), 'local changed content');
   await fse.outputFile(path.join(assignmentsPath, file6Path), 'local content');
-  await git.add({ filepath: 'basics-course/example/file6', dir: assignmentsPath });
+  await git.add({ filepath: file6Path, dir: assignmentsPath });
   await fse.remove(path.join(assignmentsPath, file6Path));
   // remove file and remove file from index
-  await git.remove({ filepath: '.github/workflows/hexlet-check.yml', dir: assignmentsPath });
+  await git.remove({ filepath: workflowPath, dir: assignmentsPath });
   await fse.remove(path.join(assignmentsPath, currentPath));
   await fse.remove(path.join(assignmentsPath, gitignorePath));
   await fse.remove(path.join(assignmentsPath, readmePath));
   // remove file and then changed (same as change and then delete) => modified
-  await git.remove({ filepath: 'basics-course/start/Makefile', dir: assignmentsPath });
+  await git.remove({ filepath: makefileStartPath, dir: assignmentsPath });
   await fse.outputFile(path.join(assignmentsPath, makefileStartPath), 'local new content');
-  await git.remove({ filepath: 'basics-course/example/Makefile', dir: assignmentsPath });
+  await git.remove({ filepath: makefilePath, dir: assignmentsPath });
   await fse.outputFile(path.join(assignmentsPath, makefilePath), 'local new content');
 };
 
@@ -315,9 +316,9 @@ describe('assignment submit', () => {
     await makeLocalChanges(assignmentsPath);
     expect(await git.lsFiles({ dir: assignmentsPath }))
       .toEqual(workDirStates.repo30changed);
-    await git.add({ dir: assignmentsPath, filepath: 'basics-course/example' });
-    await git.add({ dir: assignmentsPath, filepath: '.current.json' });
-    await git.add({ dir: assignmentsPath, filepath: '.github/workflows/hexlet-check.yml' });
+    await git.add({ dir: assignmentsPath, filepath: submittedAssignmentRelativePath });
+    await git.add({ dir: assignmentsPath, filepath: currentPath });
+    await git.add({ dir: assignmentsPath, filepath: workflowPath });
     await git.commit({ message: 'local commit', author, dir: assignmentsPath });
     expect(await git.lsFiles({ dir: assignmentsPath }))
       .toEqual(workDirStates.repo30changedAllCommitted);
@@ -392,9 +393,9 @@ describe('assignment submit', () => {
     await makeLocalChanges(assignmentsPath);
     expect(await git.lsFiles({ dir: assignmentsPath }))
       .toEqual(workDirStates.repo30changed);
-    await git.add({ dir: assignmentsPath, filepath: 'basics-course/example' });
-    await git.add({ dir: assignmentsPath, filepath: '.current.json' });
-    await git.add({ dir: assignmentsPath, filepath: '.github/workflows/hexlet-check.yml' });
+    await git.add({ dir: assignmentsPath, filepath: submittedAssignmentRelativePath });
+    await git.add({ dir: assignmentsPath, filepath: currentPath });
+    await git.add({ dir: assignmentsPath, filepath: workflowPath });
     await git.commit({ message: 'local commit', author, dir: assignmentsPath });
     expect(await git.lsFiles({ dir: assignmentsPath }))
       .toEqual(workDirStates.repo30changedAllCommitted);

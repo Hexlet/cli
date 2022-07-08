@@ -42,14 +42,8 @@ const updateCurrent = async (repoPath, courseSlugWithLocale, lessonSlug) => {
   return currentName;
 };
 
-const normalizePath = (filePath) => {
-  const filePathParts = filePath.split(path.sep);
-  return filePathParts.join('/');
-};
-
 module.exports = {
   getEntityName,
   updateTemplates,
   updateCurrent,
-  normalizePath,
 };

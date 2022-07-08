@@ -33,30 +33,31 @@ const readmePath = path.join('exercises', 'start', 'README.md');
 const makefilePath = path.join('exercises', 'start', 'Makefile');
 const tutorialPath = path.join('exercises', 'start', 'TUTORIAL.md');
 const gitignorePath = '.gitignore';
+const specPath = 'spec.yml';
 
 const makeLocalChanges = async (programPath) => {
   // modified existing files
   await fse.outputFile(path.join(programPath, file1Path), 'local content');
   await fse.outputFile(path.join(programPath, file2Path), 'local content');
-  await git.add({ filepath: 'exercises/example/subdir/file2', dir: programPath });
+  await git.add({ filepath: file2Path, dir: programPath });
   await fse.outputFile(path.join(programPath, readmePath), 'local content');
-  await git.add({ filepath: 'exercises/start/README.md', dir: programPath });
+  await git.add({ filepath: readmePath, dir: programPath });
   await fse.outputFile(path.join(programPath, readmePath), 'local changed content');
   // create new files
   await fse.outputFile(path.join(programPath, file3Path), 'local content');
   await fse.outputFile(path.join(programPath, file4Path), 'local content');
-  await git.add({ filepath: 'exercises/example/subdir/file4', dir: programPath });
+  await git.add({ filepath: file4Path, dir: programPath });
   await fse.outputFile(path.join(programPath, file5Path), 'local content');
-  await git.add({ filepath: 'exercises/example/subdir/file5', dir: programPath });
+  await git.add({ filepath: file5Path, dir: programPath });
   await fse.outputFile(path.join(programPath, file5Path), 'local changed content');
   await fse.outputFile(path.join(programPath, file6Path), 'local content');
-  await git.add({ filepath: 'exercises/example/file6', dir: programPath });
+  await git.add({ filepath: file6Path, dir: programPath });
   await fse.remove(path.join(programPath, file6Path));
   // remove file and remove file from index
-  await git.remove({ filepath: 'spec.yml', dir: programPath });
+  await git.remove({ filepath: specPath, dir: programPath });
   await fse.remove(path.join(programPath, gitignorePath));
   // remove file and then changed (same as change and then delete) => modified
-  await git.remove({ filepath: 'exercises/start/Makefile', dir: programPath });
+  await git.remove({ filepath: makefilePath, dir: programPath });
   await fse.outputFile(path.join(programPath, makefilePath), 'local new content');
 };
 
@@ -358,7 +359,6 @@ describe('program submit', () => {
     expect(await git.lsFiles({ dir: hexletProgramPath })).toEqual(workDirStates.repo30afterPull30);
 
     const actualCommits2 = await git.logMessages({ dir: hexletProgramPath });
-    // NOTE: выполнен мердж, конфликтов нет.
     const expectedCommits2 = [
       'local commit',
       'add file2 & change file1',

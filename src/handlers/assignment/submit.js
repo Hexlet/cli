@@ -51,7 +51,7 @@ module.exports = async (params, customSettings = {}) => {
   if (changesToCommit) {
     await git.commit({
       dir: repoPath,
-      message: `submit ${courseSlugWithLocale}/${lessonSlug}`,
+      message: `submit ${git.normalizePath(assignmentRelativePath)}`,
       author,
     });
   } else {

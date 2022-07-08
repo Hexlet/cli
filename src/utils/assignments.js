@@ -6,7 +6,7 @@ const moment = require('moment');
 const fse = require('fs-extra');
 const path = require('path');
 
-const { normalizePath } = require('./index.js');
+const git = require('./git.js');
 
 const isValidLessonUrl = (lessonUrl) => {
   const urlRegExp = /^https:\/\/\w{0,2}\.*hexlet.io\/courses\/.+\/lessons\/[^/]+/;
@@ -48,8 +48,8 @@ const makeAssignmentBackup = async (assignmentPath) => {
 };
 
 const getAssignmentData = (cwdPath, repoPath) => {
-  const normalizedCwdPath = normalizePath(cwdPath);
-  const normalizedRepoPath = normalizePath(repoPath);
+  const normalizedCwdPath = git.normalizePath(cwdPath);
+  const normalizedRepoPath = git.normalizePath(repoPath);
   const regexp = new RegExp(`${normalizedRepoPath}/(?<courseSlugWithLocale>[^/]+)/(?<lessonSlug>[^/]+).*$`);
   const validAssignmentPath = regexp.test(normalizedCwdPath);
 

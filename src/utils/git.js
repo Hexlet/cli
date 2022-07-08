@@ -5,8 +5,14 @@ const http = require('isomorphic-git/http/node');
 const git = require('isomorphic-git');
 const debug = require('debug');
 const _ = require('lodash');
+const path = require('path');
 
 const log = debug('hexlet');
+
+const gitNormalizePath = (filePath) => {
+  const filePathParts = filePath.split(path.sep);
+  return filePathParts.join('/');
+};
 
 const gitPull = async (options) => {
   const {
@@ -63,7 +69,8 @@ const gitPullMerge = async (options) => {
 };
 
 const gitAdd = async ({ dir, filepath }) => {
-  const fileStatuses = await git.statusMatrix({ fs, dir, filepaths: [filepath] });
+  const normalizedFilePath = gitNormalizePath(filepath);
+  const fileStatuses = await git.statusMatrix({ fs, dir, filepaths: [normalizedFilePath] });
 
   const addToIndexPromises = fileStatuses.map(([filePath, , workTreeStatus]) => (
     workTreeStatus === 0
@@ -76,11 +83,12 @@ const gitAdd = async ({ dir, filepath }) => {
 
 const gitAddAll = ({ dir }) => gitAdd({ dir, filepath: '.' });
 
-const gitIsWorkDirChanged = async ({ dir, checkedPath = '.' }) => {
+const gitIsWorkDirChanged = async ({ dir, filepath = '.' }) => {
+  const normalizedFilePath = gitNormalizePath(filepath);
   const fileStatuses = await git.statusMatrix({
     fs,
     dir,
-    filepaths: [checkedPath],
+    filepaths: [normalizedFilePath],
   });
 
   return fileStatuses.some(([, headStatus, workTreeStatus, stageStatus]) => (
@@ -179,13 +187,14 @@ const gitLsFiles = ({ dir }) => (
   })
 );
 
-const gitRemove = ({ dir, filepath }) => (
-  git.remove({
+const gitRemove = async ({ dir, filepath }) => {
+  const normalizedFilePath = gitNormalizePath(filepath);
+  await git.remove({
     fs,
     dir,
-    filepath,
-  })
-);
+    filepath: normalizedFilePath,
+  });
+};
 
 const gitCurrentBranch = ({ dir }) => (
   git.currentBranch({
@@ -274,4 +283,5 @@ module.exports = {
   branchExists: gitBranchExists,
   isLocalHistoryAhead: gitIsLocalHistoryAhead,
   hasChangesToCommit: gitHasChangesToCommit,
+  normalizePath: gitNormalizePath,
 };

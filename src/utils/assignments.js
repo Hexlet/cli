@@ -6,6 +6,8 @@ const moment = require('moment');
 const fse = require('fs-extra');
 const path = require('path');
 
+const { normalizePath } = require('./index.js');
+
 const isValidLessonUrl = (lessonUrl) => {
   const urlRegExp = /^https:\/\/\w{0,2}\.*hexlet.io\/courses\/.+\/lessons\/[^/]+/;
   return urlRegExp.test(lessonUrl);
@@ -46,15 +48,16 @@ const makeAssignmentBackup = async (assignmentPath) => {
 };
 
 const getAssignmentData = (cwdPath, repoPath) => {
-  const { sep } = path;
-  const regexp = new RegExp(`${repoPath}${sep}(?<courseSlugWithLocale>[^${sep}]+)${sep}(?<lessonSlug>[^${sep}]+).*$`);
-  const validAssignmentPath = regexp.test(cwdPath);
+  const normalizedCwdPath = normalizePath(cwdPath);
+  const normalizedRepoPath = normalizePath(repoPath);
+  const regexp = new RegExp(`${normalizedRepoPath}/(?<courseSlugWithLocale>[^/]+)/(?<lessonSlug>[^/]+).*$`);
+  const validAssignmentPath = regexp.test(normalizedCwdPath);
 
   if (!validAssignmentPath) {
     throw new Error('Submit command must be executed from assignment directory.');
   }
 
-  const matches = cwdPath.match(regexp);
+  const matches = normalizedCwdPath.match(regexp);
   return matches.groups;
 };
 

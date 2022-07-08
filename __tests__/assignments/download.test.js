@@ -37,7 +37,7 @@ describe.each([
   let customSettings;
   let hexletDir;
   let config;
-  let repoName;
+  let assignmentsPath;
 
   beforeAll(() => {
     nock.disableNetConnect();
@@ -59,10 +59,10 @@ describe.each([
     customSettings = { homedir: tmpDir };
     const settings = initSettings(customSettings);
     hexletConfigPath = settings.hexletConfigPath;
-    repoName = settings.repo.name;
     await fse.ensureDir(settings.hexletConfigDir);
     hexletDir = path.join(tmpDir, 'learning', 'Hexlet');
     config = getAssignmentConfig({ hexletDir });
+    assignmentsPath = settings.generateRepoPath(hexletDir);
   });
 
   it('download', async () => {
@@ -74,7 +74,7 @@ describe.each([
 
   it('download the same assignment again (with backup)', async () => {
     await fse.writeJson(hexletConfigPath, config);
-    const coursePath = path.join(hexletDir, repoName, courseSlugWithLocale);
+    const coursePath = path.join(assignmentsPath, courseSlugWithLocale);
     const assignmentPath = path.join(coursePath, lessonSlug);
     const someFilePath = path.join(assignmentPath, 'SomeFile.java');
     await fse.outputFile(someFilePath, 'content');

@@ -103,7 +103,7 @@ module.exports = async (params, customSettings = {}) => {
   }
 
   const locallyRemoteBranchExists = await git.branchExists({
-    dir: hexletDir,
+    dir: repoPath,
     ref: 'main',
     remote: 'origin',
   });
@@ -112,7 +112,7 @@ module.exports = async (params, customSettings = {}) => {
     ? await git.isLocalHistoryAhead({ dir: repoPath, ref: branch })
     : true;
 
-  if (changesToCommit && localHistoryAhead) {
+  if (localHistoryAhead) {
     await git.push({
       dir: repoPath,
       ref: branch,

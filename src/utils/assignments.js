@@ -47,7 +47,7 @@ const makeAssignmentBackup = async (assignmentPath) => {
 
 const getAssignmentData = (cwdPath, repoPath) => {
   const { sep } = path;
-  const regexp = new RegExp(`${repoPath}${sep}(?<courseSlugWithLocale>[^/]+)${sep}(?<lessonSlug>[^/]+).*$`);
+  const regexp = new RegExp(`${repoPath}${sep}(?<courseSlugWithLocale>[^${sep}]+)${sep}(?<lessonSlug>[^${sep}]+).*$`);
   const validAssignmentPath = regexp.test(cwdPath);
 
   if (!validAssignmentPath) {

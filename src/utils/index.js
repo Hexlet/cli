@@ -31,11 +31,11 @@ const updateTemplates = async (hexletTemplatesPath, repoPath) => {
   return templatePaths;
 };
 
-const updateCurrent = async (repoPath, assignmentRelativePath) => {
+const updateCurrent = async (repoPath, courseSlugWithLocale, lessonSlug) => {
   const currentName = '.current.json';
   const currentPath = path.join(repoPath, currentName);
 
-  const data = { assignment: assignmentRelativePath };
+  const data = { assignment: `${courseSlugWithLocale}/${lessonSlug}` };
   await fse.writeJSON(currentPath, data);
   await git.add({ dir: repoPath, filepath: currentName });
 

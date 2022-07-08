@@ -64,17 +64,19 @@ const gitPullMerge = async (options) => {
   }
 };
 
-const gitAddAll = async ({ dir }) => {
-  const fileStatuses = await git.statusMatrix({ fs, dir });
+const gitAdd = async ({ dir, filepath }) => {
+  const fileStatuses = await git.statusMatrix({ fs, dir, filepaths: [filepath] });
 
-  const addToIndexPromises = fileStatuses.map(([filepath, , workTreeStatus]) => (
+  const addToIndexPromises = fileStatuses.map(([filePath, , workTreeStatus]) => (
     workTreeStatus === 0
-      ? git.remove({ fs, dir, filepath })
-      : git.add({ fs, dir, filepath })
+      ? git.remove({ fs, dir, filepath: filePath })
+      : git.add({ fs, dir, filepath: filePath })
   ));
 
   await Promise.all(addToIndexPromises);
 };
+
+const gitAddAll = ({ dir }) => gitAdd({ dir, filepath: '.' });
 
 const gitIsWorkDirChanged = async ({ dir, checkedPath = null }) => {
   let filter = null;
@@ -185,14 +187,6 @@ const gitLsFiles = ({ dir }) => (
   git.statusMatrix({
     fs,
     dir,
-  })
-);
-
-const gitAdd = ({ dir, filepath }) => (
-  git.add({
-    fs,
-    dir,
-    filepath,
   })
 );
 

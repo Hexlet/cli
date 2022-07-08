@@ -66,6 +66,7 @@ const prepareConfig = async (options) => {
 };
 
 const initSettings = (options = {}) => {
+  const cwdPath = options.cwdPath || process.cwd();
   const homeDir = options.homedir || os.homedir();
   const hexletConfigDir = path.join(homeDir, 'Hexlet');
   const cliSrcDir = path.join(__dirname, '..', 'src');
@@ -85,6 +86,7 @@ const initSettings = (options = {}) => {
   const generateHexletProgramPath = (hexletDir, programSlug) => path.join(hexletDir, programSlug);
 
   return {
+    cwdPath,
     author,
     hexletConfigDir,
     hexletConfigPath,

@@ -17,7 +17,7 @@ module.exports = async (params, customSettings = {}) => {
   const entityName = getEntityName(params);
 
   const {
-    author, branch,
+    author, branch, cwdPath,
     generateRepoPath, hexletConfigPath, hexletTemplatesPath,
   } = initSettings(customSettings);
 
@@ -26,7 +26,7 @@ module.exports = async (params, customSettings = {}) => {
   } = await readHexletConfig(hexletConfigPath, entityName);
 
   const repoPath = generateRepoPath(hexletDir);
-  const { courseSlugWithLocale, lessonSlug } = getAssignmentData(process.cwd(), repoPath);
+  const { courseSlugWithLocale, lessonSlug } = getAssignmentData(cwdPath, repoPath);
   const assignmentRelativePath = path.join(courseSlugWithLocale, lessonSlug);
   log('assignment path', assignmentRelativePath);
 
@@ -42,7 +42,7 @@ module.exports = async (params, customSettings = {}) => {
   });
 
   const templatePaths = await updateTemplates(hexletTemplatesPath, repoPath);
-  const currentPath = await updateCurrent(repoPath, assignmentRelativePath);
+  const currentPath = await updateCurrent(repoPath, courseSlugWithLocale, lessonSlug);
   const changesToCommit = await git.hasChangesToCommit({
     dir: repoPath,
     checkedPaths: [...templatePaths, currentPath, assignmentRelativePath],
@@ -51,7 +51,7 @@ module.exports = async (params, customSettings = {}) => {
   if (changesToCommit) {
     await git.commit({
       dir: repoPath,
-      message: `submit ${assignmentRelativePath}`,
+      message: `submit ${courseSlugWithLocale}/${lessonSlug}`,
       author,
     });
   } else {

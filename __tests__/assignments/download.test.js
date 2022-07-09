@@ -7,7 +7,7 @@ const fse = require('fs-extra');
 const nock = require('nock');
 
 const assignmentDownloadCmd = require('../../src/commands/assignment/download.js');
-const assignmentRefreshCmd = require('../../src/commands/assignment/refresh.js');
+const assignmentResetCmd = require('../../src/commands/assignment/reset.js');
 const { initSettings } = require('../../src/config.js');
 const { readDirP, getFixturePath, getAssignmentConfig } = require('../helpers/index.js');
 
@@ -39,7 +39,7 @@ const testCases = [
   {
     method: 'PUT',
     successCode: 200,
-    command: assignmentRefreshCmd,
+    command: assignmentResetCmd,
     commandName: 'reset',
   },
 ];

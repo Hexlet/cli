@@ -4,7 +4,7 @@ const _ = require('lodash');
 
 const obj = {
   command: 'assignment <command>',
-  description: 'Manage assignments (download, refresh, submit)',
+  description: 'Manage assignments (download, reset, submit)',
   builder: (yargs) => yargs.commandDir('assignment'),
   handler: _.noop(),
 };

@@ -5,10 +5,10 @@ const axios = require('axios');
 
 const downloadAssignment = async (options) => {
   const {
-    courseSlug, lessonSlug, filePath, hexletToken, apiHost, refresh = false,
+    courseSlug, lessonSlug, filePath, hexletToken, apiHost, reset = false,
   } = options;
 
-  const method = refresh ? 'put' : 'post';
+  const method = reset ? 'put' : 'post';
   const url = `${apiHost}/api/course/${courseSlug}/lesson/${lessonSlug}/assignment/download`;
   const handledStatuses = [200, 201, 404, 401, 422];
 

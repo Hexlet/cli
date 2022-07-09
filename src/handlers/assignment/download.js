@@ -18,7 +18,7 @@ const {
 const hexlet = require('../../utils/hexlet.js');
 
 module.exports = async (params, customSettings = {}) => {
-  const { lessonUrl, refresh } = params;
+  const { lessonUrl, reset } = params;
   const entityName = getEntityName(params);
 
   const {
@@ -45,7 +45,7 @@ module.exports = async (params, customSettings = {}) => {
     lessonSlug,
     filePath: tmpArchivePath,
     hexletToken,
-    refresh,
+    reset,
   });
 
   log('prepare directory', assignmentPath);

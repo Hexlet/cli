@@ -29,10 +29,24 @@ const args = {
 };
 const lessonArchivePath = getFixturePath(`${lessonSlug}.tar.gz`);
 
-describe.each([
-  { method: 'POST', successCode: 201, command: assignmentDownloadCmd },
-  { method: 'PUT', successCode: 200, command: assignmentRefreshCmd },
-])('$command.description', ({ method, successCode, command }) => {
+const testCases = [
+  {
+    method: 'POST',
+    successCode: 201,
+    command: assignmentDownloadCmd,
+    commandName: 'download',
+  },
+  {
+    method: 'PUT',
+    successCode: 200,
+    command: assignmentRefreshCmd,
+    commandName: 'reset',
+  },
+];
+
+describe.each(testCases)('$command.description', ({
+  method, successCode, command, commandName,
+}) => {
   let hexletConfigPath;
   let customSettings;
   let hexletDir;
@@ -65,14 +79,14 @@ describe.each([
     assignmentsPath = settings.generateRepoPath(hexletDir);
   });
 
-  it('download', async () => {
+  it(`${commandName}`, async () => {
     await fse.writeJson(hexletConfigPath, config);
 
     await command.handler(args, customSettings);
     expect(await readDirP(hexletDir)).toMatchSnapshot();
   });
 
-  it('download the same assignment again (with backup)', async () => {
+  it(`${commandName} the same assignment again (with backup)`, async () => {
     await fse.writeJson(hexletConfigPath, config);
     const coursePath = path.join(assignmentsPath, courseSlugWithLocale);
     const assignmentPath = path.join(coursePath, lessonSlug);
@@ -93,19 +107,19 @@ describe.each([
     expect(await readDirP(assignmentBackupPath)).toMatchSnapshot();
   });
 
-  it('download (without init)', async () => {
+  it(`${commandName} (without init)`, async () => {
     await expect(command.handler(args, customSettings))
       .rejects.toThrow('no such file or directory');
   });
 
-  it('download with invalid .config.json', async () => {
+  it(`${commandName} with invalid .config.json`, async () => {
     await fse.writeJson(hexletConfigPath, {});
 
     await expect(command.handler(args, customSettings))
       .rejects.toThrow(`Validation error "${hexletConfigPath}"`);
   });
 
-  it('download with incorrect lessonUrl', async () => {
+  it(`${commandName} with incorrect lessonUrl`, async () => {
     await fse.writeJson(hexletConfigPath, config);
     const params = {
       ...args,
@@ -116,7 +130,7 @@ describe.each([
       .rejects.toThrow('Incorrect lessonUrl');
   });
 
-  it('download with negative api responses', async () => {
+  it(`${commandName} with negative api responses`, async () => {
     await fse.writeJson(hexletConfigPath, config);
     const wrongCourseSlug = 'wrong-course';
     const wrongLessonSlug = 'wrong-lesson';

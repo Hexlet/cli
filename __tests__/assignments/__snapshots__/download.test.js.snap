@@ -170,7 +170,7 @@ Array [
 ]
 `;
 
-exports[`Download latest version of the assignment download 1`] = `
+exports[`Download latest version of the assignment reset 1`] = `
 Array [
   Object {
     "name": "hexlet-check.yml",
@@ -250,7 +250,7 @@ Array [
 ]
 `;
 
-exports[`Download latest version of the assignment download the same assignment again (with backup) 1`] = `
+exports[`Download latest version of the assignment reset the same assignment again (with backup) 1`] = `
 Array [
   Object {
     "name": "SomeFile.java",
@@ -260,7 +260,7 @@ Array [
 ]
 `;
 
-exports[`Download latest version of the assignment download the same assignment again (with backup) 2`] = `
+exports[`Download latest version of the assignment reset the same assignment again (with backup) 2`] = `
 Array [
   Object {
     "name": ".gitignore",
@@ -330,7 +330,7 @@ Array [
 ]
 `;
 
-exports[`Download latest version of the assignment download the same assignment again (with backup) 3`] = `
+exports[`Download latest version of the assignment reset the same assignment again (with backup) 3`] = `
 Array [
   Object {
     "name": "SomeFile.java",

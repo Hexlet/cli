@@ -5,6 +5,7 @@ const path = require('path');
 const fsp = require('fs/promises');
 const fse = require('fs-extra');
 const nock = require('nock');
+const isomorphicGit = require('isomorphic-git');
 
 const command = require('../../src/commands/assignments-init.js');
 const { getValidator } = require('../../src/validator/index.js');
@@ -83,6 +84,7 @@ describe('program', () => {
   beforeAll(() => {
     nock.disableNetConnect();
     nock.enableNetConnect(new RegExp(mockServerHost));
+    isomorphicGit.push = jest.fn(() => {});
   });
 
   afterAll(() => {

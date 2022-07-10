@@ -1,5 +1,110 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`program init with existing repository & init again after changes 1`] = `
+Array [
+  Object {
+    "name": ".current.json",
+    "path": "hexlet-assignments/.current.json",
+    "size": 39n,
+  },
+  Object {
+    "name": "hexlet-check.yml",
+    "path": "hexlet-assignments/.github/workflows/hexlet-check.yml",
+    "size": 600n,
+  },
+  Object {
+    "name": "README.md",
+    "path": "hexlet-assignments/README.md",
+    "size": 21n,
+  },
+  Object {
+    "name": ".gitignore",
+    "path": "hexlet-assignments/basics-course/example/.gitignore",
+    "size": 20n,
+  },
+  Object {
+    "name": "Makefile",
+    "path": "hexlet-assignments/basics-course/example/Makefile",
+    "size": 23n,
+  },
+  Object {
+    "name": "README.md",
+    "path": "hexlet-assignments/basics-course/example/README.md",
+    "size": 402n,
+  },
+  Object {
+    "name": "file1",
+    "path": "hexlet-assignments/basics-course/example/file1",
+    "size": 12n,
+  },
+  Object {
+    "name": "Makefile",
+    "path": "hexlet-assignments/basics-course/start/Makefile",
+    "size": 23n,
+  },
+  Object {
+    "name": "README.md",
+    "path": "hexlet-assignments/basics-course/start/README.md",
+    "size": 402n,
+  },
+]
+`;
+
+exports[`program init with existing repository & init again after changes 2`] = `
+Array [
+  Object {
+    "name": ".current.json",
+    "path": "hexlet-assignments/.current.json",
+    "size": 39n,
+  },
+  Object {
+    "name": "hexlet-check.yml",
+    "path": "hexlet-assignments/.github/workflows/hexlet-check.yml",
+    "size": 600n,
+  },
+  Object {
+    "name": "README.md",
+    "path": "hexlet-assignments/README.md",
+    "size": 21n,
+  },
+  Object {
+    "name": ".gitignore",
+    "path": "hexlet-assignments/basics-course/example/.gitignore",
+    "size": 20n,
+  },
+  Object {
+    "name": "Makefile",
+    "path": "hexlet-assignments/basics-course/example/Makefile",
+    "size": 23n,
+  },
+  Object {
+    "name": "README.md",
+    "path": "hexlet-assignments/basics-course/example/README.md",
+    "size": 402n,
+  },
+  Object {
+    "name": "addedFile",
+    "path": "hexlet-assignments/basics-course/example/addedFile",
+    "size": 7n,
+  },
+  Object {
+    "name": "file1",
+    "path": "hexlet-assignments/basics-course/example/file1",
+    "size": 12n,
+  },
+  Object {
+    "name": "Makefile",
+    "path": "hexlet-assignments/basics-course/start/Makefile",
+    "size": 23n,
+  },
+  Object {
+    "name": "README.md",
+    "path": "hexlet-assignments/basics-course/start/README.md",
+    "size": 402n,
+  },
+]
+`;
+
 exports[`program init with program config 1`] = `
 Array [
   Object {

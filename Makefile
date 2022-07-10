@@ -4,7 +4,7 @@ install:
 	npm ci
 
 test:
-	DEBUG=hexlet npm test -- --colors --verbose --runInBand --ci
+	DEBUG=hexlet npm test -- --colors --verbose
 
 test-coverage:
 	npm test -- --coverage --coverageProvider=v8

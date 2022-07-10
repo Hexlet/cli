@@ -113,15 +113,15 @@ module.exports = async (params, customSettings = {}) => {
     : true;
 
   if (localHistoryAhead) {
+    await git.setUpstream({
+      dir: repoPath,
+      ref: branch,
+    });
+
     await git.push({
       dir: repoPath,
       ref: branch,
       token: githubToken,
-    });
-
-    await git.setUpstream({
-      dir: repoPath,
-      ref: branch,
     });
   } else {
     console.log(chalk.grey('Nothing to push. Skip pushing.'));

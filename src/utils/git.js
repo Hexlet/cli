@@ -139,7 +139,7 @@ const gitLogMessages = async (options) => {
 
 const gitClone = async (options) => {
   const {
-    dir, url, ref = 'main', token,
+    dir, url, ref = 'main', remote = 'origin', token,
     noCheckout = false, singleBranch = false, force = false,
   } = options;
 
@@ -156,9 +156,19 @@ const gitClone = async (options) => {
     url,
     singleBranch,
     ref,
+    remote,
     noCheckout,
     force,
     ...customOptions,
+  });
+
+  await git.writeRef({
+    fs,
+    dir,
+    ref: `refs/remotes/${remote}/HEAD`,
+    value: `refs/remotes/${remote}/${ref}`,
+    symbolic: true,
+    force: true,
   });
 };
 
@@ -226,6 +236,7 @@ const gitSetUpstream = async ({ dir, remote = 'origin', ref }) => {
     path: `branch.${ref}.remote`,
     value: remote,
   });
+
   await git.setConfig({
     fs,
     dir,

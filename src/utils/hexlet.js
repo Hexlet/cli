@@ -10,7 +10,7 @@ const downloadAssignment = async (options) => {
 
   const method = reset ? 'put' : 'post';
   const url = `${apiHost}/api/course/${courseSlug}/lesson/${lessonSlug}/assignment/download`;
-  const handledStatuses = [200, 201, 404, 401, 422];
+  const handledStatuses = [200, 201, 404, 401, 403, 422];
 
   const response = await axios({
     method,
@@ -25,7 +25,7 @@ const downloadAssignment = async (options) => {
   if (status === 404) {
     throw new Error(`Assignment ${courseSlug}/${lessonSlug} not found. Check the lessonUrl.`);
   }
-  if (status === 401 || status === 422) {
+  if ([401, 403, 422].includes(status)) {
     const dataJson = response.data.toString();
     let data;
     try {

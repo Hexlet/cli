@@ -159,6 +159,13 @@ describe.each(testCases)('$command.description', ({
     await expect(command.handler(params, customSettings))
       .rejects.toThrow(message);
 
+    message = 'You have no access to download assignment of this lesson';
+    nock(buildApiUrl(wrongCourseSlug, wrongLessonSlug))
+      .intercept('', method)
+      .reply(403, { message });
+    await expect(command.handler(params, customSettings))
+      .rejects.toThrow(message);
+
     // Unhandled errors
     nock(buildApiUrl(wrongCourseSlug, wrongLessonSlug))
       .intercept('', method)

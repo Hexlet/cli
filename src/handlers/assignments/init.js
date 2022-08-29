@@ -23,7 +23,6 @@ module.exports = async (params, customSettings = {}) => {
 
   await github.checkToken({ token: githubToken });
   const owner = await github.getOwner({ token: githubToken });
-  await hexlet.checkToken({ token: hexletToken });
 
   const {
     repo, author, branch,
@@ -44,6 +43,8 @@ module.exports = async (params, customSettings = {}) => {
     name: 'HEXLET_TOKEN',
     value: hexletToken,
   });
+
+  await hexlet.initAssignments({ token: hexletToken, repoUrl: repoData.html_url });
 
   log('prepare and write config');
   const { hexletDir } = await prepareConfig({

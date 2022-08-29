@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`program init with existing repository & init again after changes 1`] = `
+exports[`assignments init with existing repository & init again after changes 1`] = `
 Array [
   Object {
     "name": ".current.json",
@@ -50,7 +50,7 @@ Array [
 ]
 `;
 
-exports[`program init with existing repository & init again after changes 2`] = `
+exports[`assignments init with existing repository & init again after changes 2`] = `
 Array [
   Object {
     "name": ".current.json",
@@ -105,7 +105,7 @@ Array [
 ]
 `;
 
-exports[`program init with program config 1`] = `
+exports[`assignments init with program config 1`] = `
 Array [
   Object {
     "name": "hexlet-check.yml",
@@ -120,7 +120,7 @@ Array [
 ]
 `;
 
-exports[`program init without local config 1`] = `
+exports[`assignments init without local config 1`] = `
 Array [
   Object {
     "name": "hexlet-check.yml",

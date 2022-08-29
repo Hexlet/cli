@@ -57,8 +57,8 @@ const enableInterceptors = (options = { remoteRepoExist: false }) => {
     .get(`/repos/${githubUser}/${repoName}/branches/${branch}`)
     .reply(404);
 
-  nock('https://hexlet.io/api')
-    .post('/user/assignment_token/check', { token: /.+/ })
+  nock('https://hexlet.io/api_internal')
+    .put('/user/assignments/init', { token: /.+/, repository: /.+/ })
     .reply(200);
 
   if (options.remoteRepoExist) {
@@ -76,7 +76,7 @@ const enableInterceptors = (options = { remoteRepoExist: false }) => {
     .reply(404);
 };
 
-describe('program', () => {
+describe('assignments', () => {
   let customSettings;
   let hexletDir;
   let params;

@@ -15,7 +15,7 @@ const buildLessonUrl = (courseSlug, lessonSlug) => (
   `https://ru.hexlet.io/courses/${courseSlug}/lessons/${lessonSlug}/theory_unit`
 );
 const buildApiUrl = (courseSlug, lessonSlug) => (
-  `https://ru.hexlet.io/api/course/${courseSlug}/lesson/${lessonSlug}/assignment/download`
+  `https://ru.hexlet.io/api_internal/course/${courseSlug}/lesson/${lessonSlug}/assignment/download`
 );
 
 const hexletToken = 'some-hexlet-token';

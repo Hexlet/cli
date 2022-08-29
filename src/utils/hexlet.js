@@ -9,7 +9,7 @@ const downloadAssignment = async (options) => {
   } = options;
 
   const method = reset ? 'put' : 'post';
-  const url = `${apiHost}/api/course/${courseSlug}/lesson/${lessonSlug}/assignment/download`;
+  const url = `${apiHost}/api_internal/course/${courseSlug}/lesson/${lessonSlug}/assignment/download`;
   const handledStatuses = [200, 201, 404, 401, 403, 422];
 
   const response = await axios({
@@ -40,13 +40,13 @@ const downloadAssignment = async (options) => {
   await fsp.writeFile(filePath, response.data);
 };
 
-const checkToken = async ({ token }) => {
-  const handledStatuses = [200, 404];
+const initAssignments = async ({ token, repoUrl }) => {
+  const handledStatuses = [200, 404, 422];
 
   const response = await axios({
-    method: 'post',
-    url: 'https://hexlet.io/api/user/assignment_token/check',
-    data: { token },
+    method: 'put',
+    url: 'https://hexlet.io/api_internal/user/assignments/init',
+    data: { token, repository: repoUrl },
     validateStatus: (status) => handledStatuses.includes(status),
   });
 
@@ -57,5 +57,5 @@ const checkToken = async ({ token }) => {
 
 module.exports = {
   downloadAssignment,
-  checkToken,
+  initAssignments,
 };

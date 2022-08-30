@@ -9,7 +9,7 @@ const downloadAssignment = async (options) => {
   } = options;
 
   const method = reset ? 'put' : 'post';
-  const url = `${apiHost}/api_internal/course/${courseSlug}/lesson/${lessonSlug}/assignment/download`;
+  const url = `${apiHost}/api_internal/courses/${courseSlug}/lessons/${lessonSlug}/assignment/download`;
   const handledStatuses = [200, 201, 404, 401, 403, 422];
 
   const response = await axios({

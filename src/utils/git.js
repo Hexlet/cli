@@ -265,7 +265,7 @@ const gitHasChangesToCommit = async ({ dir, checkedPaths }) => {
   const promises = checkedPaths.map((checkedPath) => (
     gitIsWorkDirChanged({
       dir,
-      checkedPath,
+      filepath: checkedPath,
     })
   ));
   const changeStatuses = await Promise.all(promises);

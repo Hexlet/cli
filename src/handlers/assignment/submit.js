@@ -41,11 +41,11 @@ module.exports = async (params, customSettings = {}) => {
     filepath: assignmentRelativePath,
   });
 
-  const templatePaths = await updateTemplates(hexletTemplatesPath, repoPath);
+  await updateTemplates(hexletTemplatesPath, repoPath);
   const currentPath = await updateCurrent(repoPath, courseSlugWithLocale, lessonSlug);
   const changesToCommit = await git.hasChangesToCommit({
     dir: repoPath,
-    checkedPaths: [...templatePaths, currentPath, assignmentRelativePath],
+    checkedPaths: [currentPath, assignmentRelativePath],
   });
 
   if (changesToCommit) {

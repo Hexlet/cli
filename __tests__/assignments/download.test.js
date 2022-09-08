@@ -21,6 +21,7 @@ const buildApiUrl = (courseSlug, lessonSlug) => (
 const hexletToken = 'some-hexlet-token';
 const courseSlug = 'java-advanced';
 const courseSlugWithLocale = 'java-advanced-ru';
+const hexletTemplatesPath = getFixturePath('templates');
 const lessonSlug = 'multithreading-java';
 const commandParts = ['assignment', 'download'];
 const lessonUrl = buildLessonUrl(courseSlug, lessonSlug);
@@ -70,7 +71,7 @@ describe.each(testCases)('$command.description', ({
 
   beforeEach(async () => {
     const tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-cli-'));
-    customSettings = { homedir: tmpDir };
+    customSettings = { homedir: tmpDir, hexletTemplatesPath };
     const settings = initSettings(customSettings);
     hexletConfigPath = settings.hexletConfigPath;
     await fse.ensureDir(settings.hexletConfigDir);

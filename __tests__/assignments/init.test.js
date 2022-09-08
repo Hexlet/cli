@@ -13,6 +13,7 @@ const { getFixturePath, readDirP } = require('../helpers/index.js');
 const { initSettings } = require('../../src/config.js');
 const git = require('../../src/utils/git.js');
 
+const hexletTemplatesPath = getFixturePath('templates');
 const githubToken = 'some-github-token';
 const hexletToken = 'some-hexlet-token';
 const commandParts = ['assignments', 'init'];
@@ -94,7 +95,7 @@ describe('assignments', () => {
 
   beforeEach(async () => {
     const tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-cli-'));
-    customSettings = { homedir: tmpDir };
+    customSettings = { homedir: tmpDir, hexletTemplatesPath };
     hexletDir = path.join(tmpDir, 'learning', 'Hexlet');
     params = { ...args, hexletDir };
   });

@@ -10,7 +10,7 @@ Array [
   Object {
     "name": "README.md",
     "path": "hexlet-assignments/README.md",
-    "size": 9590n,
+    "size": 21n,
   },
   Object {
     "name": ".gitignore",
@@ -180,7 +180,7 @@ Array [
   Object {
     "name": "README.md",
     "path": "hexlet-assignments/README.md",
-    "size": 9590n,
+    "size": 21n,
   },
   Object {
     "name": ".gitignore",

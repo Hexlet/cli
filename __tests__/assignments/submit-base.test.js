@@ -8,7 +8,9 @@ const nock = require('nock');
 
 const command = require('../../src/commands/assignment/submit.js');
 const { initSettings } = require('../../src/config.js');
+const { getFixturePath } = require('../helpers/index.js');
 
+const hexletTemplatesPath = getFixturePath('templates');
 const args = {
   _: ['assignment', 'submit'],
 };
@@ -28,7 +30,7 @@ describe('assignment submit base', () => {
 
   beforeEach(async () => {
     const tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-cli-'));
-    customSettings = { homedir: tmpDir };
+    customSettings = { homedir: tmpDir, hexletTemplatesPath };
     const settings = initSettings(customSettings);
     hexletConfigPath = settings.hexletConfigPath;
     await fse.ensureDir(settings.hexletConfigDir);

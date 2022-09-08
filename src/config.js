@@ -71,7 +71,7 @@ const initSettings = (options = {}) => {
   const hexletConfigDir = path.join(homeDir, 'Hexlet');
   const cliSrcDir = path.join(__dirname, '..', 'src');
   const hexletConfigPath = path.join(hexletConfigDir, '.config.json');
-  const hexletTemplatesPath = path.join(cliSrcDir, 'templates');
+  const hexletTemplatesPath = options.hexletTemplatesPath || path.join(cliSrcDir, 'templates');
   const branch = 'main';
   const author = {
     name: '@hexlet/cli',

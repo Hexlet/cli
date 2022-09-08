@@ -11,10 +11,12 @@ const { initSettings } = require('../../src/config.js');
 const { readFile, getAssignmentConfig } = require('../helpers/index.js');
 const git = require('../../src/utils/git.js');
 const workDirStates = require('../../__fixtures__/assignmentsWorkDirStates.js');
+const { getFixturePath } = require('../helpers/index.js');
 
 const mockServerHost = 'localhost:8888';
 const baseUrl = `http://${mockServerHost}`;
 
+const hexletTemplatesPath = getFixturePath('templates');
 const args = {
   _: ['assignment', 'submit'],
 };
@@ -85,7 +87,7 @@ describe('assignment submit', () => {
 
   beforeEach(async () => {
     const tmpDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'hexlet-cli-'));
-    const customSettings = { homedir: tmpDir };
+    const customSettings = { homedir: tmpDir, hexletTemplatesPath };
     const settings = initSettings(customSettings);
     hexletConfigPath = settings.hexletConfigPath;
     await fse.ensureDir(settings.hexletConfigDir);

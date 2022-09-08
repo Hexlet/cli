@@ -3,10 +3,10 @@
 const path = require('path');
 const os = require('os');
 
-const handler = require('../handlers/assignments/init.js');
+const handler = require('../../handlers/assignments/init.js');
 
 module.exports = {
-  command: 'assignments init',
+  command: 'init',
   description: 'Init assignments repository',
   builder: (yargs) => {
     yargs.option('github-token', {

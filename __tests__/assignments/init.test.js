@@ -7,7 +7,7 @@ const fse = require('fs-extra');
 const nock = require('nock');
 const isomorphicGit = require('isomorphic-git');
 
-const command = require('../../src/commands/assignments-init.js');
+const command = require('../../src/commands/assignments/init.js');
 const { getValidator } = require('../../src/validator/index.js');
 const { getFixturePath, readDirP } = require('../helpers/index.js');
 const { initSettings } = require('../../src/config.js');

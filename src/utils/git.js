@@ -69,7 +69,7 @@ const gitPullMerge = async (options) => {
 };
 
 const gitAdd = async ({ dir, filepath }) => {
-  const normalizedFilePath = gitNormalizePath(filepath);
+  const normalizedFilePath = filepath === '.' ? filepath : `${gitNormalizePath(filepath)}/`;
   const fileStatuses = await git.statusMatrix({ fs, dir, filepaths: [normalizedFilePath] });
 
   const addToIndexPromises = fileStatuses.map(([filePath, , workTreeStatus]) => (
@@ -84,12 +84,8 @@ const gitAdd = async ({ dir, filepath }) => {
 const gitAddAll = ({ dir }) => gitAdd({ dir, filepath: '.' });
 
 const gitIsWorkDirChanged = async ({ dir, filepath = '.' }) => {
-  const normalizedFilePath = gitNormalizePath(filepath);
-  const fileStatuses = await git.statusMatrix({
-    fs,
-    dir,
-    filepaths: [normalizedFilePath],
-  });
+  const normalizedFilePath = filepath === '.' ? filepath : `${gitNormalizePath(filepath)}/`;
+  const fileStatuses = await git.statusMatrix({ fs, dir, filepaths: [normalizedFilePath] });
 
   return fileStatuses.some(([, headStatus, workTreeStatus, stageStatus]) => (
     headStatus !== 1 || workTreeStatus !== 1 || stageStatus !== 1

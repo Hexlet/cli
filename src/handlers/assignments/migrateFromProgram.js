@@ -32,7 +32,7 @@ const getMigrationData = (exerciseName, program, exercisesPath, repoPath) => {
 };
 
 module.exports = async (params, customSettings = {}) => {
-  const { program } = params;
+  const { program, skipImportGitlab } = params;
 
   const entityName = getEntityName(params);
 
@@ -82,33 +82,35 @@ module.exports = async (params, customSettings = {}) => {
     return;
   }
 
-  const api = new Gitlab({
-    token: gitlabToken,
-  });
+  if (!skipImportGitlab) {
+    const api = new Gitlab({
+      token: gitlabToken,
+    });
 
-  const user = await api.Users.current();
-  const projectName = `hexlet-${program}-program`;
-  const projectPath = `${user.username}/${projectName}`;
-  try {
-    const project = await api.Projects.show(projectPath);
-    throw new Error(chalk.red(`Repository '${project.web_url}' already exists`));
-  } catch (e) {
-    if (e.description !== '404 Project Not Found') {
-      throw e;
+    const user = await api.Users.current();
+    const projectName = `hexlet-${program}-program`;
+    const projectPath = `${user.username}/${projectName}`;
+    try {
+      const project = await api.Projects.show(projectPath);
+      throw new Error(chalk.red(`Repository '${project.web_url}' already exists`));
+    } catch (e) {
+      if (e.description !== '404 Project Not Found') {
+        throw e;
+      }
     }
+
+    log('export remote repository to personal account', assignments.githubUrl);
+    const hexletGitlabUrl = new URL(programs[program].gitlabUrl);
+    hexletGitlabUrl.pathname = `${hexletGitlabUrl.pathname}.git`;
+    hexletGitlabUrl.username = 'oauth2';
+    hexletGitlabUrl.password = gitlabToken;
+
+    const project = await api.Projects.create({
+      name: projectName,
+      importUrl: hexletGitlabUrl.toString(),
+    });
+    console.log(chalk.green(`Remote repository exported to: ${project.web_url}`));
   }
-
-  log('export remote repository to personal account', assignments.githubUrl);
-  const hexletGitlabUrl = new URL(programs[program].gitlabUrl);
-  hexletGitlabUrl.pathname = `${hexletGitlabUrl.pathname}.git`;
-  hexletGitlabUrl.username = 'oauth2';
-  hexletGitlabUrl.password = gitlabToken;
-
-  const project = await api.Projects.create({
-    name: projectName,
-    importUrl: hexletGitlabUrl.toString(),
-  });
-  console.log(chalk.green(`Remote repository exported to: ${project.web_url}`));
 
   log('copy exercises to assignments', repoPath);
   const copyPromises = exerciseNames

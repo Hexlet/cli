@@ -15,7 +15,7 @@ Array [
   Object {
     "name": "README.md",
     "path": "hexlet-assignments/README.md",
-    "size": 21n,
+    "size": 24n,
   },
   Object {
     "name": ".gitignore",
@@ -65,7 +65,7 @@ Array [
   Object {
     "name": "README.md",
     "path": "hexlet-assignments/README.md",
-    "size": 21n,
+    "size": 24n,
   },
   Object {
     "name": ".gitignore",
@@ -115,7 +115,7 @@ Array [
   Object {
     "name": "README.md",
     "path": "hexlet-assignments/README.md",
-    "size": 21n,
+    "size": 24n,
   },
 ]
 `;
@@ -130,7 +130,7 @@ Array [
   Object {
     "name": "README.md",
     "path": "hexlet-assignments/README.md",
-    "size": 21n,
+    "size": 24n,
   },
 ]
 `;

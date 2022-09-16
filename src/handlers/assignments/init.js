@@ -44,11 +44,19 @@ module.exports = async (params, customSettings = {}) => {
     value: hexletToken,
   });
 
-  await hexlet.initAssignments({ token: hexletToken, repoUrl: repoData.html_url });
+  const { preferredLocale } = await hexlet.initAssignments({
+    token: hexletToken,
+    repoUrl: repoData.html_url,
+  });
 
   log('prepare and write config');
   const { hexletDir } = await prepareConfig({
-    ...params, hexletConfigDir, hexletConfigPath, projectUrl: repoData.html_url, entityName,
+    ...params,
+    hexletConfigDir,
+    hexletConfigPath,
+    projectUrl: repoData.html_url,
+    entityName,
+    preferredLocale,
   });
 
   const repoPath = generateRepoPath(hexletDir);
@@ -79,7 +87,7 @@ module.exports = async (params, customSettings = {}) => {
     });
   }
 
-  const templatePaths = await updateTemplates(hexletTemplatesPath, repoPath);
+  const templatePaths = await updateTemplates(hexletTemplatesPath, repoPath, preferredLocale);
   const changesToCommit = await git.hasChangesToCommit({
     dir: repoPath,
     checkedPaths: templatePaths,

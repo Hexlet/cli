@@ -22,7 +22,7 @@ module.exports = async (params, customSettings = {}) => {
   } = initSettings(customSettings);
 
   const {
-    hexletDir, githubToken, assignments,
+    hexletDir, githubToken, assignments, preferredLocale,
   } = await readHexletConfig(hexletConfigPath, entityName);
 
   const repoPath = generateRepoPath(hexletDir);
@@ -41,7 +41,7 @@ module.exports = async (params, customSettings = {}) => {
     filepath: assignmentRelativePath,
   });
 
-  await updateTemplates(hexletTemplatesPath, repoPath);
+  await updateTemplates(hexletTemplatesPath, repoPath, preferredLocale);
   const currentPath = await updateCurrent(repoPath, courseSlugWithLocale, lessonSlug);
   const changesToCommit = await git.hasChangesToCommit({
     dir: repoPath,

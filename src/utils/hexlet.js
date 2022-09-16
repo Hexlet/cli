@@ -53,6 +53,10 @@ const initAssignments = async ({ token, repoUrl }) => {
   if (response.status === 404) {
     throw new Error('Invalid Hexlet token passed.');
   }
+
+  const { preferred_locale: preferredLocale } = response.data;
+
+  return { preferredLocale };
 };
 
 module.exports = {

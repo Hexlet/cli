@@ -34,7 +34,7 @@ const readHexletConfig = async (configPath, entityName) => {
 const prepareConfig = async (options) => {
   const {
     hexletConfigDir, hexletConfigPath, hexletDir, entityName,
-    githubToken, hexletToken, projectUrl,
+    githubToken, hexletToken, projectUrl, preferredLocale,
   } = options;
 
   let previousData = {};
@@ -52,6 +52,7 @@ const prepareConfig = async (options) => {
     githubToken,
     hexletToken,
     hexletDir,
+    preferredLocale,
     assignments: {
       githubUrl: projectUrl,
     },

@@ -60,7 +60,10 @@ const enableInterceptors = (options = { remoteRepoExist: false }) => {
 
   nock('https://hexlet.io/api_internal')
     .put('/user/assignments/init', { token: /.+/, repository: /.+/ })
-    .reply(200);
+    .reply(200, {
+      message: 'ok',
+      preferred_locale: 'ru',
+    });
 
   if (options.remoteRepoExist) {
     scope

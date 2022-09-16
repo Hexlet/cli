@@ -11,10 +11,10 @@ const getEntityName = (params) => {
   return _.first(commandParts);
 };
 
-const updateTemplates = async (hexletTemplatesPath, repoPath) => {
+const updateTemplates = async (hexletTemplatesPath, repoPath, preferredLocale) => {
   const templatesPath = path.join(hexletTemplatesPath, 'assignments');
   const templates = [
-    { fileName: 'README.md', destPath: 'README.md' },
+    { fileName: `README.${preferredLocale}.md`, destPath: 'README.md' },
     { fileName: 'hexlet-check.yml', destPath: path.join('.github', 'workflows', 'hexlet-check.yml') },
   ];
 

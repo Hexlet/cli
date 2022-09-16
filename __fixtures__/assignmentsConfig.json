@@ -2,6 +2,7 @@
   "hexletDir": null,
   "githubToken": "some-github-token",
   "hexletToken": "some-hexlet-token",
+  "preferredLocale": "ru",
   "assignments": {
     "githubUrl": "http://localhost:8888/assignments-empty"
   }

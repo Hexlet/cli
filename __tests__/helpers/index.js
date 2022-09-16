@@ -42,6 +42,7 @@ const getAssignmentConfig = ({ hexletDir, remoteUrl }) => ({
   hexletDir,
   hexletToken: 'some-hexlet-token',
   githubToken: 'some-github-token',
+  preferredLocale: 'ru',
   assignments: {
     githubUrl: remoteUrl ?? 'https://remote-repo-url',
   },

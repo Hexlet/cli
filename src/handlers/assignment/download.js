@@ -25,7 +25,9 @@ module.exports = async (params, customSettings = {}) => {
     generateRepoPath, hexletConfigPath, hexletTemplatesPath,
   } = initSettings(customSettings);
 
-  const { hexletDir, hexletToken } = await readHexletConfig(hexletConfigPath, entityName);
+  const {
+    hexletDir, hexletToken, preferredLocale,
+  } = await readHexletConfig(hexletConfigPath, entityName);
 
   const repoPath = generateRepoPath(hexletDir);
   checkLessonUrl(lessonUrl);
@@ -63,7 +65,7 @@ module.exports = async (params, customSettings = {}) => {
     noChmod: true,
   });
 
-  await updateTemplates(hexletTemplatesPath, repoPath);
+  await updateTemplates(hexletTemplatesPath, repoPath, preferredLocale);
 
   console.log(chalk.green(`Assignment path: ${assignmentPath}`));
 };

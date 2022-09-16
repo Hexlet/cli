@@ -72,16 +72,6 @@ module.exports = async (params, customSettings = {}) => {
     throw new Error(chalk.red(`The '${programBranch}' branch should be '${branch}'`));
   }
 
-  const files = await fsp.readdir(exercisesPath, { withFileTypes: true });
-  const exerciseNames = files
-    .filter((file) => file.isDirectory())
-    .map((dir) => dir.name);
-
-  if (_.isEmpty(exerciseNames)) {
-    console.log(chalk.gray(`Directory '${exercisesPath}' does not contain exercises. Skip migrating.`));
-    return;
-  }
-
   if (!skipImportGitlab) {
     const api = new Gitlab({
       token: gitlabToken,
@@ -101,6 +91,7 @@ module.exports = async (params, customSettings = {}) => {
 
     log('export remote repository to personal account', assignments.githubUrl);
     const hexletGitlabUrl = new URL(programs[program].gitlabUrl);
+    const hexletProjectPath = hexletGitlabUrl.pathname.replace(/^\//, '');
     hexletGitlabUrl.pathname = `${hexletGitlabUrl.pathname}.git`;
     hexletGitlabUrl.username = 'oauth2';
     hexletGitlabUrl.password = gitlabToken;
@@ -109,7 +100,25 @@ module.exports = async (params, customSettings = {}) => {
       name: projectName,
       importUrl: hexletGitlabUrl.toString(),
     });
-    console.log(chalk.green(`Remote repository exported to: ${project.web_url}`));
+    console.log(chalk.cyan(`Remote repository exported to: ${project.web_url}`));
+
+    await api.ProtectedBranches.unprotect(hexletProjectPath, programBranch);
+    await api.ProtectedBranches.protect(hexletProjectPath, programBranch, {
+      push_access_level: 0,
+      merge_access_level: 0,
+    });
+    console.log(chalk.yellow(`Repository: ${programs[program].gitlabUrl} closed for pushing!`));
+    console.log();
+  }
+
+  const files = await fsp.readdir(exercisesPath, { withFileTypes: true });
+  const exerciseNames = files
+    .filter((file) => file.isDirectory())
+    .map((dir) => dir.name);
+
+  if (_.isEmpty(exerciseNames)) {
+    console.log(chalk.gray(`Directory '${exercisesPath}' does not contain exercises. Skip migrating.`));
+    return;
   }
 
   log('copy exercises to assignments', repoPath);
@@ -130,6 +139,7 @@ module.exports = async (params, customSettings = {}) => {
       return assignmentPath;
     });
   const assignmentPaths = await Promise.all(copyPromises);
+  console.log(chalk.cyan(`Local path to assignments: ${repoPath}`));
 
   log('update remote repository', assignments.githubUrl);
   await git.pullMerge({
@@ -173,13 +183,12 @@ module.exports = async (params, customSettings = {}) => {
       token: githubToken,
     });
 
-    console.log(chalk.green('Changes have been pushed!'));
-    console.log(chalk.cyan(`Open ${assignments.githubUrl}`));
+    console.log(chalk.cyan(`Remote repository with assignments ${assignments.githubUrl}`));
   } else {
     console.log(chalk.grey('Nothing to push. Skip pushing.'));
   }
 
-  console.log(chalk.grey(`Path to assignments: ${repoPath}`));
   console.log();
   console.log(chalk.green(`Migration from ${programPath} to ${repoPath} finished!`));
+  console.log();
 };

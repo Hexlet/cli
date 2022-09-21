@@ -96,10 +96,10 @@ const rails = {
   'testing-2': makeData('rails-full', 'testing-2'),
   jobs: makeData('rails-full', 'jobs'),
   caching: makeData('rails-full', 'caching'),
-  engines: makeData('rails-full', 'engines')
+  engines: makeData('rails-full', 'engines'),
 };
 
 module.exports = {
   java,
-  rails
+  rails,
 };

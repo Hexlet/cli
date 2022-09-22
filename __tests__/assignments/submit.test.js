@@ -78,7 +78,6 @@ describe('assignment submit', () => {
   beforeAll(() => {
     nock.disableNetConnect();
     nock.enableNetConnect(new RegExp(mockServerHost));
-    jest.setTimeout(6000);
   });
 
   afterAll(() => {
@@ -128,7 +127,7 @@ describe('assignment submit', () => {
       'init',
     ];
     expect(actualCommits2).toEqual(expectedCommits2);
-  });
+  }, 6000);
 
   it('no local changes, remote repo has new file & changed file', async () => {
     const cloneUrl = `${baseUrl}/assignments-20.git`;

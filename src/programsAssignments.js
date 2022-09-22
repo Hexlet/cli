@@ -69,7 +69,7 @@ const rails = {
   metaprogramming: makeData('ruby-basics', 'metaprogramming'),
   'gems-inside': makeData('ruby-setup-environment', 'gems-inside'),
   rack: makeData('rails-basics', 'rack'),
-  'static-pages': makeData('rails-basics', 'static'),
+  'static-pages': makeData('rails-basics', 'static-pages'),
   models: makeData('rails-basics', 'models'),
   quality: makeData('rails-basics', 'quality'),
   crud: makeData('rails-basics', 'crud'),

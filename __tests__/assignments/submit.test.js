@@ -78,6 +78,7 @@ describe('assignment submit', () => {
   beforeAll(() => {
     nock.disableNetConnect();
     nock.enableNetConnect(new RegExp(mockServerHost));
+    jest.setTimeout(6000);
   });
 
   afterAll(() => {

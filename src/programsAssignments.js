@@ -99,7 +99,12 @@ const rails = {
   engines: makeData('rails-full', 'engines'),
 };
 
+const devopsForProgrammers = {};
+const frontendTestingReact = {};
+
 module.exports = {
   java,
   rails,
+  devopsForProgrammers,
+  frontendTestingReact,
 };

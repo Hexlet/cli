@@ -102,4 +102,6 @@ const rails = {
 module.exports = {
   java,
   rails,
+  'devops-for-programmers': {},
+  'frontend-testing-react': {},
 };

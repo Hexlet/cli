@@ -14,8 +14,7 @@ module.exports = {
     });
     yargs.choices(
       'program',
-      ['java', 'rails'],
-      // ['java', 'rails', 'devops-for-programmers', 'frontend-testing-react'],
+      ['java', 'rails', 'devops-for-programmers', 'frontend-testing-react'],
     );
   },
   handler,

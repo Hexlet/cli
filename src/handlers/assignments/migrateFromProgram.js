@@ -91,7 +91,7 @@ module.exports = async (params, customSettings = {}) => {
 
     log('export remote repository to personal account', assignments.githubUrl);
     const hexletGitlabUrl = new URL(programs[program].gitlabUrl);
-    const hexletProjectPath = hexletGitlabUrl.pathname.replace(/^\//, '');
+    // const hexletProjectPath = hexletGitlabUrl.pathname.replace(/^\//, '');
     hexletGitlabUrl.pathname = `${hexletGitlabUrl.pathname}.git`;
     hexletGitlabUrl.username = 'oauth2';
     hexletGitlabUrl.password = gitlabToken;
@@ -102,12 +102,12 @@ module.exports = async (params, customSettings = {}) => {
     });
     console.log(chalk.cyan(`Remote repository exported to: ${project.web_url}`));
 
-    await api.ProtectedBranches.unprotect(hexletProjectPath, programBranch);
-    await api.ProtectedBranches.protect(hexletProjectPath, programBranch, {
-      push_access_level: 0,
-      merge_access_level: 0,
-    });
-    console.log(chalk.yellow(`Repository: ${programs[program].gitlabUrl} closed for pushing!`));
+    // await api.ProtectedBranches.unprotect(hexletProjectPath, programBranch);
+    // await api.ProtectedBranches.protect(hexletProjectPath, programBranch, {
+    //   push_access_level: 0,
+    //   merge_access_level: 0,
+    // });
+    // console.log(chalk.yellow(`Repository: ${programs[program].gitlabUrl} closed for pushing!`));
     console.log();
   }
 

@@ -11,7 +11,7 @@ const java = {
   lambdas: makeData('java-collections', 'lambdas'),
   'advanced-streams': makeData('java-collections', 'advanced-streams'),
   'other-collections': makeData('java-collections', 'other-collections'),
-  'classes-and-objects': makeData('java-oop', 'other-collections'),
+  'classes-and-objects': makeData('java-oop', 'classes-and-objects'),
   interfaces: makeData('java-oop', 'interfaces'),
   subtyping: makeData('java-oop', 'subtyping'),
   patterns: makeData('java-oop', 'patterns'),

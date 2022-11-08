@@ -113,7 +113,7 @@ const gitPush = async ({ dir, ref = 'main', token = null }) => {
     http,
     dir,
     remote: 'origin',
-    ref: `refs/heads/${ref}`,
+    ref,
     ...customOptions,
   });
 };

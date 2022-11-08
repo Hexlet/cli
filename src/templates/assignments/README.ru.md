@@ -54,14 +54,14 @@
 
 ### Опции
 
-* *--github-token* – *Personal access token* из Gitlab
+* *--github-token* – *Personal access token* из GitHub
 * *--hexlet-token* – Ваш персональный токен Хекслета
 
 ### Использование
 
 Перед тем, как начать работу с домашним заданием, нужно выполнить инициализацию проекта. Это можно сделать с помощью команды *hexlet assignments init*. У нее есть несколько опций:
 
-* *--github-token* – Обязательная. *Personal access token* из Gitlab. [Создайте](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) свой Personal access token [здесь](https://github.com/settings/tokens). При создании токена сделайте его бессрочным и проставьте разрешения на *repo* и *workflow*
+* *--github-token* – Обязательная. *Personal access token* из GitHub. [Создайте](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) свой Personal access token [здесь](https://github.com/settings/tokens). При создании токена сделайте его бессрочным и проставьте разрешения на *repo* и *workflow*
 * *--hexlet-token* – Обязательная. Ваш персональный токен Хекслета. Этот токен автоматически подставлен в команду на странице домашнего задания
 * *--hexlet-dir* – Необязательная. Директория, в которую будут скачиваться домашние задания. По умолчанию это будет директория Hexlet в вашей домашней директории
 

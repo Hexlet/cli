@@ -59,7 +59,7 @@ const prepareConfig = async (options) => {
   };
 
   await fse.writeJson(hexletConfigPath, data);
-  console.log(chalk.grey(`Config wrote to: ${hexletConfigPath}`));
+  console.log(chalk.grey(`Config has been written to: ${hexletConfigPath}`));
 
   await readHexletConfig(hexletConfigPath, entityName);
 

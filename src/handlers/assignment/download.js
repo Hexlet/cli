@@ -67,5 +67,6 @@ module.exports = async (params, customSettings = {}) => {
 
   await updateTemplates(hexletTemplatesPath, repoPath, preferredLocale);
 
-  console.log(chalk.green(`Assignment path: ${assignmentPath}`));
+  console.log(chalk.green('Assignment has been downloaded!'));
+  console.log(chalk.cyan(`Go to path: ${assignmentPath}`));
 };

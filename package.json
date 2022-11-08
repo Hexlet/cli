@@ -16,7 +16,7 @@
     "readdirp": "^3.6.0",
     "semver": "^7.3.8",
     "tar": "^6.1.12",
-    "update-notifier": "6.0.2",
+    "update-notifier": "5.1.0",
     "yargs": "^17.6.2"
   },
   "devDependencies": {

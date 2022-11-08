@@ -1,78 +1,78 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Download assignment download 1`] = `
-Array [
-  Object {
+[
+  {
     "name": "hexlet-check.yml",
     "path": "hexlet-assignments/.github/workflows/hexlet-check.yml",
     "size": 600n,
   },
-  Object {
+  {
     "name": "README.md",
     "path": "hexlet-assignments/README.md",
     "size": 24n,
   },
-  Object {
+  {
     "name": ".gitignore",
     "path": "hexlet-assignments/java-advanced-ru/multithreading-java/.gitignore",
     "size": 29n,
   },
-  Object {
+  {
     "name": "Makefile",
     "path": "hexlet-assignments/java-advanced-ru/multithreading-java/Makefile",
     "size": 36n,
   },
-  Object {
+  {
     "name": "README.html",
     "path": "hexlet-assignments/java-advanced-ru/multithreading-java/README.html",
     "size": 27470n,
   },
-  Object {
+  {
     "name": "README.md",
     "path": "hexlet-assignments/java-advanced-ru/multithreading-java/README.md",
     "size": 3583n,
   },
-  Object {
+  {
     "name": "ShouldBeCleaned.md",
     "path": "hexlet-assignments/java-advanced-ru/multithreading-java/ShouldBeCleaned.md",
     "size": 0n,
   },
-  Object {
+  {
     "name": "build.gradle",
     "path": "hexlet-assignments/java-advanced-ru/multithreading-java/build.gradle",
     "size": 417n,
   },
-  Object {
+  {
     "name": "ThreadExample.java",
     "path": "hexlet-assignments/java-advanced-ru/multithreading-java/examples/ThreadExample.java",
     "size": 2687n,
   },
-  Object {
+  {
     "name": "fileWithMarkers",
     "path": "hexlet-assignments/java-advanced-ru/multithreading-java/fileWithMarkers",
     "size": 32n,
   },
-  Object {
+  {
     "name": "gradlew",
     "path": "hexlet-assignments/java-advanced-ru/multithreading-java/gradlew",
     "size": 5766n,
   },
-  Object {
+  {
     "name": "gradlew.bat",
     "path": "hexlet-assignments/java-advanced-ru/multithreading-java/gradlew.bat",
     "size": 2763n,
   },
-  Object {
+  {
     "name": "presentation.pdf",
     "path": "hexlet-assignments/java-advanced-ru/multithreading-java/presentation.pdf",
     "size": 1110740n,
   },
-  Object {
+  {
     "name": "App.java",
     "path": "hexlet-assignments/java-advanced-ru/multithreading-java/src/main/java/exercise/App.java",
     "size": 36n,
   },
-  Object {
+  {
     "name": "AppTest.java",
     "path": "hexlet-assignments/java-advanced-ru/multithreading-java/src/test/java/exercise/AppTest.java",
     "size": 403n,
@@ -81,8 +81,8 @@ Array [
 `;
 
 exports[`Download assignment download the same assignment again (with backup) 1`] = `
-Array [
-  Object {
+[
+  {
     "name": "SomeFile.java",
     "path": "SomeFile.java",
     "size": 7n,
@@ -91,68 +91,68 @@ Array [
 `;
 
 exports[`Download assignment download the same assignment again (with backup) 2`] = `
-Array [
-  Object {
+[
+  {
     "name": ".gitignore",
     "path": ".gitignore",
     "size": 29n,
   },
-  Object {
+  {
     "name": "Makefile",
     "path": "Makefile",
     "size": 36n,
   },
-  Object {
+  {
     "name": "README.html",
     "path": "README.html",
     "size": 27470n,
   },
-  Object {
+  {
     "name": "README.md",
     "path": "README.md",
     "size": 3583n,
   },
-  Object {
+  {
     "name": "ShouldBeCleaned.md",
     "path": "ShouldBeCleaned.md",
     "size": 0n,
   },
-  Object {
+  {
     "name": "build.gradle",
     "path": "build.gradle",
     "size": 417n,
   },
-  Object {
+  {
     "name": "ThreadExample.java",
     "path": "examples/ThreadExample.java",
     "size": 2687n,
   },
-  Object {
+  {
     "name": "fileWithMarkers",
     "path": "fileWithMarkers",
     "size": 32n,
   },
-  Object {
+  {
     "name": "gradlew",
     "path": "gradlew",
     "size": 5766n,
   },
-  Object {
+  {
     "name": "gradlew.bat",
     "path": "gradlew.bat",
     "size": 2763n,
   },
-  Object {
+  {
     "name": "presentation.pdf",
     "path": "presentation.pdf",
     "size": 1110740n,
   },
-  Object {
+  {
     "name": "App.java",
     "path": "src/main/java/exercise/App.java",
     "size": 36n,
   },
-  Object {
+  {
     "name": "AppTest.java",
     "path": "src/test/java/exercise/AppTest.java",
     "size": 403n,
@@ -161,8 +161,8 @@ Array [
 `;
 
 exports[`Download assignment download the same assignment again (with backup) 3`] = `
-Array [
-  Object {
+[
+  {
     "name": "SomeFile.java",
     "path": "SomeFile.java",
     "size": 7n,
@@ -171,78 +171,78 @@ Array [
 `;
 
 exports[`Download latest version of the assignment reset 1`] = `
-Array [
-  Object {
+[
+  {
     "name": "hexlet-check.yml",
     "path": "hexlet-assignments/.github/workflows/hexlet-check.yml",
     "size": 600n,
   },
-  Object {
+  {
     "name": "README.md",
     "path": "hexlet-assignments/README.md",
     "size": 24n,
   },
-  Object {
+  {
     "name": ".gitignore",
     "path": "hexlet-assignments/java-advanced-ru/multithreading-java/.gitignore",
     "size": 29n,
   },
-  Object {
+  {
     "name": "Makefile",
     "path": "hexlet-assignments/java-advanced-ru/multithreading-java/Makefile",
     "size": 36n,
   },
-  Object {
+  {
     "name": "README.html",
     "path": "hexlet-assignments/java-advanced-ru/multithreading-java/README.html",
     "size": 27470n,
   },
-  Object {
+  {
     "name": "README.md",
     "path": "hexlet-assignments/java-advanced-ru/multithreading-java/README.md",
     "size": 3583n,
   },
-  Object {
+  {
     "name": "ShouldBeCleaned.md",
     "path": "hexlet-assignments/java-advanced-ru/multithreading-java/ShouldBeCleaned.md",
     "size": 0n,
   },
-  Object {
+  {
     "name": "build.gradle",
     "path": "hexlet-assignments/java-advanced-ru/multithreading-java/build.gradle",
     "size": 417n,
   },
-  Object {
+  {
     "name": "ThreadExample.java",
     "path": "hexlet-assignments/java-advanced-ru/multithreading-java/examples/ThreadExample.java",
     "size": 2687n,
   },
-  Object {
+  {
     "name": "fileWithMarkers",
     "path": "hexlet-assignments/java-advanced-ru/multithreading-java/fileWithMarkers",
     "size": 32n,
   },
-  Object {
+  {
     "name": "gradlew",
     "path": "hexlet-assignments/java-advanced-ru/multithreading-java/gradlew",
     "size": 5766n,
   },
-  Object {
+  {
     "name": "gradlew.bat",
     "path": "hexlet-assignments/java-advanced-ru/multithreading-java/gradlew.bat",
     "size": 2763n,
   },
-  Object {
+  {
     "name": "presentation.pdf",
     "path": "hexlet-assignments/java-advanced-ru/multithreading-java/presentation.pdf",
     "size": 1110740n,
   },
-  Object {
+  {
     "name": "App.java",
     "path": "hexlet-assignments/java-advanced-ru/multithreading-java/src/main/java/exercise/App.java",
     "size": 36n,
   },
-  Object {
+  {
     "name": "AppTest.java",
     "path": "hexlet-assignments/java-advanced-ru/multithreading-java/src/test/java/exercise/AppTest.java",
     "size": 403n,
@@ -251,8 +251,8 @@ Array [
 `;
 
 exports[`Download latest version of the assignment reset the same assignment again (with backup) 1`] = `
-Array [
-  Object {
+[
+  {
     "name": "SomeFile.java",
     "path": "SomeFile.java",
     "size": 7n,
@@ -261,68 +261,68 @@ Array [
 `;
 
 exports[`Download latest version of the assignment reset the same assignment again (with backup) 2`] = `
-Array [
-  Object {
+[
+  {
     "name": ".gitignore",
     "path": ".gitignore",
     "size": 29n,
   },
-  Object {
+  {
     "name": "Makefile",
     "path": "Makefile",
     "size": 36n,
   },
-  Object {
+  {
     "name": "README.html",
     "path": "README.html",
     "size": 27470n,
   },
-  Object {
+  {
     "name": "README.md",
     "path": "README.md",
     "size": 3583n,
   },
-  Object {
+  {
     "name": "ShouldBeCleaned.md",
     "path": "ShouldBeCleaned.md",
     "size": 0n,
   },
-  Object {
+  {
     "name": "build.gradle",
     "path": "build.gradle",
     "size": 417n,
   },
-  Object {
+  {
     "name": "ThreadExample.java",
     "path": "examples/ThreadExample.java",
     "size": 2687n,
   },
-  Object {
+  {
     "name": "fileWithMarkers",
     "path": "fileWithMarkers",
     "size": 32n,
   },
-  Object {
+  {
     "name": "gradlew",
     "path": "gradlew",
     "size": 5766n,
   },
-  Object {
+  {
     "name": "gradlew.bat",
     "path": "gradlew.bat",
     "size": 2763n,
   },
-  Object {
+  {
     "name": "presentation.pdf",
     "path": "presentation.pdf",
     "size": 1110740n,
   },
-  Object {
+  {
     "name": "App.java",
     "path": "src/main/java/exercise/App.java",
     "size": 36n,
   },
-  Object {
+  {
     "name": "AppTest.java",
     "path": "src/test/java/exercise/AppTest.java",
     "size": 403n,
@@ -331,8 +331,8 @@ Array [
 `;
 
 exports[`Download latest version of the assignment reset the same assignment again (with backup) 3`] = `
-Array [
-  Object {
+[
+  {
     "name": "SomeFile.java",
     "path": "SomeFile.java",
     "size": 7n,

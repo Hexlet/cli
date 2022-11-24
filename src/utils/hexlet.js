@@ -15,7 +15,11 @@ const downloadAssignment = async (options) => {
   const response = await axios({
     method,
     url,
-    headers: { 'X-Auth-Key': hexletToken },
+    headers: {
+      'X-Auth-Key': hexletToken,
+      'Content-Type': 'application/json',
+      'accept-encoding': '*',
+    },
     responseType: 'arraybuffer',
     validateStatus: (status) => handledStatuses.includes(status),
   });
@@ -46,6 +50,10 @@ const initAssignments = async ({ token, repoUrl }) => {
   const response = await axios({
     method: 'put',
     url: 'https://hexlet.io/api_internal/user/assignments/init',
+    headers: {
+      'Content-Type': 'application/json',
+      'accept-encoding': '*',
+    },
     data: { token, repository: repoUrl },
     validateStatus: (status) => handledStatuses.includes(status),
   });

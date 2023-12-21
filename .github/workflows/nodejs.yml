@@ -17,7 +17,7 @@ jobs:
         # OS list
         os: [ubuntu-latest, windows-latest, macos-latest]
         # Node versions list
-        node-version: [14, 16, 18]
+        node-version: [14, 18, 21]
 
     steps:
         # When using the package on windows, line breaks will not be converted

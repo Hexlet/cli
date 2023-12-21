@@ -11,11 +11,11 @@ const assignmentResetCmd = require('../../src/commands/assignment/reset.js');
 const { initSettings } = require('../../src/config.js');
 const { readDirP, getFixturePath, getAssignmentConfig } = require('../helpers/index.js');
 
-const buildLessonUrl = (courseSlug, lessonSlug) => (
-  `https://ru.hexlet.io/courses/${courseSlug}/lessons/${lessonSlug}/theory_unit`
+const buildLessonUrl = (courseSlug, lessonSlug, locale = 'ru') => (
+  `https://${locale}.hexlet.io/courses/${courseSlug}/lessons/${lessonSlug}/theory_unit`
 );
-const buildApiUrl = (courseSlug, lessonSlug) => (
-  `https://ru.hexlet.io/api_internal/courses/${courseSlug}/lessons/${lessonSlug}/assignment/download`
+const buildApiUrl = (courseSlug, lessonSlug, locale = 'ru') => (
+  `https://${locale}.hexlet.io/api_internal/courses/${courseSlug}/lessons/${lessonSlug}/assignment/download`
 );
 
 const hexletToken = 'some-hexlet-token';
@@ -62,6 +62,12 @@ describe.each(testCases)('$command.description', ({
       .matchHeader('X-Auth-Key', hexletToken)
       .intercept('', method)
       .replyWithFile(successCode, lessonArchivePath);
+
+    const scope2 = nock(buildApiUrl(courseSlug, lessonSlug, 'kz')).persist();
+    scope2
+      .matchHeader('X-Auth-Key', hexletToken)
+      .intercept('', method)
+      .replyWithFile(successCode, lessonArchivePath);
   });
 
   afterAll(() => {
@@ -84,6 +90,17 @@ describe.each(testCases)('$command.description', ({
     await fse.writeJson(hexletConfigPath, config);
 
     await command.handler(args, customSettings);
+    expect(await readDirP(hexletDir)).toMatchSnapshot();
+  });
+
+  it(`${commandName} with kz locale`, async () => {
+    await fse.writeJson(hexletConfigPath, config);
+    const params = {
+      ...args,
+      lessonUrl: buildLessonUrl(courseSlug, lessonSlug, 'kz'),
+    };
+
+    await command.handler(params, customSettings);
     expect(await readDirP(hexletDir)).toMatchSnapshot();
   });
 

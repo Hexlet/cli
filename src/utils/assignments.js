@@ -8,6 +8,13 @@ const path = require('path');
 
 const git = require('./git.js');
 
+const contentLocales = {
+  ru: 'ru',
+  kz: 'ru',
+  en: 'en',
+  es: 'es',
+};
+
 const isValidLessonUrl = (lessonUrl) => {
   const urlRegExp = /^https:\/\/\w{0,2}\.*hexlet.io\/courses\/.+\/lessons\/[^/]+/;
   return urlRegExp.test(lessonUrl);
@@ -36,8 +43,8 @@ const getLessonData = (lessonUrl) => {
 };
 
 const generateAssignmentPath = (repoPath, courseSlug, lessonSlug, locale) => {
-  const normalizedLocale = locale === 'kz' ? 'ru' : locale;
-  const courseSlugWithLocale = locale === 'en' ? courseSlug : `${courseSlug}-${normalizedLocale}`;
+  const normalizedLocale = contentLocales[locale];
+  const courseSlugWithLocale = normalizedLocale === 'en' ? courseSlug : `${courseSlug}-${normalizedLocale}`;
   return path.join(repoPath, courseSlugWithLocale, lessonSlug);
 };
 

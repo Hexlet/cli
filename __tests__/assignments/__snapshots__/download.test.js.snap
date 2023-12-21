@@ -170,6 +170,86 @@ exports[`Download assignment download the same assignment again (with backup) 3`
 ]
 `;
 
+exports[`Download assignment download with kz locale 1`] = `
+[
+  {
+    "name": "hexlet-check.yml",
+    "path": "hexlet-assignments/.github/workflows/hexlet-check.yml",
+    "size": 600n,
+  },
+  {
+    "name": "README.md",
+    "path": "hexlet-assignments/README.md",
+    "size": 24n,
+  },
+  {
+    "name": ".gitignore",
+    "path": "hexlet-assignments/java-advanced-ru/multithreading-java/.gitignore",
+    "size": 29n,
+  },
+  {
+    "name": "Makefile",
+    "path": "hexlet-assignments/java-advanced-ru/multithreading-java/Makefile",
+    "size": 36n,
+  },
+  {
+    "name": "README.html",
+    "path": "hexlet-assignments/java-advanced-ru/multithreading-java/README.html",
+    "size": 27470n,
+  },
+  {
+    "name": "README.md",
+    "path": "hexlet-assignments/java-advanced-ru/multithreading-java/README.md",
+    "size": 3583n,
+  },
+  {
+    "name": "ShouldBeCleaned.md",
+    "path": "hexlet-assignments/java-advanced-ru/multithreading-java/ShouldBeCleaned.md",
+    "size": 0n,
+  },
+  {
+    "name": "build.gradle",
+    "path": "hexlet-assignments/java-advanced-ru/multithreading-java/build.gradle",
+    "size": 417n,
+  },
+  {
+    "name": "ThreadExample.java",
+    "path": "hexlet-assignments/java-advanced-ru/multithreading-java/examples/ThreadExample.java",
+    "size": 2687n,
+  },
+  {
+    "name": "fileWithMarkers",
+    "path": "hexlet-assignments/java-advanced-ru/multithreading-java/fileWithMarkers",
+    "size": 32n,
+  },
+  {
+    "name": "gradlew",
+    "path": "hexlet-assignments/java-advanced-ru/multithreading-java/gradlew",
+    "size": 5766n,
+  },
+  {
+    "name": "gradlew.bat",
+    "path": "hexlet-assignments/java-advanced-ru/multithreading-java/gradlew.bat",
+    "size": 2763n,
+  },
+  {
+    "name": "presentation.pdf",
+    "path": "hexlet-assignments/java-advanced-ru/multithreading-java/presentation.pdf",
+    "size": 1110740n,
+  },
+  {
+    "name": "App.java",
+    "path": "hexlet-assignments/java-advanced-ru/multithreading-java/src/main/java/exercise/App.java",
+    "size": 36n,
+  },
+  {
+    "name": "AppTest.java",
+    "path": "hexlet-assignments/java-advanced-ru/multithreading-java/src/test/java/exercise/AppTest.java",
+    "size": 403n,
+  },
+]
+`;
+
 exports[`Download latest version of the assignment reset 1`] = `
 [
   {
@@ -336,6 +416,86 @@ exports[`Download latest version of the assignment reset the same assignment aga
     "name": "SomeFile.java",
     "path": "SomeFile.java",
     "size": 7n,
+  },
+]
+`;
+
+exports[`Download latest version of the assignment reset with kz locale 1`] = `
+[
+  {
+    "name": "hexlet-check.yml",
+    "path": "hexlet-assignments/.github/workflows/hexlet-check.yml",
+    "size": 600n,
+  },
+  {
+    "name": "README.md",
+    "path": "hexlet-assignments/README.md",
+    "size": 24n,
+  },
+  {
+    "name": ".gitignore",
+    "path": "hexlet-assignments/java-advanced-ru/multithreading-java/.gitignore",
+    "size": 29n,
+  },
+  {
+    "name": "Makefile",
+    "path": "hexlet-assignments/java-advanced-ru/multithreading-java/Makefile",
+    "size": 36n,
+  },
+  {
+    "name": "README.html",
+    "path": "hexlet-assignments/java-advanced-ru/multithreading-java/README.html",
+    "size": 27470n,
+  },
+  {
+    "name": "README.md",
+    "path": "hexlet-assignments/java-advanced-ru/multithreading-java/README.md",
+    "size": 3583n,
+  },
+  {
+    "name": "ShouldBeCleaned.md",
+    "path": "hexlet-assignments/java-advanced-ru/multithreading-java/ShouldBeCleaned.md",
+    "size": 0n,
+  },
+  {
+    "name": "build.gradle",
+    "path": "hexlet-assignments/java-advanced-ru/multithreading-java/build.gradle",
+    "size": 417n,
+  },
+  {
+    "name": "ThreadExample.java",
+    "path": "hexlet-assignments/java-advanced-ru/multithreading-java/examples/ThreadExample.java",
+    "size": 2687n,
+  },
+  {
+    "name": "fileWithMarkers",
+    "path": "hexlet-assignments/java-advanced-ru/multithreading-java/fileWithMarkers",
+    "size": 32n,
+  },
+  {
+    "name": "gradlew",
+    "path": "hexlet-assignments/java-advanced-ru/multithreading-java/gradlew",
+    "size": 5766n,
+  },
+  {
+    "name": "gradlew.bat",
+    "path": "hexlet-assignments/java-advanced-ru/multithreading-java/gradlew.bat",
+    "size": 2763n,
+  },
+  {
+    "name": "presentation.pdf",
+    "path": "hexlet-assignments/java-advanced-ru/multithreading-java/presentation.pdf",
+    "size": 1110740n,
+  },
+  {
+    "name": "App.java",
+    "path": "hexlet-assignments/java-advanced-ru/multithreading-java/src/main/java/exercise/App.java",
+    "size": 36n,
+  },
+  {
+    "name": "AppTest.java",
+    "path": "hexlet-assignments/java-advanced-ru/multithreading-java/src/test/java/exercise/AppTest.java",
+    "size": 403n,
   },
 ]
 `;

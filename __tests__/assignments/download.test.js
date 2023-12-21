@@ -11,11 +11,11 @@ const assignmentResetCmd = require('../../src/commands/assignment/reset.js');
 const { initSettings } = require('../../src/config.js');
 const { readDirP, getFixturePath, getAssignmentConfig } = require('../helpers/index.js');
 
-const buildLessonUrl = (courseSlug, lessonSlug) => (
-  `https://ru.hexlet.io/courses/${courseSlug}/lessons/${lessonSlug}/theory_unit`
+const buildLessonUrl = (locale, courseSlug, lessonSlug) => (
+  `https://${locale}.hexlet.io/courses/${courseSlug}/lessons/${lessonSlug}/theory_unit`
 );
-const buildApiUrl = (courseSlug, lessonSlug) => (
-  `https://ru.hexlet.io/api_internal/courses/${courseSlug}/lessons/${lessonSlug}/assignment/download`
+const buildApiUrl = (locale, courseSlug, lessonSlug) => (
+  `https://${locale}.hexlet.io/api_internal/courses/${courseSlug}/lessons/${lessonSlug}/assignment/download`
 );
 
 const hexletToken = 'some-hexlet-token';
@@ -24,7 +24,7 @@ const courseSlugWithLocale = 'java-advanced-ru';
 const hexletTemplatesPath = getFixturePath('templates');
 const lessonSlug = 'multithreading-java';
 const commandParts = ['assignment', 'download'];
-const lessonUrl = buildLessonUrl(courseSlug, lessonSlug);
+const lessonUrl = buildLessonUrl('ru', courseSlug, lessonSlug);
 const args = {
   lessonUrl, _: commandParts,
 };
@@ -57,8 +57,14 @@ describe.each(testCases)('$command.description', ({
   beforeAll(() => {
     nock.disableNetConnect();
 
-    const scope = nock(buildApiUrl(courseSlug, lessonSlug)).persist();
+    const scope = nock(buildApiUrl('ru', courseSlug, lessonSlug)).persist();
     scope
+      .matchHeader('X-Auth-Key', hexletToken)
+      .intercept('', method)
+      .replyWithFile(successCode, lessonArchivePath);
+
+    const scope2 = nock(buildApiUrl('kz', courseSlug, lessonSlug)).persist();
+    scope2
       .matchHeader('X-Auth-Key', hexletToken)
       .intercept('', method)
       .replyWithFile(successCode, lessonArchivePath);
@@ -84,6 +90,17 @@ describe.each(testCases)('$command.description', ({
     await fse.writeJson(hexletConfigPath, config);
 
     await command.handler(args, customSettings);
+    expect(await readDirP(hexletDir)).toMatchSnapshot();
+  });
+
+  it(`${commandName} with kz locale`, async () => {
+    await fse.writeJson(hexletConfigPath, config);
+    const params = {
+      ...args,
+      lessonUrl: buildLessonUrl('kz', courseSlug, lessonSlug),
+    };
+
+    await command.handler(params, customSettings);
     expect(await readDirP(hexletDir)).toMatchSnapshot();
   });
 
@@ -137,38 +154,38 @@ describe.each(testCases)('$command.description', ({
     const wrongLessonSlug = 'wrong-lesson';
     const params = {
       ...args,
-      lessonUrl: buildLessonUrl(wrongCourseSlug, wrongLessonSlug),
+      lessonUrl: buildLessonUrl('ru', wrongCourseSlug, wrongLessonSlug),
     };
 
-    nock(buildApiUrl(wrongCourseSlug, wrongLessonSlug))
+    nock(buildApiUrl('ru', wrongCourseSlug, wrongLessonSlug))
       .intercept('', method)
       .reply(404);
     await expect(command.handler(params, customSettings))
       .rejects.toThrow(`Assignment ${wrongCourseSlug}/${wrongLessonSlug} not found. Check the lessonUrl.`);
 
     let message = 'Invalid token passed.';
-    nock(buildApiUrl(wrongCourseSlug, wrongLessonSlug))
+    nock(buildApiUrl('ru', wrongCourseSlug, wrongLessonSlug))
       .intercept('', method)
       .reply(401, { message });
     await expect(command.handler(params, customSettings))
       .rejects.toThrow(message);
 
     message = 'You do not have permission to download assignment.';
-    nock(buildApiUrl(wrongCourseSlug, wrongLessonSlug))
+    nock(buildApiUrl('ru', wrongCourseSlug, wrongLessonSlug))
       .intercept('', method)
       .reply(422, { message });
     await expect(command.handler(params, customSettings))
       .rejects.toThrow(message);
 
     message = 'You have no access to download assignment of this lesson';
-    nock(buildApiUrl(wrongCourseSlug, wrongLessonSlug))
+    nock(buildApiUrl('ru', wrongCourseSlug, wrongLessonSlug))
       .intercept('', method)
       .reply(403, { message });
     await expect(command.handler(params, customSettings))
       .rejects.toThrow(message);
 
     // Unhandled errors
-    nock(buildApiUrl(wrongCourseSlug, wrongLessonSlug))
+    nock(buildApiUrl('ru', wrongCourseSlug, wrongLessonSlug))
       .intercept('', method)
       .reply(500);
     await expect(command.handler(params, customSettings))

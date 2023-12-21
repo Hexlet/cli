@@ -36,7 +36,8 @@ const getLessonData = (lessonUrl) => {
 };
 
 const generateAssignmentPath = (repoPath, courseSlug, lessonSlug, locale) => {
-  const courseSlugWithLocale = locale === 'en' ? courseSlug : `${courseSlug}-${locale}`;
+  const normalizedLocale = locale === 'kz' ? 'ru' : locale;
+  const courseSlugWithLocale = locale === 'en' ? courseSlug : `${courseSlug}-${normalizedLocale}`;
   return path.join(repoPath, courseSlugWithLocale, lessonSlug);
 };
 
